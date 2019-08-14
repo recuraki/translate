@@ -12,16 +12,16 @@
 *{
 	margin: 0px;
 	padding: 0px;
-	font-family: Verdana, "ŸàƒSƒVƒbƒN", YuGothic, "ƒqƒ‰ƒMƒmŠpƒS ProN W3", "Hiragino Kaku Gothic ProN", "ƒƒCƒŠƒI", Meiryo, sans-serif;
+	font-family: Verdana, "æ¸¸ã‚´ã‚·ãƒƒã‚¯", YuGothic, "ãƒ’ãƒ©ã‚®ãƒè§’ã‚´ ProN W3", "Hiragino Kaku Gothic ProN", "ãƒ¡ã‚¤ãƒªã‚ª", Meiryo, sans-serif;
 }
 </style>
 </head>
 <body>
 
-<h1 id="jp">Kea Administrator Reference Manual 1.5.0 <br> @@ha: High Availability </h1>
+<h1 id="jp">Kea Administrator Reference Manual 1.5.0 <br> ã€€ã€€ha: High Availability </h1>
 
 	<p id="jp">
-	Œ´’˜: 
+	åŸè‘—: 
         <a href="https://ftp.isc.org/isc/kea/1.5.0/doc/kea-guide.html#high-availability-library">
 	Kea Administrator Reference Manual 1.5.0 15.4.8. ha: High Availability
 	</a>
@@ -35,34 +35,34 @@
 	<p>
 
 <p id="jp">
-Kea‚ğg‚¢n‚ß‚½‚Ì‚Å‚·‚ªAHA‚Å‚Í‚Ü‚Á‚½‚Ì‚ÅAHA‚ÌƒZƒNƒVƒ‡ƒ“‚¾‚¯–|–ó‚µ‚Ü‚·B(‹àˆä)
+Keaã‚’ä½¿ã„å§‹ã‚ãŸã®ã§ã™ãŒã€HAã§ã¯ã¾ã£ãŸã®ã§ã€HAã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã ã‘ç¿»è¨³ã—ã¾ã™ã€‚(é‡‘äº•)
 </p>
 
 <div id="section">
 <p id="jp">
-‚±‚ÌƒZƒNƒVƒ‡ƒ“‚Å‚ÍAHAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚É‚Â‚¢‚Äq‚×‚Ü‚·B
-HAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚Í‚P‘ä‚ÌƒT[ƒo‚ÉáŠQ‚ª”­¶‚µ‚½Û‚È‚Ç‚É‘Î‰‚Å‚«‚éDHCPv4/v6 ‚M—Š«‚½‚ß‚Ìƒ‰ƒCƒuƒ‰ƒŠ‚Å‚·B
-Ì‚ÍISC‚ÌŒÚ‹q‚Ì‚İ‚ª—˜—p‰Â”\‚È‹@”\‚Å‚µ‚½‚ªAŒ»İ‚Å‚ÍƒI[ƒvƒ“ƒ\[ƒX‚Å‚ ‚éKea‚Ìˆê•”‚É‚È‚Á‚Ä‚¢‚Ü‚·B
+ã“ã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã§ã¯ã€HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«ã¤ã„ã¦è¿°ã¹ã¾ã™ã€‚
+HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯ï¼‘å°ã®ã‚µãƒ¼ãƒã«éšœå®³ãŒç™ºç”Ÿã—ãŸéš›ãªã©ã«å¯¾å¿œã§ãã‚‹DHCPv4/v6 é«˜ä¿¡é ¼æ€§ãŸã‚ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§ã™ã€‚
+æ˜”ã¯ISCã®é¡§å®¢ã®ã¿ãŒåˆ©ç”¨å¯èƒ½ãªæ©Ÿèƒ½ã§ã—ãŸãŒã€ç¾åœ¨ã§ã¯ã‚ªãƒ¼ãƒ—ãƒ³ã‚½ãƒ¼ã‚¹ã§ã‚ã‚‹Keaã®ä¸€éƒ¨ã«ãªã£ã¦ã„ã¾ã™ã€‚
 </p>
 <p id="en">
 This section describes the High Availability hooks library, which can be loaded on a pair of DHCPv4 or DHCPv6 servers to increase reliability of the DHCP service in case of outage of one of the servers. This library used to be only available to ISC customers, but is now part of the open source Kea, available to all users.
 </p>
 
 <p id="jp">
-DHCP‚ÌHA‚Í•¡”‚ÌƒT[ƒoƒCƒ“ƒXƒ^ƒ“ƒX‚ª˜AŒg‚·‚é‚±‚Æ‚ÅÀŒ»‚³‚ê‚Ü‚·B
-‚¢‚¸‚ê‚©‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ªáŠQ(ƒvƒƒZƒXáŠQAƒG[ƒWƒFƒ“ƒgáŠQAƒT[ƒo‚Ì’â“d‚âáŠQ)‚É‚æ‚Á‚Ä—˜—p‚Å‚«‚È‚­‚È‚Á‚½ê‡‚Å‚àAc‚è‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ÍƒNƒ‰ƒCƒAƒ“ƒg‚ÉƒT[ƒrƒX‚ğŒp‘±‚µ‚Ä’ñ‹Ÿ‚Å‚«‚Ü‚·B
-ˆê”Ê“I‚ÈDHCPƒT[ƒo‚ÌÀ‘•‚Å‚ÍƒtƒFƒCƒ‹ƒI[ƒo[‚ªÀŒ»‚³‚ê‚Ä‚¨‚èAƒT[ƒoŠÔ‚Ì˜AŒgEáŠQŒŸ’mE(ƒAƒhƒŒƒXƒŠ[ƒX‚Ì)“¯Šú‚È‚Ç‚ª‰Â”\‚Å‚·B
-‚½‚¾‚µAIETF‚É‚¨‚¢‚ÄDHCPv4‚ÌƒtƒFƒCƒ‹ƒI[ƒo[‚Í•W€‰»‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB
-‘Î‚µ‚ÄDHCPv6‚Å‚ÍRFC8156‚ªStandards Track‚ÅŒöŠJ‚³‚ê‚Ä‚¢‚Ü‚·‚ªDHCPv4‚ğ•ïŠÜ‚·‚é‚à‚Ì‚Å‚Í‚ ‚è‚Ü‚¹‚ñ‚µA‚Æ‚Ä‚à•¡G‚ÈƒvƒƒgƒRƒ‹‚È‚½‚ß‰^—pã‚Ì§–ñ‚à¶‚Ü‚ê‚Ü‚·B
+DHCPã®HAã¯è¤‡æ•°ã®ã‚µãƒ¼ãƒã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒé€£æºã™ã‚‹ã“ã¨ã§å®Ÿç¾ã•ã‚Œã¾ã™ã€‚
+ã„ãšã‚Œã‹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒéšœå®³(ãƒ—ãƒ­ã‚»ã‚¹éšœå®³ã€ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆéšœå®³ã€ã‚µãƒ¼ãƒã®åœé›»ã‚„éšœå®³)ã«ã‚ˆã£ã¦åˆ©ç”¨ã§ããªããªã£ãŸå ´åˆã§ã‚‚ã€æ®‹ã‚Šã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«ã‚µãƒ¼ãƒ“ã‚¹ã‚’ç¶™ç¶šã—ã¦æä¾›ã§ãã¾ã™ã€‚
+ä¸€èˆ¬çš„ãªDHCPã‚µãƒ¼ãƒã®å®Ÿè£…ã§ã¯ãƒ•ã‚§ã‚¤ãƒ«ã‚ªãƒ¼ãƒãƒ¼ãŒå®Ÿç¾ã•ã‚Œã¦ãŠã‚Šã€ã‚µãƒ¼ãƒé–“ã®é€£æºãƒ»éšœå®³æ¤œçŸ¥ãƒ»(ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒªãƒ¼ã‚¹ã®)åŒæœŸãªã©ãŒå¯èƒ½ã§ã™ã€‚
+ãŸã ã—ã€IETFã«ãŠã„ã¦DHCPv4ã®ãƒ•ã‚§ã‚¤ãƒ«ã‚ªãƒ¼ãƒãƒ¼ã¯æ¨™æº–åŒ–ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚
+å¯¾ã—ã¦DHCPv6ã§ã¯RFC8156ãŒStandards Trackã§å…¬é–‹ã•ã‚Œã¦ã„ã¾ã™ãŒDHCPv4ã‚’åŒ…å«ã™ã‚‹ã‚‚ã®ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã—ã€ã¨ã¦ã‚‚è¤‡é›‘ãªãƒ—ãƒ­ãƒˆã‚³ãƒ«ãªãŸã‚é‹ç”¨ä¸Šã®åˆ¶ç´„ã‚‚ç”Ÿã¾ã‚Œã¾ã™ã€‚
 
-u•W€‰»v‚³‚ê‚½ƒtƒFƒCƒ‹ƒI[ƒo[ƒvƒƒgƒRƒ‹‚Í‚²‚­ˆê•”‚Ìƒ†[ƒU‚É‚Æ‚Á‚Ä–£—Í“I‚Å‚µ‚å‚¤‚ªA
-‚µ‚©‚µA‘½‚­‚Ìƒ†[ƒU‚É‚Æ‚Á‚Ä‚ÍŒ»À“I‚È‚‰Â—p«‹@”\‚ÌÀŒ»‚ªˆê”Ô‚Å‚·B
-‚±‚Ì‚½‚ßAKea‚ÌHAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚Í•W€‰»‚³‚ê‚½ƒvƒƒgƒRƒ‹‚Å‚Í‚È‚­A
-“Æ©‚ÌİŒvÀ‘•(ƒvƒƒgƒRƒ‹A\¬Aó‘Ô‚È‚Ç)‚ÅDHCPv4/v6‚Å‚‰Â—p«‚ğ’ñ‹Ÿ‚µ‚Ä‚¢‚Ü‚·B
+ã€Œæ¨™æº–åŒ–ã€ã•ã‚ŒãŸãƒ•ã‚§ã‚¤ãƒ«ã‚ªãƒ¼ãƒãƒ¼ãƒ—ãƒ­ãƒˆã‚³ãƒ«ã¯ã”ãä¸€éƒ¨ã®ãƒ¦ãƒ¼ã‚¶ã«ã¨ã£ã¦é­…åŠ›çš„ã§ã—ã‚‡ã†ãŒã€
+ã—ã‹ã—ã€å¤šãã®ãƒ¦ãƒ¼ã‚¶ã«ã¨ã£ã¦ã¯ç¾å®Ÿçš„ãªé«˜å¯ç”¨æ€§æ©Ÿèƒ½ã®å®Ÿç¾ãŒä¸€ç•ªã§ã™ã€‚
+ã“ã®ãŸã‚ã€Keaã®HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯æ¨™æº–åŒ–ã•ã‚ŒãŸãƒ—ãƒ­ãƒˆã‚³ãƒ«ã§ã¯ãªãã€
+ç‹¬è‡ªã®è¨­è¨ˆå®Ÿè£…(ãƒ—ãƒ­ãƒˆã‚³ãƒ«ã€æ§‹æˆã€çŠ¶æ…‹ãªã©)ã§DHCPv4/v6ã§é«˜å¯ç”¨æ€§ã‚’æä¾›ã—ã¦ã„ã¾ã™ã€‚
 
-‚±‚Ì•¶Í‚Å‚ÍAŠ¸‚¦‚ÄƒtƒFƒCƒ‹ƒI[ƒo[‚Æ‚¢‚¤Œ¾—t‚Íg‚í‚¸‚ÉA‚‰Â—p«(HA)‚Æ‚¢‚¤Œ¾—t‚ğ—˜—p‚µ‚Ü‚·B
+ã“ã®æ–‡ç« ã§ã¯ã€æ•¢ãˆã¦ãƒ•ã‚§ã‚¤ãƒ«ã‚ªãƒ¼ãƒãƒ¼ã¨ã„ã†è¨€è‘‰ã¯ä½¿ã‚ãšã«ã€é«˜å¯ç”¨æ€§(HA)ã¨ã„ã†è¨€è‘‰ã‚’åˆ©ç”¨ã—ã¾ã™ã€‚
 
-‚Ü‚¸Å‰‚ÉŸ‚ÌƒZƒNƒVƒ‡ƒ“‚Å‚ÍAKea HAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚Ì\¬‚Æ‰^—p•û–@‚É‚Â‚¢‚Äà–¾‚µ‚Ü‚·B
+ã¾ãšæœ€åˆã«æ¬¡ã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã§ã¯ã€Kea HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®æ§‹æˆã¨é‹ç”¨æ–¹æ³•ã«ã¤ã„ã¦èª¬æ˜ã—ã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -73,23 +73,23 @@ The following sections describe the configuration and operation of the Kea HA ho
 
 </div>
 
-<h2 id="jp">15.4.8.1. ƒTƒ|[ƒg‚·‚éİ’è</h2>
+<h2 id="jp">15.4.8.1. ã‚µãƒãƒ¼ãƒˆã™ã‚‹è¨­å®š</h2>
 <h2 id="en">Supported Configurations</h2>
 <div id="section">
 <p id="jp">
-HAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚Í‚Q‚Â‚Ìƒ‚[ƒh‚ğƒTƒ|[ƒg‚µ‚Ü‚·B
+HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯ï¼’ã¤ã®ãƒ¢ãƒ¼ãƒ‰ã‚’ã‚µãƒãƒ¼ãƒˆã—ã¾ã™ã€‚
 <br>
 <br>
-y•‰‰×•ªUz‚±‚Ì‹@”\‚ÍRFC3074‚ÌÀ‘•‚ÉŠî‚Ã‚¢‚Ä‚¢‚Ü‚·BDHCP—v‹‚É“¯‚É‰“š‚·‚é2‘ä‚ÌƒT[ƒo‚ğ—pˆÓ‚µAŒğŒİ‚ÉŠ„‚è“–‚Ä‚ğs‚¢‚Ü‚·B—v‹‚ğˆ—‚µ‚½ƒCƒ“ƒXƒ^ƒ“ƒX‚Íƒp[ƒgƒi[‚É‘Î‚µ‚ÄREST API‚ÅŠ„‚è“–‚Ä‚ğ’Ê’B‚µ‚Ü‚·B‚±‚Ìƒ‚[ƒh‚Å‚ÍAƒp[ƒgƒi[‚Ö‚Ì’Ê’B‚ª¬Œ÷‚µ‚½‚Æ‚«‚Ì‚İ‰“š‚Í•Ô‚³‚êAƒp[ƒgƒi[‚Æ‚ÌƒƒbƒZ[ƒW’ÊM‚ª¸”s‚·‚é‚Æ(–ó’:API‚ªconnect‚µ‚½Œã‚Ì¸”s‚Å‚·)ƒNƒ‰ƒCƒAƒ“ƒg‚É‘Î‚·‚é‰“š‚ğs‚¢‚Ü‚¹‚ñB
-—¼ƒT[ƒoŠÔ‚Å‚ÍƒŠ[ƒXXVî•ñ‚ª‚â‚è‚Æ‚è‚³‚ê‚Ä‚¢‚é‚½‚ßAŠ„‚è“–‚Ä‚ç‚ê‚½ƒŠ[ƒXî•ñ‚ÍŠ®‘S‚É“¯Šú‚µ‚Ä‚¢‚Ü‚·B
-‚±‚Ì‚½‚ßAƒp[ƒgƒi[‚ÉáŠQ‚ª”­¶‚µ‚½Û‚Í‚à‚¤•ĞŒn‚ªDHCP’ÊM‚ğ‚·‚×‚Äˆ—‚Å‚«‚Ü‚·B
+ã€è² è·åˆ†æ•£ã€‘ã“ã®æ©Ÿèƒ½ã¯RFC3074ã®å®Ÿè£…ã«åŸºã¥ã„ã¦ã„ã¾ã™ã€‚DHCPè¦æ±‚ã«åŒæ™‚ã«å¿œç­”ã™ã‚‹2å°ã®ã‚µãƒ¼ãƒã‚’ç”¨æ„ã—ã€äº¤äº’ã«å‰²ã‚Šå½“ã¦ã‚’è¡Œã„ã¾ã™ã€‚è¦æ±‚ã‚’å‡¦ç†ã—ãŸã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«å¯¾ã—ã¦REST APIã§å‰²ã‚Šå½“ã¦ã‚’é€šé”ã—ã¾ã™ã€‚ã“ã®ãƒ¢ãƒ¼ãƒ‰ã§ã¯ã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¸ã®é€šé”ãŒæˆåŠŸã—ãŸã¨ãã®ã¿å¿œç­”ã¯è¿”ã•ã‚Œã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¨ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šä¿¡ãŒå¤±æ•—ã™ã‚‹ã¨(è¨³æ³¨:APIãŒconnectã—ãŸå¾Œã®å¤±æ•—ã§ã™)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«å¯¾ã™ã‚‹å¿œç­”ã‚’è¡Œã„ã¾ã›ã‚“ã€‚
+ä¸¡ã‚µãƒ¼ãƒé–“ã§ã¯ãƒªãƒ¼ã‚¹æ›´æ–°æƒ…å ±ãŒã‚„ã‚Šã¨ã‚Šã•ã‚Œã¦ã„ã‚‹ãŸã‚ã€å‰²ã‚Šå½“ã¦ã‚‰ã‚ŒãŸãƒªãƒ¼ã‚¹æƒ…å ±ã¯å®Œå…¨ã«åŒæœŸã—ã¦ã„ã¾ã™ã€‚
+ã“ã®ãŸã‚ã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«éšœå®³ãŒç™ºç”Ÿã—ãŸéš›ã¯ã‚‚ã†ç‰‡ç³»ãŒDHCPé€šä¿¡ã‚’ã™ã¹ã¦å‡¦ç†ã§ãã¾ã™ã€‚
 </p>
 <p id="en">
 The Kea HA hook library supports two configurations also known as HA modes: load balancing and hot standby. In the load balancing mode, there are two servers responding to the DHCP requests. The load balancing function is implemented as described in RFC3074, with each server responding to 1/2 of received DHCP queries. When one of the servers allocates a lease for a client, it notifies the partner server over the control channel (RESTful API), so as the partner can save the lease information in its own database. If the communication with the partner is unsuccessful, the DHCP query is dropped and the response is not returned to the DHCP client. If the lease update is successful, the response is returned to the DHCP client by the server which has allocated the lease. By exchanging the lease updates, both servers get a copy of all leases allocated by the entire HA setup and any of the servers can be switched to handle the entire DHCP traffic if its partner becomes unavailable.
 </p>
 
 <p id="jp">
-•‰‰×•ªUƒ‚[ƒh‚Å‚ÍA2‘ä‚ÌƒT[ƒo‚ğ"ƒvƒ‰ƒCƒ}ƒŠ"‚©"ƒZƒJƒ“ƒ_ƒŠ"‚ÉŠ„‚è“–‚Ä‚Ü‚·B‚±‚Ì‚Q‘ä‚Í’Êí‘S‚­“¯‚¶–ğŠ„‚Å‚·‚ªA‚½‚¾A‹N“®‚Ì“®ì‚ªˆÙ‚È‚è‚Ü‚·Bƒvƒ‰ƒCƒ}ƒŠƒT[ƒo‚Í‘¦À‚ÉƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ğ“¯Šú‚µ‚Ü‚·‚ªAƒZƒJƒ“ƒ_ƒŠƒT[ƒo‚Íƒvƒ‰ƒCƒ}ƒŠƒT[ƒo‚©‚ç“¯Šú‚ğ‚İ‚æ‚¤‚Æ‚µ‚Ü‚·B
+è² è·åˆ†æ•£ãƒ¢ãƒ¼ãƒ‰ã§ã¯ã€2å°ã®ã‚µãƒ¼ãƒã‚’"ãƒ—ãƒ©ã‚¤ãƒãƒª"ã‹"ã‚»ã‚«ãƒ³ãƒ€ãƒª"ã«å‰²ã‚Šå½“ã¦ã¾ã™ã€‚ã“ã®ï¼’å°ã¯é€šå¸¸å…¨ãåŒã˜å½¹å‰²ã§ã™ãŒã€ãŸã ã€èµ·å‹•æ™‚ã®å‹•ä½œãŒç•°ãªã‚Šã¾ã™ã€‚ãƒ—ãƒ©ã‚¤ãƒãƒªã‚µãƒ¼ãƒã¯å³åº§ã«ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’åŒæœŸã—ã¾ã™ãŒã€ã‚»ã‚«ãƒ³ãƒ€ãƒªã‚µãƒ¼ãƒã¯ãƒ—ãƒ©ã‚¤ãƒãƒªã‚µãƒ¼ãƒã‹ã‚‰åŒæœŸã‚’è©¦ã¿ã‚ˆã†ã¨ã—ã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -98,10 +98,10 @@ In the load balancing configuration, one of the servers must be designated as "p
 <br>
 <br>
 <p id="jp">
-yƒzƒbƒgƒXƒ^ƒ“ƒoƒCz
-‚±‚Ìƒ‚[ƒh‚Å‚àA‚Q‘ä‚ÌƒT[ƒo‚Íuƒvƒ‰ƒCƒ}ƒŠv‚ÆuƒZƒJƒ“ƒ_ƒŠi–ó’F‚±‚±‚ÍƒXƒ^ƒ“ƒoƒC‚ª³‚µ‚¢‚Æ‚¨‚à‚¤jv‚Ì–ğŠ„‚ğ‚¿‚Ü‚·B
-‚µ‚©‚µA•½í‚É‚Í•‰‰×•ªUƒ‚[ƒh‚Æ‚ÍˆÙ‚È‚èAƒvƒ‰ƒCƒ}ƒŠ‚Ì‚İ‚ªDHCP—v‹‚É‰“š‚µ‚Ü‚·B
-ƒZƒJƒ“ƒ_ƒŠƒT[ƒo‚Íƒvƒ‰ƒCƒ}ƒŠ‚©‚ç‚ÌƒŠ[ƒXXV‚ğó‚¯æ‚Á‚Ä©g‚ÌƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ğXV‚µ‘±‚¯Aƒvƒ‰ƒCƒ}ƒŠ‚ÌáŠQ‚ğŒŸo‚·‚é‚ÆDHCP—v‹‚É‰“š‚·‚é‚æ‚¤‚É‚È‚è‚Ü‚·B
+ã€ãƒ›ãƒƒãƒˆã‚¹ã‚¿ãƒ³ãƒã‚¤ã€‘
+ã“ã®ãƒ¢ãƒ¼ãƒ‰ã§ã‚‚ã€ï¼’å°ã®ã‚µãƒ¼ãƒã¯ã€Œãƒ—ãƒ©ã‚¤ãƒãƒªã€ã¨ã€Œã‚»ã‚«ãƒ³ãƒ€ãƒªï¼ˆè¨³æ³¨ï¼šã“ã“ã¯ã‚¹ã‚¿ãƒ³ãƒã‚¤ãŒæ­£ã—ã„ã¨ãŠã‚‚ã†ï¼‰ã€ã®å½¹å‰²ã‚’æŒã¡ã¾ã™ã€‚
+ã—ã‹ã—ã€å¹³å¸¸æ™‚ã«ã¯è² è·åˆ†æ•£ãƒ¢ãƒ¼ãƒ‰ã¨ã¯ç•°ãªã‚Šã€ãƒ—ãƒ©ã‚¤ãƒãƒªã®ã¿ãŒDHCPè¦æ±‚ã«å¿œç­”ã—ã¾ã™ã€‚
+ã‚»ã‚«ãƒ³ãƒ€ãƒªã‚µãƒ¼ãƒã¯ãƒ—ãƒ©ã‚¤ãƒãƒªã‹ã‚‰ã®ãƒªãƒ¼ã‚¹æ›´æ–°ã‚’å—ã‘å–ã£ã¦è‡ªèº«ã®ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’æ›´æ–°ã—ç¶šã‘ã€ãƒ—ãƒ©ã‚¤ãƒãƒªã®éšœå®³ã‚’æ¤œå‡ºã™ã‚‹ã¨DHCPè¦æ±‚ã«å¿œç­”ã™ã‚‹ã‚ˆã†ã«ãªã‚Šã¾ã™ã€‚
 </p>
 <p id="en">
 In the hot standby configuration one of the servers is designated as "primary" and the second server is designated as "secondary". During the normal operation, the primary server is the only one that responds to the DHCP requests. The secodary server receives lease updates from the primary over the control channel. However, it does not respond to any DHCP queries as long as the primary is running or, more accurately, until the secondary considers the primary to be offline. When the secondary server detects the failure of the primary, it starts responding to all DHCP queries.
@@ -109,28 +109,28 @@ In the hot standby configuration one of the servers is designated as "primary" a
 
 
 <p id="jp">
-‚±‚ê‚ç‚Ì\¬‚Å‚Íƒvƒ‰ƒCƒ}ƒŠAƒZƒJƒ“ƒ_ƒŠAƒXƒ^ƒ“ƒoƒC‚ÍuƒAƒNƒeƒBƒuvƒT[ƒo‚ÆŒÄ‚Î‚ê‚Ü‚·B
-‚È‚º‚È‚çADHCP—v‹‚ğó‚¯æ‚ê‚Î‚·‚®‚Éƒp[ƒgƒi[‚ÌáŠQ‚É‘¦À‚É©“®“I‚É‘Î‰‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚ç‚Å‚·B
+ã“ã‚Œã‚‰ã®æ§‹æˆã§ã¯ãƒ—ãƒ©ã‚¤ãƒãƒªã€ã‚»ã‚«ãƒ³ãƒ€ãƒªã€ã‚¹ã‚¿ãƒ³ãƒã‚¤ã¯ã€Œã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã€ã‚µãƒ¼ãƒã¨å‘¼ã°ã‚Œã¾ã™ã€‚
+ãªãœãªã‚‰ã€DHCPè¦æ±‚ã‚’å—ã‘å–ã‚Œã°ã™ãã«ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã®éšœå®³æ™‚ã«å³åº§ã«è‡ªå‹•çš„ã«å¯¾å¿œã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã‹ã‚‰ã§ã™ã€‚
 
-HAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚Å‚ÍuƒoƒbƒNƒAƒbƒvvƒT[ƒo‚Æ‚¢‚¤–ğŠ„‚ğì‚é‚±‚Æ‚à‚Å‚«‚Ü‚·B‚±‚ê‚Í•K{‚Å‚Í‚È‚­Aã‹L‚Ì‚Q‚Â‚Ìƒ‚[ƒh‚ÉƒIƒvƒVƒ‡ƒ“‚Æ‚µ‚Äİ’è‚Å‚«‚Ü‚·B
-ƒoƒbƒNƒAƒbƒvƒT[ƒo‚Ì”‚É‚ÍãŒÀ‚Í‚È‚¢‚Ì‚Å‚·‚ªAƒAƒNƒeƒBƒuƒT[ƒo‚Í‚·‚×‚Ä‚ÌƒoƒbƒNƒAƒbƒvƒT[ƒo‚É‚àƒŠ[ƒX‚ÌXV‚Ìî•ñ‚ğs‚¤‚Ì‚ÅA
-DHCP‰“š‚ÌŠÔ‚ª’·‚­‚È‚è‚Ü‚·Bi–ó’F‚Ü‚½Œãq‚Ì‚æ‚¤‚ÉKea‚ÍƒoƒbƒNƒAƒbƒv‚Ö‚ÌØ‚è‘Ö‚¦‚ğ©“®‚Ås‚¢‚Ü‚¹‚ñj
+HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§ã¯ã€Œãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã€ã‚µãƒ¼ãƒã¨ã„ã†å½¹å‰²ã‚’ä½œã‚‹ã“ã¨ã‚‚ã§ãã¾ã™ã€‚ã“ã‚Œã¯å¿…é ˆã§ã¯ãªãã€ä¸Šè¨˜ã®ï¼’ã¤ã®ãƒ¢ãƒ¼ãƒ‰ã«ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¨ã—ã¦è¨­å®šã§ãã¾ã™ã€‚
+ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã®æ•°ã«ã¯ä¸Šé™ã¯ãªã„ã®ã§ã™ãŒã€ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã¯ã™ã¹ã¦ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã«ã‚‚ãƒªãƒ¼ã‚¹ã®æ›´æ–°ã®æƒ…å ±ã‚’è¡Œã†ã®ã§ã€
+DHCPå¿œç­”ã®æ™‚é–“ãŒé•·ããªã‚Šã¾ã™ã€‚ï¼ˆè¨³æ³¨ï¼šã¾ãŸå¾Œè¿°ã®ã‚ˆã†ã«Keaã¯ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã¸ã®åˆ‡ã‚Šæ›¿ãˆã‚’è‡ªå‹•ã§è¡Œã„ã¾ã›ã‚“ï¼‰
 </p>
 <p id="en">
 In the configurations described above, the primary, secondary and standby are referred to as "active" servers, because they receive lease updates and can automatically react to the partner's failures by responding to the DHCP queries which would normally be handled by the partner. The HA hook library supports another server type (role) - backup server. The use of the backup servers is optional. They can be used in both load balancing and hot standby setup, in addition to the active servers. There is no limit on the number of backup servers in the HA setup. However, the presence of the backup servers increases latency of the DHCP responses, because not only do active servers send lease updates to each other, but also to the backup servers.
 </p>
 </div>
 
-<h2 id="jp">15.4.8.2. ƒAƒNƒeƒBƒuƒT[ƒo‚Ì</h2>
+<h2 id="jp">15.4.8.2. ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã®æ™‚åˆ»</h2>
 <h2 id="en">Clocks on Active Servers</h2>
 <div id="section">
 <p id="jp">
-HA‚ğ\¬‚·‚é‚É‚Í“¯Šú‚ªd—v‚È—v‘f‚Å‚·B
-DHCPƒT[ƒo‚Å‚ÍƒŠ[ƒX‚ÌXV‚âƒf[ƒ^ƒx[ƒX‚Ì“¯Šú‚ÉƒŠ[ƒXî•ñ‚ğŒğŠ·‚µ‚Ü‚·B
-‚±‚ÌƒŠ[ƒXî•ñ‚É‚ÍŠ„‚è“–‚Ä‚âŠúŒÀØ‚ê‚ªŠÜ‚Ü‚ê‚Ü‚·B
-’Êí‚ÍƒT[ƒoŠÔ‚Å‚í‚¸‚©‚È‚ª‚ç‚Ì‚¸‚ê‚ª‚ª‘¶İ‚µ‚Ü‚·B‚¸‚ê‚ª¬‚³‚¢ê‡‚Í–â‘è‚ ‚è‚Ü‚¹‚ñ‚ªA‚±‚Ì‚¸‚ê‚ª‘å‚«‚¢ê‡‚ÍHA‚ª—\Šú‚¹‚Ê“®ì‚ğ‚·‚é‚±‚Æ‚ª‚ ‚è‚Ü‚·B
-—á‚¦‚ÎA–{—ˆŠ„‚è“–‚ÄŠÔ“à‚Å‚ ‚éƒŠ[ƒX‚ªŠúŒÀØ‚ê‚ÆŒë”»’è‚³‚êA
-‚±‚ÌŒ‹‰ÊA’Êí‚È‚çƒNƒ‰ƒCƒAƒ“ƒg‚ªÄ—˜—p(renew)ˆ—‚ğs‚¤ŠúŠÔ“à‚ÉAiƒT[ƒo‘¤‚ªŠÖŒW‚·‚éjDNS‚Ì–¼‘O‚ªíœ‚³‚ê‚éA‚Æ‚¢‚Á‚½‚±‚Æ‚ª‹N‚±‚è‚¦‚Ü‚·B
+HAã‚’æ§‹æˆã™ã‚‹ã«ã¯æ™‚åˆ»åŒæœŸãŒé‡è¦ãªè¦ç´ ã§ã™ã€‚
+DHCPã‚µãƒ¼ãƒã§ã¯ãƒªãƒ¼ã‚¹ã®æ›´æ–°ã‚„ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åŒæœŸæ™‚ã«ãƒªãƒ¼ã‚¹æƒ…å ±ã‚’äº¤æ›ã—ã¾ã™ã€‚
+ã“ã®ãƒªãƒ¼ã‚¹æƒ…å ±ã«ã¯å‰²ã‚Šå½“ã¦æ™‚åˆ»ã‚„æœŸé™åˆ‡ã‚Œæ™‚åˆ»ãŒå«ã¾ã‚Œã¾ã™ã€‚
+é€šå¸¸ã¯ã‚µãƒ¼ãƒé–“ã§ã‚ãšã‹ãªãŒã‚‰æ™‚åˆ»ã®ãšã‚ŒãŒãŒå­˜åœ¨ã—ã¾ã™ã€‚ãšã‚ŒãŒå°ã•ã„å ´åˆã¯å•é¡Œã‚ã‚Šã¾ã›ã‚“ãŒã€ã“ã®ãšã‚ŒãŒå¤§ãã„å ´åˆã¯HAãŒäºˆæœŸã›ã¬å‹•ä½œã‚’ã™ã‚‹ã“ã¨ãŒã‚ã‚Šã¾ã™ã€‚
+ä¾‹ãˆã°ã€æœ¬æ¥å‰²ã‚Šå½“ã¦æ™‚é–“å†…ã§ã‚ã‚‹ãƒªãƒ¼ã‚¹ãŒæœŸé™åˆ‡ã‚Œã¨èª¤åˆ¤å®šã•ã‚Œã€
+ã“ã®çµæœã€é€šå¸¸ãªã‚‰ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãŒå†åˆ©ç”¨(renew)å‡¦ç†ã‚’è¡Œã†æœŸé–“å†…ã«ã€ï¼ˆã‚µãƒ¼ãƒå´ãŒé–¢ä¿‚ã™ã‚‹ï¼‰DNSã®åå‰ãŒå‰Šé™¤ã•ã‚Œã‚‹ã€ã¨ã„ã£ãŸã“ã¨ãŒèµ·ã“ã‚Šãˆã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -138,10 +138,10 @@ Synchronized clocks are essential for the HA setup to operate reliably. The serv
 </p>
 
 <p id="jp">
-ƒAƒNƒeƒBƒu‚ÈŠeƒT[ƒo‚Íƒp[ƒgƒi[‚Æ‚Ìƒn[ƒgƒr[ƒg‚ÌÛ‚É‚¸‚ê‚ğŠÄ‹‚µ‚Ü‚·B
-‚½‚¾‚µA‚±‚ê‚Í•¡G‚È(NTP‚Ì‚æ‚¤‚È)ˆ—‚Ís‚Á‚Ä‚¨‚ç‚¸A‚ ‚­‚Ü‚Å”­M‚©‚ç’…M‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì·‚Å‹æ•Ê‚µ‚Ä‚¢‚Ü‚·B
-Kea‚Å‚Í‚¸‚ê‚ª30•b‚ğ’´‚¦‚é‚ÆWarning‚ğ”­o‚µ‚Ü‚·B
-(Kea‚Íˆ—‚ğs‚í‚È‚¢‚Ì‚Å)ŠÇ—Ò‚Í’Êí‚±‚Ì–â‘è‚ğNTP“¯Šú‚ğs‚¤‚±‚Æ‚Å‘Îˆ‚·‚é•K—v‚ª‚ ‚é‚Å‚µ‚å‚¤B
+ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªå„ã‚µãƒ¼ãƒã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¨ã®ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã®éš›ã«æ™‚åˆ»ãšã‚Œã‚’ç›£è¦–ã—ã¾ã™ã€‚
+ãŸã ã—ã€ã“ã‚Œã¯è¤‡é›‘ãª(NTPã®ã‚ˆã†ãª)å‡¦ç†ã¯è¡Œã£ã¦ãŠã‚‰ãšã€ã‚ãã¾ã§ç™ºä¿¡ã‹ã‚‰ç€ä¿¡ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®å·®ã§åŒºåˆ¥ã—ã¦ã„ã¾ã™ã€‚
+Keaã§ã¯æ™‚åˆ»ãšã‚ŒãŒ30ç§’ã‚’è¶…ãˆã‚‹ã¨Warningã‚’ç™ºå‡ºã—ã¾ã™ã€‚
+(Keaã¯æ™‚åˆ»å‡¦ç†ã‚’è¡Œã‚ãªã„ã®ã§)ç®¡ç†è€…ã¯é€šå¸¸ã“ã®å•é¡Œã‚’NTPåŒæœŸã‚’è¡Œã†ã“ã¨ã§å¯¾å‡¦ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã§ã—ã‚‡ã†ã€‚
 </p>
 
 <p id="en">
@@ -149,9 +149,9 @@ Each active server monitors the clock skew by comparing its current time with th
 </p>
 
 <p id="jp">
-‚¸‚ê‚ª60•b‚ğ’´‚¦‚½ê‡‚ÍHA‚ª‘g‚Ü‚ê‚Ü‚¹‚ñB‚Â‚Ü‚èAHA‚Ì‚ÍterminatedƒXƒe[ƒg(Œãq)‚Æ‚È‚è‚Ü‚·B
-ƒT[ƒo‚ÍDHCP—v‹‚É‰“š‚·‚é‚±‚Æ‚Í‚Å‚«‚é‚à‚Ì‚ÌA‘¼‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Ö‚Ìƒn[ƒgƒr[ƒg‚âƒŠ[ƒX‚Ì“¯Šú‚ğs‚¤‚±‚Æ‚ª‚È‚­‚È‚è‚Ü‚·B
-ŠÇ—Ò‚Í‚±‚Ìê‡ANTP‚È‚Ç‚ÅƒNƒƒbƒN“¯Šú‚µ‚½ŒãAKeaƒT[ƒo‚ğÄ‹N“®‚·‚é•K—v‚ª‚ ‚é‚Å‚µ‚å‚¤B
+æ™‚åˆ»ãšã‚ŒãŒ60ç§’ã‚’è¶…ãˆãŸå ´åˆã¯HAãŒçµ„ã¾ã‚Œã¾ã›ã‚“ã€‚ã¤ã¾ã‚Šã€HAã®ã¯terminatedã‚¹ãƒ†ãƒ¼ãƒˆ(å¾Œè¿°)ã¨ãªã‚Šã¾ã™ã€‚
+ã‚µãƒ¼ãƒã¯DHCPè¦æ±‚ã«å¿œç­”ã™ã‚‹ã“ã¨ã¯ã§ãã‚‹ã‚‚ã®ã®ã€ä»–ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¸ã®ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚„ãƒªãƒ¼ã‚¹ã®åŒæœŸã‚’è¡Œã†ã“ã¨ãŒãªããªã‚Šã¾ã™ã€‚
+ç®¡ç†è€…ã¯ã“ã®å ´åˆã€NTPãªã©ã§ã‚¯ãƒ­ãƒƒã‚¯åŒæœŸã—ãŸå¾Œã€Keaã‚µãƒ¼ãƒã‚’å†èµ·å‹•ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã§ã—ã‚‡ã†ã€‚
 </p>
 
 <p id="en">
@@ -159,31 +159,31 @@ If the clock skew is not corrected and it exceeds 60 seconds, the HA service on 
 </p>
 </div>
 
-<h2 id="jp">15.4.8.3. ƒXƒe[ƒg</h2>
+<h2 id="jp">15.4.8.3. ã‚¹ãƒ†ãƒ¼ãƒˆ</h2>
 <h2 id="en">Server States</h2>
 <div id="section">
 
 <p id="jp">
-HA‚ª‘g‚Ü‚ê‚Ä‚¢‚éƒT[ƒo‚Å‚ÍHA‚ÌƒXƒe[ƒg‚ğ‚¿‚Ü‚·B
-ha-heartbeat API‚Åƒp[ƒgƒi[‚Ìó‘Ô‚ğŠm”F‚³‚ê‚Ä‚¢‚Ü‚·B
-ƒp[ƒgƒi[‚ª‚±‚ÌAPI‚É‰“š‚µ‚È‚¢ê‡AHAŠÔ‚Ì’ÊM‚ÍØ’f‚µ‚½‚Æ‰¼’è‚µA
-\¬‚É‰‚¶‚ÄƒT[ƒo‚Í•Ê‚Ìè’i(•Ê“rà–¾)‚Åƒp[ƒgƒi[‚Ìó‘Ô‚ğŠm”F‚µ‚æ‚¤‚Æ‚µ‚Ü‚·B
-ƒp[ƒgƒi[‚ÉáŠQ‚ª”­¶‚µ‚½‚Æ”»’f‚³‚ê‚é‚Æpartner-downó‘Ô‚É‚È‚èADHCP—v‹‚Ìˆ—‚ğŠJn‚µ‚Ü‚·B
+HAãŒçµ„ã¾ã‚Œã¦ã„ã‚‹ã‚µãƒ¼ãƒã§ã¯HAã®ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æŒã¡ã¾ã™ã€‚
+ha-heartbeat APIã§ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã®çŠ¶æ…‹ã‚’ç¢ºèªã•ã‚Œã¦ã„ã¾ã™ã€‚
+ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ãŒã“ã®APIã«å¿œç­”ã—ãªã„å ´åˆã€HAé–“ã®é€šä¿¡ã¯åˆ‡æ–­ã—ãŸã¨ä»®å®šã—ã€
+æ§‹æˆã«å¿œã˜ã¦ã‚µãƒ¼ãƒã¯åˆ¥ã®æ‰‹æ®µ(åˆ¥é€”èª¬æ˜)ã§ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã®çŠ¶æ…‹ã‚’ç¢ºèªã—ã‚ˆã†ã¨ã—ã¾ã™ã€‚
+ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«éšœå®³ãŒç™ºç”Ÿã—ãŸã¨åˆ¤æ–­ã•ã‚Œã‚‹ã¨partner-downçŠ¶æ…‹ã«ãªã‚Šã€DHCPè¦æ±‚ã®å‡¦ç†ã‚’é–‹å§‹ã—ã¾ã™ã€‚
 </p>
 <p id="en">
 The DHCP server operating within an HA setup runs a state machine and the state of the server can be retrieved by its peers using the ha-heartbeat command sent over the RESTful API. If the partner server doesn't respond to the ha-heartbeat command longer than configured amount of time, the communication is considered interrupted and the server may (depending on the configuration) use additional measures (desribed further in this document) to verify if the partner is still operating. If it finds that the partner is not operating, the server transitions to the partner-down state to handle the entire DHCP traffic directed to the system.
 </p>
 
 <p id="jp">
-partner-downó‘Ô‚Å‚àAƒp[ƒgƒi[‚É‘Î‚µ‚Äha-heartbeat API‚Ís‚µ‘±‚¯‚ç‚ê‚Ü‚·B
-áŠQó‘Ô‚©‚ç‰ñ•œ‚µ‚½ƒp[ƒgƒi[‚ªƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚Ì“¯Šú‚ğŠ®—¹‚µA‰^—p‰Â”\ó‘Ô‚Æ‚È‚é‚ÆA’Êíó‘Ô‚É–ß‚è‚Ü‚·B
+partner-downçŠ¶æ…‹ã§ã‚‚ã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«å¯¾ã—ã¦ha-heartbeat APIã¯è©¦è¡Œã—ç¶šã‘ã‚‰ã‚Œã¾ã™ã€‚
+éšœå®³çŠ¶æ…‹ã‹ã‚‰å›å¾©ã—ãŸãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ãŒãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åŒæœŸã‚’å®Œäº†ã—ã€é‹ç”¨å¯èƒ½çŠ¶æ…‹ã¨ãªã‚‹ã¨ã€é€šå¸¸çŠ¶æ…‹ã«æˆ»ã‚Šã¾ã™ã€‚
 </p>
 <p id="en">
 In this case, the surviving server continues to send the ha-heartbeat command to detect when the partner wakes up. The partner synchronizes the lease database and when it is finally ready to operate, the surviving server returns to the normal operation, i.e. load-balancing or hot-standby state.
 </p>
 
 <p id="jp">
-ˆÈ‰º‚ÉƒXƒe[ƒg‚Ìˆê——‚ğ¦‚µ‚Ü‚·B
+ä»¥ä¸‹ã«ã‚¹ãƒ†ãƒ¼ãƒˆã®ä¸€è¦§ã‚’ç¤ºã—ã¾ã™ã€‚
 </p>
 <p id="en">
 The following is the list of all possible states into which the servers may transition:
@@ -191,7 +191,7 @@ The following is the list of all possible states into which the servers may tran
 
 <b>backup</b>
 <p id="jp">
-ƒoƒbƒNƒAƒbƒvƒT[ƒo‚Ì³íó‘ÔBƒAƒNƒeƒBƒuƒT[ƒo‚©‚ç‚ÌƒŠ[ƒXXV‚ğóM‚·‚éB
+ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã®æ­£å¸¸çŠ¶æ…‹ã€‚ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã‹ã‚‰ã®ãƒªãƒ¼ã‚¹æ›´æ–°ã‚’å—ä¿¡ã™ã‚‹ã€‚
 </p>
 <p id="en">
 normal operation of the backup server. In this state it receives lease updates from the active servers.
@@ -199,9 +199,9 @@ normal operation of the backup server. In this state it receives lease updates f
 
 <b>hot-standby</b>
 <p id="jp">
-ƒzƒbƒgƒXƒ^ƒ“ƒoƒCƒ‚[ƒh‚ÌƒAƒNƒeƒBƒuƒT[ƒo‚É‚¨‚¯‚é³íó‘ÔB
-ƒvƒ‰ƒCƒ}ƒŠ‚ÆƒZƒJƒ“ƒ_ƒŠ‚Í’Êí‚±‚Ìó‘Ô‚Æ‚È‚éB
-ƒvƒ‰ƒCƒ}ƒŠ‚ÍDHCP—v‹‚É‰“š‚µAƒXƒ^ƒ“ƒoƒC‚ÆƒoƒbƒNƒAƒbƒvƒT[ƒo‚ÉƒŠ[ƒXXV‚ğ‘—M‚·‚éB
+ãƒ›ãƒƒãƒˆã‚¹ã‚¿ãƒ³ãƒã‚¤ãƒ¢ãƒ¼ãƒ‰ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã«ãŠã‘ã‚‹æ­£å¸¸çŠ¶æ…‹ã€‚
+ãƒ—ãƒ©ã‚¤ãƒãƒªã¨ã‚»ã‚«ãƒ³ãƒ€ãƒªã¯é€šå¸¸ã“ã®çŠ¶æ…‹ã¨ãªã‚‹ã€‚
+ãƒ—ãƒ©ã‚¤ãƒãƒªã¯DHCPè¦æ±‚ã«å¿œç­”ã—ã€ã‚¹ã‚¿ãƒ³ãƒã‚¤ã¨ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã«ãƒªãƒ¼ã‚¹æ›´æ–°ã‚’é€ä¿¡ã™ã‚‹ã€‚
 </p>
 <p id="en">
 normal operation of the active server running in the hot standby mode. Both primary and standby server are in this state during their normal operation. The primary server is responding to the DHCP queries and sends lease updates to the standby server and to the backup servers, if any backup servers are present.
@@ -209,10 +209,10 @@ normal operation of the active server running in the hot standby mode. Both prim
 
 <b>load-balancing</b>
 <p id="jp">
-•‰‰×•ªUƒ‚[ƒh‚ÌƒAƒNƒeƒBƒuƒT[ƒo‚É‚¨‚¯‚é³íó‘ÔB
-ƒvƒ‰ƒCƒ}ƒŠ‚ÆƒZƒJƒ“ƒ_ƒŠ‚Í’Êí‚±‚Ìó‘Ô‚Æ‚È‚éB
-—¼•û‚ÌƒT[ƒo‚ÍDHCP—v‹‚É‰“š‚µA‘ŠŒİŠÔ‚ÉƒŠ[ƒXXV‚ğ‘—M‚·‚éB
-ƒoƒbƒNƒAƒbƒvƒT[ƒo‚ª‘¶İ‚·‚é‚È‚çA“¯—l‚ÉƒŠ[ƒXXV‚ğ‘—M‚·‚éB
+è² è·åˆ†æ•£ãƒ¢ãƒ¼ãƒ‰ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã«ãŠã‘ã‚‹æ­£å¸¸çŠ¶æ…‹ã€‚
+ãƒ—ãƒ©ã‚¤ãƒãƒªã¨ã‚»ã‚«ãƒ³ãƒ€ãƒªã¯é€šå¸¸ã“ã®çŠ¶æ…‹ã¨ãªã‚‹ã€‚
+ä¸¡æ–¹ã®ã‚µãƒ¼ãƒã¯DHCPè¦æ±‚ã«å¿œç­”ã—ã€ç›¸äº’é–“ã«ãƒªãƒ¼ã‚¹æ›´æ–°ã‚’é€ä¿¡ã™ã‚‹ã€‚
+ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒãŒå­˜åœ¨ã™ã‚‹ãªã‚‰ã€åŒæ§˜ã«ãƒªãƒ¼ã‚¹æ›´æ–°ã‚’é€ä¿¡ã™ã‚‹ã€‚
 </p>
 <p id="en">
 normal operation of the active server running in the load balancing mode. Both primary and secondary server are in this state during their normal operation. Both servers are responding to the DHCP queries and send lease updates to each other and to the backup servers, if any backup servers are present.
@@ -220,9 +220,9 @@ normal operation of the active server running in the load balancing mode. Both p
 
 <b>partner-down</b>
 <p id="jp">
-ƒAƒNƒeƒBƒuƒT[ƒo‚Íƒp[ƒgƒi[‚ªƒIƒtƒ‰ƒCƒ“ó‘Ô‚Å‚ ‚é‚±‚Æ‚ğŒŸo‚·‚é‚Æ‚±‚Ìó‘Ô‚Æ‚È‚éB
-®AƒoƒbƒNƒAƒbƒvƒT[ƒo‚Íƒp[ƒgƒi[‚ÉŠÜ‚Ü‚ê‚È‚¢B
-‚±‚Ìó‘Ô‚Å‚Í(‘Šè•û‚ªDHCP—v‹‚É‰“š‚Å‚«‚È‚¢‚Æ‚İ‚È‚·‚½‚ß)’Êí‚Íƒp[ƒgƒi[‚ªˆ—‚·‚é‚Æ‚İ‚È‚·ˆ—‚µ‚È‚¢—v‹‚É‚à‰“š‚·‚éB
+ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ãŒã‚ªãƒ•ãƒ©ã‚¤ãƒ³çŠ¶æ…‹ã§ã‚ã‚‹ã“ã¨ã‚’æ¤œå‡ºã™ã‚‹ã¨ã“ã®çŠ¶æ…‹ã¨ãªã‚‹ã€‚
+å°šã€ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«å«ã¾ã‚Œãªã„ã€‚
+ã“ã®çŠ¶æ…‹ã§ã¯(ç›¸æ‰‹æ–¹ãŒDHCPè¦æ±‚ã«å¿œç­”ã§ããªã„ã¨ã¿ãªã™ãŸã‚)é€šå¸¸ã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ãŒå‡¦ç†ã™ã‚‹ã¨ã¿ãªã™å‡¦ç†ã—ãªã„è¦æ±‚ã«ã‚‚å¿œç­”ã™ã‚‹ã€‚
 </p>
 <p id="en">
 an active server transitions to this state after detecting that its partner (another active server) is offline. The server doesn't transition to this state if any of the backup servers is unavailable. In the partner-down state the server responds to all DHCP queries, so also those queries which are normally handled by the active server which is now unavailable.
@@ -230,8 +230,8 @@ an active server transitions to this state after detecting that its partner (ano
 
 <b>ready</b>
 <p id="jp">
-ƒAƒNƒeƒBƒuƒT[ƒo‚ÍƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ğƒp[ƒgƒi[‚Æ“¯Šú‚·‚é‚Æ‚±‚Ìó‘Ô‚Æ‚È‚éB
-partner-downó‘Ô‚ÌƒT[ƒo‚ÍáŠQ‚ª‰ñ•œ‚µ‚Äƒp[ƒgƒi[‚Æ‚Ì“¯Šú‚ªŠ®—¹‚·‚é‚Æ‚±‚Ìó‘Ô‚Æ‚È‚èA³í“®ì‚Æ‚È‚éB
+ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã¯ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¨åŒæœŸã™ã‚‹ã¨ã“ã®çŠ¶æ…‹ã¨ãªã‚‹ã€‚
+partner-downçŠ¶æ…‹ã®ã‚µãƒ¼ãƒã¯éšœå®³ãŒå›å¾©ã—ã¦ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¨ã®åŒæœŸãŒå®Œäº†ã™ã‚‹ã¨ã“ã®çŠ¶æ…‹ã¨ãªã‚Šã€æ­£å¸¸å‹•ä½œã¨ãªã‚‹ã€‚
 
 </p>
 <p id="en">
@@ -240,11 +240,11 @@ an active server transitions to this state after synchronizing its lease databas
 
 <b>syncing</b>
 <p id="jp">
-ƒAƒNƒeƒBƒuƒT[ƒo‚Í‚±‚Ìó‘Ô‚ÉˆÚs‚µ‚ÄAƒp[ƒgƒi[‚©‚ç‚ÌƒŠ[ƒX‚ğæ“¾‚µA©g‚ÌƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ğXV‚µ‚æ‚¤‚·‚éB
-‚±‚Ìó‘Ô‚Å‚ÍAdhcp-disable API‚ğ”­s‚·‚é‚±‚Æ‚Åƒp[ƒgƒi[‚ÌDHCP‚ğÅ‘å60•b‚ÌŠÔ–³Œø‚É‚·‚éB60•`‰æŒo‰ß‚µ‚½Œã‚Í©“®“I‚É—LŒø‚Æ‚È‚éB‚È‚º‚È‚çAdhcp-disable‚ğ—v‹‚µ‚½ƒm[ƒh‚ÉáŠQ‚ª‹N‚«‚é‚Æ‚¸‚Á‚Ædisable‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚©‚ç‚Å‚ ‚éB
-–³–‚ÉƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ÌXV‚ªŠ®—¹‚µ‚½ê‡Adhcp-enableƒRƒ}ƒ“ƒh‚ğ”­s‚µ‚Äƒp[ƒgƒi[‚ÌDHCP‚ğ—LŒø‚É‚·‚éB
-‚Â‚Ü‚èAƒŠ[ƒX‚Ì“¯Šú‚ªs‚í‚ê‚Ä‚¢‚éŠÔADHCP—v‹‚É‘Î‚µ‚Ä‚Í‰“š‚µ‚È‚¢B
-‚½‚¾‚µAsync-leasesƒpƒ‰ƒ[ƒ^‚ğfalse‚É‚µ‚Ä‚¢‚éƒT[ƒo(ƒp[ƒgƒi[‚Æ‚Ì“¯Šú‚ğs‚í‚È‚­‚µ‚Ä‚¢‚éƒT[ƒo)‚Í‚±‚Ìó‘Ô‚É‘JˆÚ‚·‚é‚±‚Æ‚Í‚È‚­Awaiting‚©‚çready‚É’¼Ú‘JˆÚ‚·‚éB
+ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã¯ã“ã®çŠ¶æ…‹ã«ç§»è¡Œã—ã¦ã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‹ã‚‰ã®ãƒªãƒ¼ã‚¹ã‚’å–å¾—ã—ã€è‡ªèº«ã®ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’æ›´æ–°ã—ã‚ˆã†ã™ã‚‹ã€‚
+ã“ã®çŠ¶æ…‹ã§ã¯ã€dhcp-disable APIã‚’ç™ºè¡Œã™ã‚‹ã“ã¨ã§ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã®DHCPã‚’æœ€å¤§60ç§’ã®é–“ç„¡åŠ¹ã«ã™ã‚‹ã€‚60æç”»çµŒéã—ãŸå¾Œã¯è‡ªå‹•çš„ã«æœ‰åŠ¹ã¨ãªã‚‹ã€‚ãªãœãªã‚‰ã€dhcp-disableã‚’è¦æ±‚ã—ãŸãƒãƒ¼ãƒ‰ã«éšœå®³ãŒèµ·ãã‚‹ã¨ãšã£ã¨disableã«ãªã£ã¦ã—ã¾ã†ã‹ã‚‰ã§ã‚ã‚‹ã€‚
+ç„¡äº‹ã«ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®æ›´æ–°ãŒå®Œäº†ã—ãŸå ´åˆã€dhcp-enableã‚³ãƒãƒ³ãƒ‰ã‚’ç™ºè¡Œã—ã¦ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã®DHCPã‚’æœ‰åŠ¹ã«ã™ã‚‹ã€‚
+ã¤ã¾ã‚Šã€ãƒªãƒ¼ã‚¹ã®åŒæœŸãŒè¡Œã‚ã‚Œã¦ã„ã‚‹é–“ã€DHCPè¦æ±‚ã«å¯¾ã—ã¦ã¯å¿œç­”ã—ãªã„ã€‚
+ãŸã ã—ã€sync-leasesãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’falseã«ã—ã¦ã„ã‚‹ã‚µãƒ¼ãƒ(ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¨ã®åŒæœŸã‚’è¡Œã‚ãªãã—ã¦ã„ã‚‹ã‚µãƒ¼ãƒ)ã¯ã“ã®çŠ¶æ…‹ã«é·ç§»ã™ã‚‹ã“ã¨ã¯ãªãã€waitingã‹ã‚‰readyã«ç›´æ¥é·ç§»ã™ã‚‹ã€‚
 <br>
 
 </p>
@@ -254,14 +254,14 @@ an active server transitions to this state to fetch leases from the active partn
 
 <b>terminated</b>
 <p id="jp">
-HAƒ‰ƒCƒuƒ‰ƒŠ‚ª‚‰Â—p«ƒT[ƒrƒX‚ğ’ñ‹Ÿ‚Å‚«‚¸AŠÇ—Ò‚ÌƒIƒyƒŒ[ƒVƒ‡ƒ“‚ª•K—v‚Èê‡A‚±‚Ìó‘Ô‚Æ‚È‚éB
-Œ»İA‚±‚Ìó‘Ô‚É‚È‚éğŒ‚Í‚»‚¤‚»‚¤‚È‚¢‚ªA—lX‚È–â‘è‚É‚æ‚Á‚Ä‚±‚Ìó‘Ô‚É‚È‚é‰Â”\«‚ª‚ ‚éB
-Kea 1.4.0“_‚ÅA‚±‚Ìó‘Ô‚Æ‚È‚é—Bˆê‚ÌğŒ‚ÍƒAƒNƒeƒBƒu‚ÈƒT[ƒoŠÔ‚Å‚Ì60•bˆÈã‚Ì‚¸‚ê‚Å‚ ‚éB
+HAãƒ©ã‚¤ãƒ–ãƒ©ãƒªãŒé«˜å¯ç”¨æ€§ã‚µãƒ¼ãƒ“ã‚¹ã‚’æä¾›ã§ããšã€ç®¡ç†è€…ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå¿…è¦ãªå ´åˆã€ã“ã®çŠ¶æ…‹ã¨ãªã‚‹ã€‚
+ç¾åœ¨ã€ã“ã®çŠ¶æ…‹ã«ãªã‚‹æ¡ä»¶ã¯ãã†ãã†ãªã„ãŒã€æ§˜ã€…ãªå•é¡Œã«ã‚ˆã£ã¦ã“ã®çŠ¶æ…‹ã«ãªã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã€‚
+Kea 1.4.0æ™‚ç‚¹ã§ã€ã“ã®çŠ¶æ…‹ã¨ãªã‚‹å”¯ä¸€ã®æ¡ä»¶ã¯ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚µãƒ¼ãƒé–“ã§ã®60ç§’ä»¥ä¸Šã®æ™‚åˆ»ãšã‚Œã§ã‚ã‚‹ã€‚
 <br>
-‚±‚Ìó‘Ô‚Å‚ÍAƒT[ƒo‚Í‘I‘ğ‚³‚ê‚½HAƒ‚[ƒh‚Ì’Ê‚è‚ÉDHCPƒNƒ‰ƒCƒAƒ“ƒg‚É‰“š‚µ‘±‚¯‚é‚à‚Ì‚ÌAƒŠ[ƒXXV‚ÍŒğŠ·‚³‚ê‚¸A‚Ü‚½Aƒn[ƒgƒr[ƒg‚à‘—o‚µ‚È‚¢B
-ˆê“x‚±‚Ìó‘Ô‚É‚È‚é‚Æ(‰^—pÒ‚ÌƒIƒyƒŒ[ƒVƒ‡ƒ“‚ª•K—v‚Å‚ ‚é‚½‚ß)ƒCƒ“ƒXƒ^ƒ“ƒX‚ªÄ‹N“®‚³‚ê‚é‚Ü‚Å‚±‚Ìó‘Ô‚Æ‚È‚éB
-‚»‚Ì‚½‚ßAŠÇ—Ò‚Í‚±‚Ìó‘Ô‚Æ‚È‚Á‚½Œ´ˆö‚ğ‰ğÁ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢B
-‚à‚µA‰ğŒˆ‚¹‚¸‚ÉÄ‹N“®‚ğs‚Á‚½‚È‚çAÄ“x‚±‚Ìó‘Ô‚Æ‚È‚é‚¾‚ë‚¤B
+ã“ã®çŠ¶æ…‹ã§ã¯ã€ã‚µãƒ¼ãƒã¯é¸æŠã•ã‚ŒãŸHAãƒ¢ãƒ¼ãƒ‰ã®é€šã‚Šã«DHCPã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«å¿œç­”ã—ç¶šã‘ã‚‹ã‚‚ã®ã®ã€ãƒªãƒ¼ã‚¹æ›´æ–°ã¯äº¤æ›ã•ã‚Œãšã€ã¾ãŸã€ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚‚é€å‡ºã—ãªã„ã€‚
+ä¸€åº¦ã“ã®çŠ¶æ…‹ã«ãªã‚‹ã¨(é‹ç”¨è€…ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå¿…è¦ã§ã‚ã‚‹ãŸã‚)ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒå†èµ·å‹•ã•ã‚Œã‚‹ã¾ã§ã“ã®çŠ¶æ…‹ã¨ãªã‚‹ã€‚
+ãã®ãŸã‚ã€ç®¡ç†è€…ã¯ã“ã®çŠ¶æ…‹ã¨ãªã£ãŸåŸå› ã‚’è§£æ¶ˆãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+ã‚‚ã—ã€è§£æ±ºã›ãšã«å†èµ·å‹•ã‚’è¡Œã£ãŸãªã‚‰ã€å†åº¦ã“ã®çŠ¶æ…‹ã¨ãªã‚‹ã ã‚ã†ã€‚
 </p>
 <p id="en">
 an active server transitions to this state when the High Availability hooks library is unable to further provide reliable service and a manual intervention of the administrator is required to correct the problem. It is envisaged that various issues with the HA setup may cause the server to transition to this state in the future. As of Kea 1.4.0 release, the only issue causing the HA service to terminate is unacceptably high clock skew between the active servers, i.e. if the clocks on respective servers are more than 60 seconds apart. While in this state, the server will continue responding to the DHCP clients based on the HA mode selected (load balancing or hot standby), but the lease updates won't be exchanged and the heartbeats won't be sent. Once a server has entered the "terminated" state it will remain in this state until it is restarted. The administrator must correct the issue which caused this situation prior to restarting the server (e.g. synchronize clocks). Otherwise, the server will return to the "terminated" state as soon as it finds that the clock skew is still too high.
@@ -269,13 +269,13 @@ an active server transitions to this state when the High Availability hooks libr
 
 <b>waiting</b>
 <p id="jp">
-‹N“®‚µ‚½ƒT[ƒoƒCƒ“ƒXƒ^ƒ“ƒX‚Ì‰Šúó‘Ô‚Å‚ ‚éB
-ƒoƒbƒNƒAƒbƒvƒT[ƒo‚Í‚±‚Ìó‘Ô‚©‚çbackupƒXƒe[ƒg‚É‘JˆÚ‚·‚éB
-ƒAƒNƒeƒBƒuƒT[ƒo‚Í‚Ü‚¸ƒp[ƒgƒi[‚Éƒn[ƒgƒr[ƒg‚ğ‘—o‚µA
-‰“š‚ª‚È‚¢ê‡‚Ípartner-downó‘Ô‚É‘JˆÚ‚·‚éB
-‚»‚¤‚Å‚È‚¢ê‡‚Ísyncingó‘Ô‚É‚È‚é(‚½‚¾‚µAsync-leases‚ªfalse‚È‚çreadyó‘Ô)B
+èµ·å‹•ã—ãŸã‚µãƒ¼ãƒã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®åˆæœŸçŠ¶æ…‹ã§ã‚ã‚‹ã€‚
+ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã¯ã“ã®çŠ¶æ…‹ã‹ã‚‰backupã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»ã™ã‚‹ã€‚
+ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã¯ã¾ãšãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’é€å‡ºã—ã€
+å¿œç­”ãŒãªã„å ´åˆã¯partner-downçŠ¶æ…‹ã«é·ç§»ã™ã‚‹ã€‚
+ãã†ã§ãªã„å ´åˆã¯syncingçŠ¶æ…‹ã«ãªã‚‹(ãŸã ã—ã€sync-leasesãŒfalseãªã‚‰readyçŠ¶æ…‹)ã€‚
 <br>
-‚à‚µ—¼•û‚ÌƒT[ƒo‚ª‚±‚Ìó‘Ô‚Ì(‚Â‚Ü‚è—¼•û‚ª“¯‚É‹N“®‚µ‚½‚Æ‚«)‚ÍAƒvƒ‰ƒCƒ}ƒŠ‚ÍŸ‚Ìó‘Ô‚É‘JˆÚ‚µAƒZƒJƒ“ƒ_ƒŠ‚âƒXƒ^ƒ“ƒoƒC‚Íwaiting‚Ì‚Ü‚Üƒvƒ‰ƒCƒ}ƒŠ‚Ìó‘Ô‘JˆÚ‚ğ‘Ò‚ÂB
+ã‚‚ã—ä¸¡æ–¹ã®ã‚µãƒ¼ãƒãŒã“ã®çŠ¶æ…‹ã®æ™‚(ã¤ã¾ã‚Šä¸¡æ–¹ãŒåŒæ™‚ã«èµ·å‹•ã—ãŸã¨ã)ã¯ã€ãƒ—ãƒ©ã‚¤ãƒãƒªã¯æ¬¡ã®çŠ¶æ…‹ã«é·ç§»ã—ã€ã‚»ã‚«ãƒ³ãƒ€ãƒªã‚„ã‚¹ã‚¿ãƒ³ãƒã‚¤ã¯waitingã®ã¾ã¾ãƒ—ãƒ©ã‚¤ãƒãƒªã®çŠ¶æ…‹é·ç§»ã‚’å¾…ã¤ã€‚
 </p>
 <p id="en">
 each started server instance enters this state. The backup server will transition directly from this state to the backup state. An active server will send heartbeat to its partner to check its state. If the partner appears to be unavailable the server will transition to the partner-down, otherwise it will transition to the syncing or ready state (depending on the setting of the sync-leases configuration parameter).
@@ -284,10 +284,10 @@ each started server instance enters this state. The backup server will transitio
 </p>
 
 <p id="jp">
-Kea‚ªDHCP—v‹‚É‰“š‚·‚é‚©A‚Ü‚½A‚Ç‚Ì—v‹‚É‰“š‚·‚é‚©‚Æ‚¢‚¤‚Ì‚Íã‹L‚É¦‚µ‚½ƒXƒe[ƒg‚É‚æ‚Á‚ÄŒˆ’è‚³‚ê‚éB
-Ÿ‚Ì•\‚ÅŠeƒXƒe[ƒg‚É‚¨‚¯‚é‚Ó‚é‚Ü‚¢(‚½‚¾‚µAdefault‚Ì)‚ğ¦‚·B
+KeaãŒDHCPè¦æ±‚ã«å¿œç­”ã™ã‚‹ã‹ã€ã¾ãŸã€ã©ã®è¦æ±‚ã«å¿œç­”ã™ã‚‹ã‹ã¨ã„ã†ã®ã¯ä¸Šè¨˜ã«ç¤ºã—ãŸã‚¹ãƒ†ãƒ¼ãƒˆã«ã‚ˆã£ã¦æ±ºå®šã•ã‚Œã‚‹ã€‚
+æ¬¡ã®è¡¨ã§å„ã‚¹ãƒ†ãƒ¼ãƒˆã«ãŠã‘ã‚‹ãµã‚‹ã¾ã„(ãŸã ã—ã€defaultã®)ã‚’ç¤ºã™ã€‚
 
-DHCPƒT[ƒoƒXƒR[ƒv‚Æ‚ÍAóM‚·‚éƒNƒGƒŠ‚Ì•ª—Ş‚Å‚ ‚èAŒãq‚·‚éB
+DHCPã‚µãƒ¼ãƒã‚¹ã‚³ãƒ¼ãƒ—ã¨ã¯ã€å—ä¿¡ã™ã‚‹ã‚¯ã‚¨ãƒªã®åˆ†é¡ã§ã‚ã‚Šã€å¾Œè¿°ã™ã‚‹ã€‚
 </p>
 <p id="en">
 Whether the server responds to the DHCP queries and which queries it responds to is a matter of the server's state, if no administrative action is performed to configure the server otherwise. The following table provides the default behavior for various states.
@@ -295,27 +295,27 @@ Whether the server responds to the DHCP queries and which queries it responds to
 The DHCP Server Scopes denotes what group of received DHCP queries the server responds to in the given state. The in-depth explanation what the scopes are can be found below.
 </p>
 
-TODO: ‚±‚±‚É•\‚ğ“\‚é
+TODO: ã“ã“ã«è¡¨ã‚’è²¼ã‚‹
 
 <p id="jp">
-DHCPƒT[ƒrƒXƒXƒR[ƒv‚É‚Â‚¢‚Ä•â‘«‚µ‚Ü‚·B
-HA\¬‚Å‚ÍŠeƒT[ƒo‚É‘Î‚µ‚ÄˆêˆÓ‚È–¼‘O‚ğİ’è‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB
-–{ƒhƒLƒ…ƒƒ“ƒg‚Å‚ÍAƒvƒ‰ƒCƒ}ƒŠƒT[ƒo‚ğserver1AƒZƒJƒ“ƒ_ƒŠ‚Ü‚½‚ÍƒXƒ^ƒ“ƒoƒCƒT[ƒo‚ğserver2A
-ƒoƒbƒNƒAƒbƒvƒT[ƒo‚É‚Íserver3‚Æ‚¢‚¤–¼‘O‚ğ—p‚¢‚Ü‚·BÀÛ‚Í‚Ç‚Ì‚æ‚¤‚È–¼‘O‚Å‚à\‚¢‚Ü‚¹‚ñB
+DHCPã‚µãƒ¼ãƒ“ã‚¹ã‚¹ã‚³ãƒ¼ãƒ—ã«ã¤ã„ã¦è£œè¶³ã—ã¾ã™ã€‚
+HAæ§‹æˆã§ã¯å„ã‚µãƒ¼ãƒã«å¯¾ã—ã¦ä¸€æ„ãªåå‰ã‚’è¨­å®šã—ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚
+æœ¬ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã§ã¯ã€ãƒ—ãƒ©ã‚¤ãƒãƒªã‚µãƒ¼ãƒã‚’server1ã€ã‚»ã‚«ãƒ³ãƒ€ãƒªã¾ãŸã¯ã‚¹ã‚¿ãƒ³ãƒã‚¤ã‚µãƒ¼ãƒã‚’server2ã€
+ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã«ã¯server3ã¨ã„ã†åå‰ã‚’ç”¨ã„ã¾ã™ã€‚å®Ÿéš›ã¯ã©ã®ã‚ˆã†ãªåå‰ã§ã‚‚æ§‹ã„ã¾ã›ã‚“ã€‚
 <br>
-•‰‰×•ªUƒ‚[ƒh: HA_server1‚ÆHA_server2‚Ì‚Q‚Â‚ÌƒXƒR[ƒv‚ª‘¶İ‚µ‚Ü‚·B
-server1‚ªˆ—‚µ‚½ƒNƒGƒŠ‚ÍHA_server1‚É‘®‚µA
-server2‚ªˆ—‚µ‚½ƒNƒGƒŠ‚ÍHA_server2‚É‘®‚µ‚Ü‚·B
-partner-downó‘Ô‚Ìê‡A—¼•û‚ÌƒXƒR[ƒv‚ÉƒT[ƒrƒX‚ğ’ñ‹Ÿ‚·‚é‚±‚Æ‚É‚È‚è‚Ü‚·B
+è² è·åˆ†æ•£ãƒ¢ãƒ¼ãƒ‰: HA_server1ã¨HA_server2ã®ï¼’ã¤ã®ã‚¹ã‚³ãƒ¼ãƒ—ãŒå­˜åœ¨ã—ã¾ã™ã€‚
+server1ãŒå‡¦ç†ã—ãŸã‚¯ã‚¨ãƒªã¯HA_server1ã«å±ã—ã€
+server2ãŒå‡¦ç†ã—ãŸã‚¯ã‚¨ãƒªã¯HA_server2ã«å±ã—ã¾ã™ã€‚
+partner-downçŠ¶æ…‹ã®å ´åˆã€ä¸¡æ–¹ã®ã‚¹ã‚³ãƒ¼ãƒ—ã«ã‚µãƒ¼ãƒ“ã‚¹ã‚’æä¾›ã™ã‚‹ã“ã¨ã«ãªã‚Šã¾ã™ã€‚
 <br>
-ƒzƒbƒgƒXƒ^ƒ“ƒoƒCƒ‚[ƒh: HA_server1‚Æ‚¢‚¤ƒXƒR[ƒv‚¾‚¯‚ª‘¶İ‚µ‚Ü‚·B
-server2‚Íserver1‚ªg—p‚Å‚«‚È‚­‚È‚ê‚Î‚±‚ÌƒXƒR[ƒv‚ÉƒT[ƒrƒX‚ğ’ñ‹Ÿ‚µ‚Ü‚·B
+ãƒ›ãƒƒãƒˆã‚¹ã‚¿ãƒ³ãƒã‚¤ãƒ¢ãƒ¼ãƒ‰: HA_server1ã¨ã„ã†ã‚¹ã‚³ãƒ¼ãƒ—ã ã‘ãŒå­˜åœ¨ã—ã¾ã™ã€‚
+server2ã¯server1ãŒä½¿ç”¨ã§ããªããªã‚Œã°ã“ã®ã‚¹ã‚³ãƒ¼ãƒ—ã«ã‚µãƒ¼ãƒ“ã‚¹ã‚’æä¾›ã—ã¾ã™ã€‚
 <br>
-ƒoƒbƒNƒAƒbƒvƒT[ƒoF“Æ©‚ÌƒXƒR[ƒv‚Í‚ ‚è‚Ü‚¹‚ñB‚½‚¾‚¢‚­‚Â‚©‚Ìó‹µ‚Å‚ÍAƒAƒNƒeƒBƒuƒT[ƒo‚ÌƒXƒR[ƒv‚É‰“š‚·‚é‚±‚Æ‚ª‚ ‚è‚Ü‚·Bpartner-downó‘Ô‚Å‚à’Êíó‘Ô‚Å‚àƒT[ƒo‚ÍƒXƒR[ƒv‚ğ’ñ‹Ÿ‚µ‚Ü‚¹‚ñB
+ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒï¼šç‹¬è‡ªã®ã‚¹ã‚³ãƒ¼ãƒ—ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚ãŸã ã„ãã¤ã‹ã®çŠ¶æ³ã§ã¯ã€ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã®ã‚¹ã‚³ãƒ¼ãƒ—ã«å¿œç­”ã™ã‚‹ã“ã¨ãŒã‚ã‚Šã¾ã™ã€‚partner-downçŠ¶æ…‹ã§ã‚‚é€šå¸¸çŠ¶æ…‹ã§ã‚‚ã‚µãƒ¼ãƒã¯ã‚¹ã‚³ãƒ¼ãƒ—ã‚’æä¾›ã—ã¾ã›ã‚“ã€‚
 <br>
-ƒXƒR[ƒv–¼‚ğ—˜—p‚·‚é‚±‚Æ‚ÅAƒv[ƒ‹AƒTƒuƒlƒbƒgA‚¨‚æ‚Ñƒlƒbƒgƒ[ƒN‚ğ“Á’è‚ÌƒT[ƒo‚É•R‚Ã‚¯‚é‚±‚Æ‚ª‚Å‚«A
-‚»‚ÌƒT[ƒo‚Ì‚İ‚Ås‚¤‚±‚Æ‚ª‚Å‚«‚Ü‚·B
-‚±‚ê‚ÍAƒNƒ‰ƒCƒAƒ“ƒg•ª—ŞƒƒJƒjƒYƒ€‚É‚æ‚Á‚Äs‚í‚ê‚Ü‚·(Œãq)B
+ã‚¹ã‚³ãƒ¼ãƒ—åã‚’åˆ©ç”¨ã™ã‚‹ã“ã¨ã§ã€ãƒ—ãƒ¼ãƒ«ã€ã‚µãƒ–ãƒãƒƒãƒˆã€ãŠã‚ˆã³ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚’ç‰¹å®šã®ã‚µãƒ¼ãƒã«ç´ã¥ã‘ã‚‹ã“ã¨ãŒã§ãã€
+ãã®ã‚µãƒ¼ãƒã®ã¿ã§è¡Œã†ã“ã¨ãŒã§ãã¾ã™ã€‚
+ã“ã‚Œã¯ã€ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆåˆ†é¡ãƒ¡ã‚«ãƒ‹ã‚ºãƒ ã«ã‚ˆã£ã¦è¡Œã‚ã‚Œã¾ã™(å¾Œè¿°)ã€‚
 </p>
 <p id="en">
 The DHCP service scopes require some explanation. The HA configuration must specify a unique name for each server within the HA setup. This document uses the following convention within provided examples: server1 for a primary server, server2 for the secondary or standby server and server3 for the backup server. In the real life any names can be used as long as they remain unique.
@@ -334,13 +334,13 @@ The scope names can be used to associate pools, subnets and networks with certai
 
 
 
-<h2 id="jp">15.4.8.4. ƒp[ƒgƒi[ƒ_ƒEƒ“‚ÌƒXƒR[ƒv‚ÌˆÚs</h2>
+<h2 id="jp">15.4.8.4. ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ãƒ€ã‚¦ãƒ³æ™‚ã®ã‚¹ã‚³ãƒ¼ãƒ—ã®ç§»è¡Œ</h2>
 <h2 id="en">Scope Transition in Partner Down Case</h2>
 <div id="section">
 <p id="jp">
-‚ ‚éƒT[ƒo‚ªƒp[ƒgƒi[‚ÌáŠQ‚ğŒŸ’m‚µ‚½ÛA©g‚ÌƒXƒR[ƒv‚É‰Á‚¦‚ÄAáŠQ‚ğŒŸ’m‚µ‚½ƒp[ƒgƒi[‚ÌƒXƒR[ƒv‚Ì—v‹‚É‚à‰“š‚·‚éB
-‚Â‚Ü‚èADHCPDISCOVER (DHCPv4)‚âSolicit (DHCPv6)‚É‘Î‚µ‚Ä‚Å‚ ‚èA‚±‚ê‚ç‚Ì—v‹‚Íƒuƒ[ƒhƒLƒƒƒXƒg‚³‚ê‚é‚½‚ß—eˆÕ‚ÉÀŒ»‚Å‚«‚éB
-Partner-downó‘Ô‚ÌƒT[ƒo‚Í‚±‚ê‚ç‚ÌƒNƒGƒŠ‚É‚·‚×‚Ä‰“š‚·‚éB
+ã‚ã‚‹ã‚µãƒ¼ãƒãŒãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã®éšœå®³ã‚’æ¤œçŸ¥ã—ãŸéš›ã€è‡ªèº«ã®ã‚¹ã‚³ãƒ¼ãƒ—ã«åŠ ãˆã¦ã€éšœå®³ã‚’æ¤œçŸ¥ã—ãŸãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã®ã‚¹ã‚³ãƒ¼ãƒ—ã®è¦æ±‚ã«ã‚‚å¿œç­”ã™ã‚‹ã€‚
+ã¤ã¾ã‚Šã€DHCPDISCOVER (DHCPv4)ã‚„Solicit (DHCPv6)ã«å¯¾ã—ã¦ã§ã‚ã‚Šã€ã“ã‚Œã‚‰ã®è¦æ±‚ã¯ãƒ–ãƒ­ãƒ¼ãƒ‰ã‚­ãƒ£ã‚¹ãƒˆã•ã‚Œã‚‹ãŸã‚å®¹æ˜“ã«å®Ÿç¾ã§ãã‚‹ã€‚
+Partner-downçŠ¶æ…‹ã®ã‚µãƒ¼ãƒã¯ã“ã‚Œã‚‰ã®ã‚¯ã‚¨ãƒªã«ã™ã¹ã¦å¿œç­”ã™ã‚‹ã€‚
 
 </p>
 <p id="en">
@@ -348,20 +348,20 @@ When one of the servers finds that its partner is unavailble, it will start serv
 </p>
 
 <p id="jp">
-ƒNƒ‰ƒCƒAƒ“ƒg‚ªƒŠ[ƒXXV‚ğ—v‹‚·‚éÛ‚Íƒuƒ[ƒhƒLƒƒƒXƒg‚Å‚Í‚È‚­AŠ„‚è“–‚Ä‚Ä‚à‚ç‚Á‚½ƒT[ƒo‚ÉDHCPREQUESTiDHCPv4j‚Ü‚½‚ÍRenewiDHCPv6j‚ğ‘—o‚·‚éB
-‚µ‚©‚µA‚»‚ÌƒT[ƒo‚ªáŠQó‘Ô‚Å‚ ‚éê‡AƒNƒ‰ƒCƒAƒ“ƒg‚Í‰“š‚ğó‚¯æ‚é‚±‚Æ‚ª‚Å‚«‚È‚¢B
-ƒNƒ‰ƒCƒAƒ“ƒg‚Írebindƒ^ƒCƒ}(T2)‚ÌŠÔ‚ªŒo‰ß‚·‚é‚Ü‚Å‚»‚ÌƒŠ[ƒX‚ğ—˜—p‚·‚é‚µAƒŠ[ƒX‚ÌXV‚ğs‚·‚éB
-Œo‰ßŒã‚ÍrebindƒtƒFƒCƒY‚Æ‚È‚èADHCPREQUESTiDHCPv4j‚Ü‚½‚ÍRebindiDHCPv6j‚ğƒuƒ[ƒhƒLƒƒƒXƒg‚Å‘—o‚·‚éB‚±‚±‚Å‘¼‚Ì¶‘¶‚µ‚Ä‚¢‚éƒT[ƒo‚Í—v‹‚ğóM‚µ‚Ä(‚¨‚»‚ç‚­‚Í)ƒŠ[ƒXŠÔ‚Ì‰„’·‚ğs‚¤‰“š‚ğs‚¤B
-ƒNƒ‰ƒCƒAƒ“ƒg‚ÍV‚µ‚¢ƒT[ƒo‚©‚ç‚ÌƒAƒhƒŒƒXXV‚ğó‚¯æ‚é‚ÆA‚»‚ÌƒT[ƒo‚Éˆø‚«‘±‚«renew‚ğˆË—Š‚·‚é‚±‚Æ‚Æ‚È‚éB
+ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãŒãƒªãƒ¼ã‚¹æ›´æ–°ã‚’è¦æ±‚ã™ã‚‹éš›ã¯ãƒ–ãƒ­ãƒ¼ãƒ‰ã‚­ãƒ£ã‚¹ãƒˆã§ã¯ãªãã€å‰²ã‚Šå½“ã¦ã¦ã‚‚ã‚‰ã£ãŸã‚µãƒ¼ãƒã«DHCPREQUESTï¼ˆDHCPv4ï¼‰ã¾ãŸã¯Renewï¼ˆDHCPv6ï¼‰ã‚’é€å‡ºã™ã‚‹ã€‚
+ã—ã‹ã—ã€ãã®ã‚µãƒ¼ãƒãŒéšœå®³çŠ¶æ…‹ã§ã‚ã‚‹å ´åˆã€ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¯å¿œç­”ã‚’å—ã‘å–ã‚‹ã“ã¨ãŒã§ããªã„ã€‚
+ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¯rebindã‚¿ã‚¤ãƒ(T2)ã®æ™‚é–“ãŒçµŒéã™ã‚‹ã¾ã§ãã®ãƒªãƒ¼ã‚¹ã‚’åˆ©ç”¨ã™ã‚‹ã—ã€ãƒªãƒ¼ã‚¹ã®æ›´æ–°ã‚’è©¦è¡Œã™ã‚‹ã€‚
+çµŒéå¾Œã¯rebindãƒ•ã‚§ã‚¤ã‚ºã¨ãªã‚Šã€DHCPREQUESTï¼ˆDHCPv4ï¼‰ã¾ãŸã¯Rebindï¼ˆDHCPv6ï¼‰ã‚’ãƒ–ãƒ­ãƒ¼ãƒ‰ã‚­ãƒ£ã‚¹ãƒˆã§é€å‡ºã™ã‚‹ã€‚ã“ã“ã§ä»–ã®ç”Ÿå­˜ã—ã¦ã„ã‚‹ã‚µãƒ¼ãƒã¯è¦æ±‚ã‚’å—ä¿¡ã—ã¦(ãŠãã‚‰ãã¯)ãƒªãƒ¼ã‚¹æ™‚é–“ã®å»¶é•·ã‚’è¡Œã†å¿œç­”ã‚’è¡Œã†ã€‚
+ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¯æ–°ã—ã„ã‚µãƒ¼ãƒã‹ã‚‰ã®ã‚¢ãƒ‰ãƒ¬ã‚¹æ›´æ–°ã‚’å—ã‘å–ã‚‹ã¨ã€ãã®ã‚µãƒ¼ãƒã«å¼•ãç¶šãrenewã‚’ä¾é ¼ã™ã‚‹ã“ã¨ã¨ãªã‚‹ã€‚
 </p>
 <p id="en">
 When the client is renewing a lease, it will send its DHCPREQUEST (DHCPv4) or Renew (DHCPv6) message directly to the server which has allocated the lease being renewed. Because this server is unavailable, the client will not get any response. In that case, the client continues to use its lease and re-tries to renew until the rebind timer (T2) elapses. The client will now enter the rebinding phase, in which it will send DHCPREQUEST (DHCPv4) or Rebind (DHCPv6) message to any available server. The surviving server will receive the rebinding request and will (typically) extend the lifetime of the lease. The client will continue to contact that new server to renew its lease as appropriate.
 </p>
 
 <p id="jp">
-áŠQó‘Ô‚Å‚ ‚Á‚½ƒT[ƒo‚ª‰ñ•œ‚·‚é‚ÆAHA‚Ìó‘Ô‚Í³í‚É‰ñ•œ‚µA]—ˆ‚ÌƒXƒR[ƒv‚Ìˆ—‚ğs‚¨‚¤‚Æ‚·‚éB
-áŠQ‚É‚»‚ÌƒXƒR[ƒv‚Ìˆ—‚ğs‚Á‚Ä‚¢‚½ƒT[ƒo‚Í‚±‚ÌƒXƒR[ƒv‚Ìˆ—‚ğ‚â‚ß‚éB
-‚Â‚Ü‚èAƒNƒ‰ƒCƒAƒ“ƒg‚ÍÄ“xã‹L‚Éq‚×‚½rebindƒtƒFƒCƒY‚ğŒo‚ÄA–{—ˆ‚ÌƒT[ƒo‚ÉXV‚ğˆË—Š‚·‚é‚±‚Æ‚Æ‚È‚éB
+éšœå®³çŠ¶æ…‹ã§ã‚ã£ãŸã‚µãƒ¼ãƒãŒå›å¾©ã™ã‚‹ã¨ã€HAã®çŠ¶æ…‹ã¯æ­£å¸¸ã«å›å¾©ã—ã€å¾“æ¥ã®ã‚¹ã‚³ãƒ¼ãƒ—ã®å‡¦ç†ã‚’è¡ŒãŠã†ã¨ã™ã‚‹ã€‚
+éšœå®³æ™‚ã«ãã®ã‚¹ã‚³ãƒ¼ãƒ—ã®å‡¦ç†ã‚’è¡Œã£ã¦ã„ãŸã‚µãƒ¼ãƒã¯ã“ã®ã‚¹ã‚³ãƒ¼ãƒ—ã®å‡¦ç†ã‚’ã‚„ã‚ã‚‹ã€‚
+ã¤ã¾ã‚Šã€ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¯å†åº¦ä¸Šè¨˜ã«è¿°ã¹ãŸrebindãƒ•ã‚§ã‚¤ã‚ºã‚’çµŒã¦ã€æœ¬æ¥ã®ã‚µãƒ¼ãƒã«æ›´æ–°ã‚’ä¾é ¼ã™ã‚‹ã“ã¨ã¨ãªã‚‹ã€‚
 </p>
 <p id="en">
 When the other server becomes available, both active servers will eventually transition to the load-balancing or hot-standby state, in which they will be responsible for their own scopes. Some clients belonging to the scope of the started server will be trying to renew their leases via the surviving server. This server will not respond to them anymore and the client will eventually transition back to the right server via rebinding mechanism again.
@@ -369,7 +369,7 @@ When the other server becomes available, both active servers will eventually tra
 
 </div>
 
-<h2 id="jp">15.4.8.5. ƒ[ƒhƒoƒ‰ƒ“ƒXƒ‚[ƒh‚Ìİ’è</h2>
+<h2 id="jp">15.4.8.5. ãƒ­ãƒ¼ãƒ‰ãƒãƒ©ãƒ³ã‚¹ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®š</h2>
 <h2 id="en">Load Balancing Configuration</h2>
 <div id="section">
 <p id="jp">
@@ -379,7 +379,7 @@ T.B.D.
 </p>
 </div>
 
-<h2 id="jp">15.4.8.6. ƒ[ƒhƒoƒ‰ƒ“ƒXƒ‚[ƒh: ‚“x‚È•ª—Ş</h2>
+<h2 id="jp">15.4.8.6. ãƒ­ãƒ¼ãƒ‰ãƒãƒ©ãƒ³ã‚¹ãƒ¢ãƒ¼ãƒ‰: é«˜åº¦ãªåˆ†é¡</h2>
 <h2 id="en">Load Balancing with Advanced Classification</h2>
 <div id="section">
 <p id="jp">
@@ -389,11 +389,11 @@ T.B.D.
 </p>
 </div>
 
-<h2 id="jp">15.4.8.7. ƒzƒbƒgƒXƒ^ƒ“ƒoƒCƒ‚[ƒh‚Ìİ’è</h2>
+<h2 id="jp">15.4.8.7. ãƒ›ãƒƒãƒˆã‚¹ã‚¿ãƒ³ãƒã‚¤ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®š</h2>
 <h2 id="en">Hot Standby Configuration</h2>
 <div id="section">
 <p id="jp">
-ˆÈ‰º‚ÉAƒzƒbƒgƒXƒ^ƒ“ƒoƒCƒ‚[ƒh‚Ìƒvƒ‰ƒCƒ}ƒŠ‘¤İ’è‚ğ¦‚·B
+ä»¥ä¸‹ã«ã€ãƒ›ãƒƒãƒˆã‚¹ã‚¿ãƒ³ãƒã‚¤ãƒ¢ãƒ¼ãƒ‰ã®ãƒ—ãƒ©ã‚¤ãƒãƒªå´è¨­å®šã‚’ç¤ºã™ã€‚
 </p>
 <p id="en">
 The following is the example configuration of the primary server in the hot standby configuratio
@@ -472,18 +472,18 @@ The following is the example configuration of the primary server in the hot stan
 }</code></pre>
 
 <p id="jp">
-‚±‚Ìİ’è‚Íƒ[ƒhƒoƒ‰ƒ“ƒXƒ‚[ƒh‚Åà–¾‚µ‚½•‰‰×•ªU\¬‚É—‚Ä‚¢‚é‚ªA
-‚¢‚­‚Â‚©‚Ì‚¨‚¨‚«‚Èˆá‚¢‚ª‚ ‚è‚Ü‚·B
+ã“ã®è¨­å®šã¯ãƒ­ãƒ¼ãƒ‰ãƒãƒ©ãƒ³ã‚¹ãƒ¢ãƒ¼ãƒ‰ã§èª¬æ˜ã—ãŸè² è·åˆ†æ•£æ§‹æˆã«ä¼¼ã¦ã„ã‚‹ãŒã€
+ã„ãã¤ã‹ã®ãŠãŠããªé•ã„ãŒã‚ã‚Šã¾ã™ã€‚
 <br>
-ƒzƒbƒgƒXƒ^ƒ“ƒoƒCƒ‚[ƒh‚Éİ’è‚³‚ê‚é‚ÆA‚½‚¾1‘ä‚ÌƒAƒNƒeƒBƒuƒT[ƒo‚ªDHCP—v‹‚ğˆ—‚µ‚Ü‚·B
-ƒvƒ‰ƒCƒ}ƒŠ‚ªƒIƒ“ƒ‰ƒCƒ“ó‘Ô‚Å‚ ‚éŒÀ‚èA‚·‚×‚Ä‚ÌDHCP—v‹‚Íƒvƒ‰ƒCƒ}ƒŠ‚Åˆ—‚³‚ê‚Ü‚·B
-ƒXƒ^ƒ“ƒoƒCƒT[ƒo‚Íƒvƒ‰ƒCƒ}ƒŠ‚ÌáŠQ‚ğŒŸ’m‚µ‚½‚Æ‚«‚É‚Ì‚İA‚±‚Ìˆ—‚ğˆø‚«Œp‚¬‚Ü‚·B
+ãƒ›ãƒƒãƒˆã‚¹ã‚¿ãƒ³ãƒã‚¤ãƒ¢ãƒ¼ãƒ‰ã«è¨­å®šã•ã‚Œã‚‹ã¨ã€ãŸã 1å°ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒãŒDHCPè¦æ±‚ã‚’å‡¦ç†ã—ã¾ã™ã€‚
+ãƒ—ãƒ©ã‚¤ãƒãƒªãŒã‚ªãƒ³ãƒ©ã‚¤ãƒ³çŠ¶æ…‹ã§ã‚ã‚‹é™ã‚Šã€ã™ã¹ã¦ã®DHCPè¦æ±‚ã¯ãƒ—ãƒ©ã‚¤ãƒãƒªã§å‡¦ç†ã•ã‚Œã¾ã™ã€‚
+ã‚¹ã‚¿ãƒ³ãƒã‚¤ã‚µãƒ¼ãƒã¯ãƒ—ãƒ©ã‚¤ãƒãƒªã®éšœå®³ã‚’æ¤œçŸ¥ã—ãŸã¨ãã«ã®ã¿ã€ã“ã®å‡¦ç†ã‚’å¼•ãç¶™ãã¾ã™ã€‚
 
-‚±‚Ìƒ‚[ƒh‚É‚¨‚¢‚ÄAƒvƒ‰ƒCƒ}ƒŠ‚Å‚Í‚È‚¢ƒAƒNƒeƒBƒuƒT[ƒo‚ÍƒXƒ^ƒ“ƒoƒC‚ÆŒÄ‚Î‚ê‚Ä‚¨‚èA
-‚Â‚Ü‚èA‚Q‘ä–Ú‚ÌƒAƒNƒeƒBƒuƒT[ƒo‚Æ‚àŒÄ‚Î‚ê‚Ü‚·B
+ã“ã®ãƒ¢ãƒ¼ãƒ‰ã«ãŠã„ã¦ã€ãƒ—ãƒ©ã‚¤ãƒãƒªã§ã¯ãªã„ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã¯ã‚¹ã‚¿ãƒ³ãƒã‚¤ã¨å‘¼ã°ã‚Œã¦ãŠã‚Šã€
+ã¤ã¾ã‚Šã€ï¼’å°ç›®ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã¨ã‚‚å‘¼ã°ã‚Œã¾ã™ã€‚
 </p>
 <p id="en">
-This configuration is very similar to the load balancing configuration described Section 15.4.8.5, gLoad Balancing Configurationh, with a few notable differences.
+This configuration is very similar to the load balancing configuration described Section 15.4.8.5, â€œLoad Balancing Configurationâ€, with a few notable differences.
 
 The mode is now set to hot-standby, in which only one server is responding to the DHCP clients. If the primary server is online, the primary server is responding to all DHCP queries. The standby server takes over the entire DHCP traffic when it discovers that the primary is unavailable.
 
@@ -505,9 +505,9 @@ Finally, because there is always one server responding to the DHCP queries, ther
 <h2 id="en">Lease Information Sharing</h2>
 <div id="section">
 <p id="jp">
-HA‚ª—LŒø‚É‚È‚Á‚Ä‚¢‚éDHCP‚Å‚ÍAƒAƒNƒeƒBƒu‚Èƒp[ƒgƒi[‚É‘Î‚µ‚Ä“KØ‚ÈƒRƒ“ƒgƒ[ƒ‹—p‚ÌƒRƒ}ƒ“ƒh‚ğ‘—‚é‚±‚Æ‚ÅAƒŠ[ƒXŠ„“–‚ÆƒŠ[ƒXXV‚Ìî•ñ‚ğ“`’B‚µ‚Ü‚·B
-ƒp[ƒgƒi[‚Í‚±‚ê‚É‚æ‚Á‚Ä©g‚ÌƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ğXV‚µ‚Ü‚·B
-ƒCƒ“ƒXƒ^ƒ“ƒX‚ª‹N“®‚µ‚½Û‚ ‚é‚¢‚ÍáŠQ‚©‚ç‚Ì•œ‹ŒAƒT[ƒo‚Íƒp[ƒgƒi[‚Æ‚ÌƒŠ[ƒXƒf[ƒ^ƒx[ƒX“¯Šú‚ğ‚İ‚Ü‚·B‚±‚ê‚ÌƒƒJƒjƒYƒ€‚É‚æ‚Á‚ÄHAƒT[ƒoŠÔ‚É‚¨‚¯‚éƒŠ[ƒX‚ÌˆêŠÑ«‚ª•Û‚Ä‚é‚½‚ßAáŠQ‚É‚àDHCPƒT[ƒrƒX‚ğ’ñ‹Ÿ‚µ‘±‚¯‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+HAãŒæœ‰åŠ¹ã«ãªã£ã¦ã„ã‚‹DHCPã§ã¯ã€ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«å¯¾ã—ã¦é©åˆ‡ãªã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ç”¨ã®ã‚³ãƒãƒ³ãƒ‰ã‚’é€ã‚‹ã“ã¨ã§ã€ãƒªãƒ¼ã‚¹å‰²å½“ã¨ãƒªãƒ¼ã‚¹æ›´æ–°ã®æƒ…å ±ã‚’ä¼é”ã—ã¾ã™ã€‚
+ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¯ã“ã‚Œã«ã‚ˆã£ã¦è‡ªèº«ã®ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’æ›´æ–°ã—ã¾ã™ã€‚
+ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒèµ·å‹•ã—ãŸéš›ã‚ã‚‹ã„ã¯éšœå®³ã‹ã‚‰ã®å¾©æ—§æ™‚ã€ã‚µãƒ¼ãƒã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¨ã®ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹åŒæœŸã‚’è©¦ã¿ã¾ã™ã€‚ã“ã‚Œã®ãƒ¡ã‚«ãƒ‹ã‚ºãƒ ã«ã‚ˆã£ã¦HAã‚µãƒ¼ãƒé–“ã«ãŠã‘ã‚‹ãƒªãƒ¼ã‚¹ã®ä¸€è²«æ€§ãŒä¿ã¦ã‚‹ãŸã‚ã€éšœå®³æ™‚ã«ã‚‚DHCPã‚µãƒ¼ãƒ“ã‚¹ã‚’æä¾›ã—ç¶šã‘ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -515,8 +515,8 @@ An HA enabled server informs its active partner about allocated or renewed lease
 </p>
 
 <p id="jp">
-ƒŠ[ƒX‚ÌŒğŠ·‚ª‘¼‚Ìè’i‚Ås‚í‚ê‚éê‡‚ÍƒŠ[ƒX“¯Šú‚âƒf[ƒ^ƒx[ƒX“¯Šú‚ğ–³Œø‚É‚·‚é‚±‚Æ‚ª—LŒø‚Å‚ ‚é‚±‚Æ‚à‚ ‚è‚Ü‚·B
-(‚Ù‚©‚Ìè’i‚Æ‚¢‚¤‚Ì‚Í)Kea‚ÍƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ÉMySQLAPostgresACassandra‚È‚Ç‚ğ‘I‘ğ‚Å‚«A‚±‚ê‚ç‚Ìƒf[ƒ^ƒx[ƒXƒŒƒvƒŠƒP[ƒVƒ‡ƒ“‚Ìd‘g‚İ‚È‚Ç‚Å‚·B
+ãƒªãƒ¼ã‚¹ã®äº¤æ›ãŒä»–ã®æ‰‹æ®µã§è¡Œã‚ã‚Œã‚‹å ´åˆã¯ãƒªãƒ¼ã‚¹åŒæœŸã‚„ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹åŒæœŸã‚’ç„¡åŠ¹ã«ã™ã‚‹ã“ã¨ãŒæœ‰åŠ¹ã§ã‚ã‚‹ã“ã¨ã‚‚ã‚ã‚Šã¾ã™ã€‚
+(ã»ã‹ã®æ‰‹æ®µã¨ã„ã†ã®ã¯)Keaã¯ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã«MySQLã€Postgresã€Cassandraãªã©ã‚’é¸æŠã§ãã€ã“ã‚Œã‚‰ã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ¬ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®ä»•çµ„ã¿ãªã©ã§ã™ã€‚
 </p>
 
 <p id="en">
@@ -526,8 +526,8 @@ In some cases, though, it is desired to disable lease updates and/or database sy
 <p id="jp">
 aaa
 
-Kea‚ÌHAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ÍKea‚ÌƒRƒ“ƒgƒ[ƒ‹API‚Å‚ÌƒŠ[ƒXXV‚ğ–³Œø‚É‚·‚é‚±‚Æ‚âA‚Ü‚½Aã‹L‚Ì‚æ‚¤‚Èƒf[ƒ^ƒx[ƒX•W€‚ÌƒŒƒvƒŠƒP[ƒVƒ‡ƒ“‚ğ—˜—p‚·‚é‚±‚Æ‚ğl—¶‚µ‚Ä‚¢‚Ü‚·B
-‹ï‘Ì“I‚É‚ÍAsend-lease-updates‚Æsync-leases‚Ì‹@”\‚ª‚±‚ê‚ÉŠY“–‚µA•W€’l‚ÍTrue‚É‚È‚Á‚Ä‚¢‚Ü‚·B
+Keaã®HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯Keaã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«APIã§ã®ãƒªãƒ¼ã‚¹æ›´æ–°ã‚’ç„¡åŠ¹ã«ã™ã‚‹ã“ã¨ã‚„ã€ã¾ãŸã€ä¸Šè¨˜ã®ã‚ˆã†ãªãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹æ¨™æº–ã®ãƒ¬ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆ©ç”¨ã™ã‚‹ã“ã¨ã‚’è€ƒæ…®ã—ã¦ã„ã¾ã™ã€‚
+å…·ä½“çš„ã«ã¯ã€send-lease-updatesã¨sync-leasesã®æ©Ÿèƒ½ãŒã“ã‚Œã«è©²å½“ã—ã€æ¨™æº–å€¤ã¯Trueã«ãªã£ã¦ã„ã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -575,12 +575,12 @@ The HA hook library supports such scenarios by allowing to disable lease updates
 }</code></pre>
 
 <p id="jp">
-ã‹L‚É¦‚·‚æ‚¤‚Éˆê”Ê“I‚ÉA‚±‚ê‚ç‚Ìƒpƒ‰ƒ[ƒ^‚Í“¯‚¶’l‚Éİ’è‚³‚ê‚Ü‚·B
-Kea‘¤‚Å“¯Šú‚ğs‚¤ê‡‚ÍTrue, ƒf[ƒ^ƒx[ƒX‘¤‚Å“¯Šú‚ğs‚¤ê‡‚ÍTrue‚Å‚·B
-‚½‚¾‚µA“Áê‚Èƒ†[ƒXƒP[ƒX‚É‚¨‚¢‚ÄAƒŠ[ƒXXVƒƒbƒZ[ƒW‚Ì‘—M‚ÆƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚Ì“¯Šú‚ğ•ÊX‚Éİ’è‚·‚é‚±‚Æ‚àƒTƒ|[ƒg‚µ‚Ü‚·B
-ƒf[ƒ^ƒx[ƒX‚ªs‚í‚ê‚é‚Ì‚ÍƒŠ[ƒXƒtƒ@ƒCƒ‹‚ÌƒRƒs[‚È‚Ì‚ÅAsync-leases‚ÍFalse‚Éİ’è‚µ‚Ü‚·‚ªAƒŠ[ƒXXVƒƒbƒZ[ƒW‚Í’Êí’Ê‚ès‚í‚ê‚é‚×‚«‚È‚Ì‚ÅAsend-lease-updates‚ÍTrue‚Éİ’u‚µ‚Ü‚·B
-Kea‚ÌƒpƒbƒP[ƒW‚É‚Í‚±‚ê‚ç‚Ìƒc[ƒ‹‚ğ‚ ‚ç‚©‚¶‚ßŠÜ‚ñ‚Å‚¢‚é‚í‚¯‚Å‚Í‚ ‚è‚Ü‚¹‚ñ‚ªAƒ†[ƒU‚Í“Æ©‚ÌƒXƒNƒŠƒvƒg‚È‚Ç‚Å‚±‚Ì–Ú“I‚ğ’B¬‰Â”\‚Å‚·B
-Kea‚ÌHAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ\¬‚Í‚±‚Ì‚æ‚¤‚ÈŠÇ—‚Ì_“î«‚ğ\•ª‚É‚‚ß‚é‚æ‚¤‚ÉİŒv‚³‚ê‚Ä‚¢‚Ü‚·B
+ä¸Šè¨˜ã«ç¤ºã™ã‚ˆã†ã«ä¸€èˆ¬çš„ã«ã€ã“ã‚Œã‚‰ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¯åŒã˜å€¤ã«è¨­å®šã•ã‚Œã¾ã™ã€‚
+Keaå´ã§åŒæœŸã‚’è¡Œã†å ´åˆã¯True, ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹å´ã§åŒæœŸã‚’è¡Œã†å ´åˆã¯Trueã§ã™ã€‚
+ãŸã ã—ã€ç‰¹æ®Šãªãƒ¦ãƒ¼ã‚¹ã‚±ãƒ¼ã‚¹ã«ãŠã„ã¦ã€ãƒªãƒ¼ã‚¹æ›´æ–°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡ã¨ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åŒæœŸã‚’åˆ¥ã€…ã«è¨­å®šã™ã‚‹ã“ã¨ã‚‚ã‚µãƒãƒ¼ãƒˆã—ã¾ã™ã€‚
+ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãŒè¡Œã‚ã‚Œã‚‹ã®ã¯ãƒªãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒ”ãƒ¼ãªã®ã§ã€sync-leasesã¯Falseã«è¨­å®šã—ã¾ã™ãŒã€ãƒªãƒ¼ã‚¹æ›´æ–°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¯é€šå¸¸é€šã‚Šè¡Œã‚ã‚Œã‚‹ã¹ããªã®ã§ã€send-lease-updatesã¯Trueã«è¨­ç½®ã—ã¾ã™ã€‚
+Keaã®ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã«ã¯ã“ã‚Œã‚‰ã®ãƒ„ãƒ¼ãƒ«ã‚’ã‚ã‚‰ã‹ã˜ã‚å«ã‚“ã§ã„ã‚‹ã‚ã‘ã§ã¯ã‚ã‚Šã¾ã›ã‚“ãŒã€ãƒ¦ãƒ¼ã‚¶ã¯ç‹¬è‡ªã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆãªã©ã§ã“ã®ç›®çš„ã‚’é”æˆå¯èƒ½ã§ã™ã€‚
+Keaã®HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªæ§‹æˆã¯ã“ã®ã‚ˆã†ãªç®¡ç†ã®æŸ”è»Ÿæ€§ã‚’ååˆ†ã«é«˜ã‚ã‚‹ã‚ˆã†ã«è¨­è¨ˆã•ã‚Œã¦ã„ã¾ã™ã€‚
 </p>
 <p id="en">
 In the most typical use case, both parameters are set to the same value, i.e. both are false if the database replication is in use, or both are true otherwise. Introducing two separate parameters to control lease updates and lease database synchronization is aimed at possible special use cases, e.g. synchronization is performed by copying a lease file (therefore the sync-leases is set to false), but lease updates should be conducted as usual (send-lease-updates set to true). It should be noted that Kea doesn't natively support such use case, but users may develop their own scripts and tools around Kea to provide such mechanisms. The HA hooks library configuration is designed to maximize the administration flexibility.
@@ -596,22 +596,22 @@ In the most typical use case, both parameters are set to the same value, i.e. bo
 
 
 <p id="jp">
-HA‚ª—LŒø‚É‚È‚Á‚Ä‚¢‚éƒCƒ“ƒXƒ^ƒ“ƒX‚Íƒ_ƒEƒ“ƒ^ƒCƒ€Œã(TODO)‚©ha-syncƒRƒ}ƒ“ƒh‚ğóM‚µ‚½Û‚ÉƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚Ì“¯Šú‚ğ‚µ‚Ü‚·B
-ƒT[ƒo‚Ísec 15.4.5.1.3‚ÅĞ‰î‚³‚ê‚Ä‚¢‚éƒRƒ}ƒ“ƒh‚ğ—˜—p‚µ‚Äƒp[ƒgƒi[‚©‚çƒŠ[ƒXî•ñ‚ğæ“¾‚µ‚Ü‚·(ƒŠ[ƒX—v‹)B
-‚±‚Ìƒy[ƒWƒTƒCƒYi1ƒRƒ}ƒ“ƒh‚Å‰“š‚Å‚«‚éÅ‘å‚ÌƒŠ[ƒX”j‚ÍHAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚Ìİ’è‚Å•ÏX‰Â”\‚Å‚·B
-ƒy[ƒWƒTƒCƒY‚ª‘å‚«‚¯‚ê‚Î”­s‚³‚ê‚éƒŠ[ƒX—v‹‚ÌƒNƒGƒŠ”‚ÍŒ¸‚è‚Ü‚·‚ªAƒp[ƒgƒi[‚©‚çˆê“x‚É‰“š‚ğ•Ô‚»‚¤‚Æ‚·‚é‚½‚ßACPU—˜—p—¦‚Í‚‚­‚È‚èAƒƒ‚ƒŠ‚ğ‘½‚­•K—v‚Æ‚µ‚Ü‚·B
-‹t‚Éƒy[ƒWƒTƒCƒY‚ª¬‚³‚¯‚ê‚ÎACPU‚âƒƒ‚ƒŠ‚Ö‚Ì•‰‰×‚Í’áŒ¸‚³‚ê‚Ü‚·‚ªAƒNƒGƒŠ‚Ì”‚ª‘‚¦‚Ü‚·B
+HAãŒæœ‰åŠ¹ã«ãªã£ã¦ã„ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯ãƒ€ã‚¦ãƒ³ã‚¿ã‚¤ãƒ å¾Œ(TODO)ã‹ha-syncã‚³ãƒãƒ³ãƒ‰ã‚’å—ä¿¡ã—ãŸéš›ã«ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åŒæœŸã‚’ã—ã¾ã™ã€‚
+ã‚µãƒ¼ãƒã¯sec 15.4.5.1.3ã§ç´¹ä»‹ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒãƒ³ãƒ‰ã‚’åˆ©ç”¨ã—ã¦ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‹ã‚‰ãƒªãƒ¼ã‚¹æƒ…å ±ã‚’å–å¾—ã—ã¾ã™(ãƒªãƒ¼ã‚¹è¦æ±‚)ã€‚
+ã“ã®ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚ºï¼ˆ1ã‚³ãƒãƒ³ãƒ‰ã§å¿œç­”ã§ãã‚‹æœ€å¤§ã®ãƒªãƒ¼ã‚¹æ•°ï¼‰ã¯HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®è¨­å®šã§å¤‰æ›´å¯èƒ½ã§ã™ã€‚
+ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚ºãŒå¤§ãã‘ã‚Œã°ç™ºè¡Œã•ã‚Œã‚‹ãƒªãƒ¼ã‚¹è¦æ±‚ã®ã‚¯ã‚¨ãƒªæ•°ã¯æ¸›ã‚Šã¾ã™ãŒã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‹ã‚‰ä¸€åº¦ã«å¿œç­”ã‚’è¿”ãã†ã¨ã™ã‚‹ãŸã‚ã€CPUåˆ©ç”¨ç‡ã¯é«˜ããªã‚Šã€ãƒ¡ãƒ¢ãƒªã‚’å¤šãå¿…è¦ã¨ã—ã¾ã™ã€‚
+é€†ã«ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚ºãŒå°ã•ã‘ã‚Œã°ã€CPUã‚„ãƒ¡ãƒ¢ãƒªã¸ã®è² è·ã¯ä½æ¸›ã•ã‚Œã¾ã™ãŒã€ã‚¯ã‚¨ãƒªã®æ•°ãŒå¢—ãˆã¾ã™ã€‚
 
-®A‚±‚ÌƒfƒtƒHƒ‹ƒg’l‚Í10,000‚Å‚·B‚Â‚Ü‚èAƒŠ[ƒX‚ª‚±‚ê‚æ‚è¬‚³‚¯‚ê‚Î1‰ñ‚Ì—v‹‚Å‚·‚×‚Ä‚ªæ“¾‚Å‚«‚Ü‚·B
+å°šã€ã“ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã¯10,000ã§ã™ã€‚ã¤ã¾ã‚Šã€ãƒªãƒ¼ã‚¹ãŒã“ã‚Œã‚ˆã‚Šå°ã•ã‘ã‚Œã°1å›ã®è¦æ±‚ã§ã™ã¹ã¦ãŒå–å¾—ã§ãã¾ã™ã€‚
 
 
 
-HA‘Î‰ƒT[ƒo[‚ÍAƒ_ƒEƒ“ƒ^ƒCƒ€Œã‚Ü‚½‚Íha-syncƒRƒ}ƒ“ƒh‚ğóM‚·‚é‚ÆAƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚Ì“¯Šú‚ğŠJn‚µ‚Ü‚·BƒT[ƒo[‚ÍAƒZƒNƒVƒ‡ƒ“15.4.5.1.3ulease4-get-pageAlease6-get-pageƒRƒ}ƒ“ƒhv‚Åà–¾‚³‚ê‚Ä‚¢‚éƒRƒ}ƒ“ƒh‚ğg—p‚µ‚ÄAƒp[ƒgƒi[ƒT[ƒo[‚©‚çƒŠ[ƒX‚ğæ“¾‚µ‚Ü‚·iƒŠ[ƒXƒNƒGƒŠjBŒ‹‰Êƒy[ƒW‚ÌƒTƒCƒYi‚±‚ê‚ç‚ÌƒRƒ}ƒ“ƒh‚Ì1‚Â‚É‘Î‚·‚é’Pˆê‚Ì‰“š‚Å•Ô‚³‚ê‚éƒŠ[ƒX‚ÌÅ‘å”j‚ÍAHAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ\¬‚ğ‰î‚µ‚Ä§Œä‚Å‚«‚Ü‚·Bƒy[ƒWƒTƒCƒY‚ğ‘å‚«‚­‚·‚é‚ÆAƒp[ƒgƒi[ƒT[ƒo[‚É‘—M‚³‚ê‚éƒŠ[ƒXƒNƒGƒŠ‚Ì”‚ÍŒ¸‚è‚Ü‚·‚ªAƒp[ƒgƒi[ƒT[ƒo[‚Í‚æ‚è‘å‚«‚È‰“š‚ğ¶¬‚µA—¼•û‚ÌƒT[ƒo[‚Ì‘—MŠÔ‚Æƒƒ‚ƒŠ‚¨‚æ‚ÑCPUg—p—¦‚ª’·‚­‚È‚è‚Ü‚·Bƒy[ƒWƒTƒCƒY‚ğ¬‚³‚­‚·‚é‚ÆAƒŠƒ\[ƒX‚Ìg—p—¦‚ª’á‰º‚µ‚Ü‚·‚ªAƒŠ[ƒXƒf[ƒ^ƒx[ƒX‘S‘Ì‚ğæ“¾‚·‚é‚É‚ÍA‚æ‚è‘½‚­‚ÌƒŠ[ƒXƒNƒGƒŠ‚ğ”­s‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
+HAå¯¾å¿œã‚µãƒ¼ãƒãƒ¼ã¯ã€ãƒ€ã‚¦ãƒ³ã‚¿ã‚¤ãƒ å¾Œã¾ãŸã¯ha-syncã‚³ãƒãƒ³ãƒ‰ã‚’å—ä¿¡ã™ã‚‹ã¨ã€ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åŒæœŸã‚’é–‹å§‹ã—ã¾ã™ã€‚ã‚µãƒ¼ãƒãƒ¼ã¯ã€ã‚»ã‚¯ã‚·ãƒ§ãƒ³15.4.5.1.3ã€Œlease4-get-pageã€lease6-get-pageã‚³ãƒãƒ³ãƒ‰ã€ã§èª¬æ˜ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒãƒ³ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰ãƒªãƒ¼ã‚¹ã‚’å–å¾—ã—ã¾ã™ï¼ˆãƒªãƒ¼ã‚¹ã‚¯ã‚¨ãƒªï¼‰ã€‚çµæœãƒšãƒ¼ã‚¸ã®ã‚µã‚¤ã‚ºï¼ˆã“ã‚Œã‚‰ã®ã‚³ãƒãƒ³ãƒ‰ã®1ã¤ã«å¯¾ã™ã‚‹å˜ä¸€ã®å¿œç­”ã§è¿”ã•ã‚Œã‚‹ãƒªãƒ¼ã‚¹ã®æœ€å¤§æ•°ï¼‰ã¯ã€HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªæ§‹æˆã‚’ä»‹ã—ã¦åˆ¶å¾¡ã§ãã¾ã™ã€‚ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚ºã‚’å¤§ããã™ã‚‹ã¨ã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚µãƒ¼ãƒãƒ¼ã«é€ä¿¡ã•ã‚Œã‚‹ãƒªãƒ¼ã‚¹ã‚¯ã‚¨ãƒªã®æ•°ã¯æ¸›ã‚Šã¾ã™ãŒã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚µãƒ¼ãƒãƒ¼ã¯ã‚ˆã‚Šå¤§ããªå¿œç­”ã‚’ç”Ÿæˆã—ã€ä¸¡æ–¹ã®ã‚µãƒ¼ãƒãƒ¼ã®é€ä¿¡æ™‚é–“ã¨ãƒ¡ãƒ¢ãƒªãŠã‚ˆã³CPUä½¿ç”¨ç‡ãŒé•·ããªã‚Šã¾ã™ã€‚ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚ºã‚’å°ã•ãã™ã‚‹ã¨ã€ãƒªã‚½ãƒ¼ã‚¹ã®ä½¿ç”¨ç‡ãŒä½ä¸‹ã—ã¾ã™ãŒã€ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹å…¨ä½“ã‚’å–å¾—ã™ã‚‹ã«ã¯ã€ã‚ˆã‚Šå¤šãã®ãƒªãƒ¼ã‚¹ã‚¯ã‚¨ãƒªã‚’ç™ºè¡Œã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 
-ƒy[ƒWƒTƒCƒY‚ğ§Œä‚·‚ésync-page-limit‚ÌƒfƒtƒHƒ‹ƒg’l‚Í10000‚Å‚·B‚±‚ê‚ÍA‚±‚Ìƒf[ƒ^ƒx[ƒX‚ÌƒTƒCƒY‚ª10000ˆÈ‰º‚Ìê‡A’Pˆê‚ÌƒRƒ}ƒ“ƒh‚ÅƒŠ[ƒXƒf[ƒ^ƒx[ƒX‘S‘Ì‚ğƒtƒFƒbƒ`‚Å‚«‚é‚±‚Æ‚ğˆÓ–¡‚µ‚Ü‚·B
+ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚ºã‚’åˆ¶å¾¡ã™ã‚‹sync-page-limitã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã¯10000ã§ã™ã€‚ã“ã‚Œã¯ã€ã“ã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®ã‚µã‚¤ã‚ºãŒ10000ä»¥ä¸‹ã®å ´åˆã€å˜ä¸€ã®ã‚³ãƒãƒ³ãƒ‰ã§ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹å…¨ä½“ã‚’ãƒ•ã‚§ãƒƒãƒã§ãã‚‹ã“ã¨ã‚’æ„å‘³ã—ã¾ã™ã€‚
 </p>
 <p id="en">
-An HA enabled server initiates synchronization of the lease database after down time or upon receiving ha-sync command. The server uses commands described in Section 15.4.5.1.3, glease4-get-page, lease6-get-page commandsh to fetch leases from the partner server (lease queries). The size of the results page (maximum number of leases to be returned in a single response to one of these commands) can be controlled via HA hooks library configuration. Increasing the page size decreases the number of lease queries sent to the partner server, but it causes the partner server to generate larger responses, which lengthens transmission time as well as memory and CPU utilization on both servers. Decreasing the page size helps to decrease resources utilization but requires more lease queries to be issued to fetch the entire lease database.
+An HA enabled server initiates synchronization of the lease database after down time or upon receiving ha-sync command. The server uses commands described in Section 15.4.5.1.3, â€œlease4-get-page, lease6-get-page commandsâ€ to fetch leases from the partner server (lease queries). The size of the results page (maximum number of leases to be returned in a single response to one of these commands) can be controlled via HA hooks library configuration. Increasing the page size decreases the number of lease queries sent to the partner server, but it causes the partner server to generate larger responses, which lengthens transmission time as well as memory and CPU utilization on both servers. Decreasing the page size helps to decrease resources utilization but requires more lease queries to be issued to fetch the entire lease database.
 
 The default value of the sync-page-limit controlling the page size is 10000. This means that the entire lease database can be fetched with a single command if the size of this database is equal or lower than 10000.
 </p>
@@ -634,38 +634,38 @@ T.B.D.
 <h2 id="en">Pausing HA State Machine</h2>
 <div id="section">
 <p id="jp">
-15.4.8.3‚Åq‚×‚½‚æ‚¤‚ÉHA\¬‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Ìó‘Ô‚ÍƒXƒe[ƒgƒ}ƒVƒ“‚É‚È‚Á‚Ä‚¨‚èA‚¢‚­‚Â‚à‚Ìó‘Ô‚ª‚ ‚è‚Ü‚·B
-‘½‚­‚ÌƒXƒe[ƒg‚Ì•Ï‰»‚Íƒp[ƒgƒi[‚ÌƒT[ƒo‚Ìó‘Ô‚Ì•Ï‰»‚É‚æ‚Á‚Äˆø‚«‹N‚±‚³‚êA
-ˆê•”‚Ìó‘Ô‚Ì•Ï‰»‚É‚ÍƒCƒ“ƒXƒ^ƒ“ƒXã‚Å“Á’è‚Ìˆ—‚ğÀs‚µ‚Ü‚·B
-—á‚¦‚ÎAƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚Ì“¯Šú‚ğÀ{‚µ‚½‚èA(ˆ—‚µ‚Ä‚¢‚È‚©‚Á‚½)DHCPƒNƒGƒŠ‚É‰“š‚ğ‚µ‚Ü‚·B
+15.4.8.3ã§è¿°ã¹ãŸã‚ˆã†ã«HAæ§‹æˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®çŠ¶æ…‹ã¯ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã«ãªã£ã¦ãŠã‚Šã€ã„ãã¤ã‚‚ã®çŠ¶æ…‹ãŒã‚ã‚Šã¾ã™ã€‚
+å¤šãã®ã‚¹ãƒ†ãƒ¼ãƒˆã®å¤‰åŒ–ã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã®ã‚µãƒ¼ãƒã®çŠ¶æ…‹ã®å¤‰åŒ–ã«ã‚ˆã£ã¦å¼•ãèµ·ã“ã•ã‚Œã€
+ä¸€éƒ¨ã®çŠ¶æ…‹ã®å¤‰åŒ–æ™‚ã«ã¯ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ä¸Šã§ç‰¹å®šã®å‡¦ç†ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚
+ä¾‹ãˆã°ã€ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åŒæœŸã‚’å®Ÿæ–½ã—ãŸã‚Šã€(å‡¦ç†ã—ã¦ã„ãªã‹ã£ãŸ)DHCPã‚¯ã‚¨ãƒªã«å¿œç­”ã‚’ã—ã¾ã™ã€‚
 </p>
 
 <p id="en">
-The high availability state machine includes many different states described in detail in Section 15.4.8.3, gServer Statesh. The server enters each state when certain conditions are met, most often taking into account the partner server's state. In some states the server performs specific actions, e.g. synchronization of the lease database in the syncing state or responding to DHCP queries according to the configured mode of operation in the load-balancing and hot-standby states.
+The high availability state machine includes many different states described in detail in Section 15.4.8.3, â€œServer Statesâ€. The server enters each state when certain conditions are met, most often taking into account the partner server's state. In some states the server performs specific actions, e.g. synchronization of the lease database in the syncing state or responding to DHCP queries according to the configured mode of operation in the load-balancing and hot-standby states.
 </p>
 
 <p id="jp">
-’ÊíAƒXƒe[ƒg‘JˆÚ‚Í©“®“I‚És‚í‚ê‚é‚½‚ßAŠÇ—Ò‚Í’¼Ú§Œä‚Å‚«‚Ü‚¹‚ñ‚µA’Êí‚Í§Œä‚·‚é•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
-‚µ‚©‚µAŠÇ—Ò‚Í"ˆê’â~"ƒXƒe[ƒg‚ÉHA‚Ìó‘Ô‚ğ•ÏX‚·‚é‚±‚Æ‚Å’Ç‰Á‚Ì(‘¼‚Ì)ŠÇ—‚ğs‚¤‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+é€šå¸¸ã€ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»ã¯è‡ªå‹•çš„ã«è¡Œã‚ã‚Œã‚‹ãŸã‚ã€ç®¡ç†è€…ã¯ç›´æ¥åˆ¶å¾¡ã§ãã¾ã›ã‚“ã—ã€é€šå¸¸ã¯åˆ¶å¾¡ã™ã‚‹å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
+ã—ã‹ã—ã€ç®¡ç†è€…ã¯"ä¸€æ™‚åœæ­¢"ã‚¹ãƒ†ãƒ¼ãƒˆã«HAã®çŠ¶æ…‹ã‚’å¤‰æ›´ã™ã‚‹ã“ã¨ã§è¿½åŠ ã®(ä»–ã®)ç®¡ç†ã‚’è¡Œã†ã“ã¨ãŒã§ãã¾ã™ã€‚
 </p>
 <p id="en">
 By default, transitions between the states are performed automatically and the server administrator has no direct control when the transitions take place and, in most cases, the administrator doesn't need such control. In some situations, however, the administrator may want to "pause" the HA state machine in a selected state to perform some additional administrative actions before the server transitions to the next state.
 </p>
 
 <p id="jp">
-‚Ü‚½AƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚·‚×‚Ä‚ª¸‚í‚ê‚éáŠQ‚à‚ ‚é‚±‚Æ‚ğl—¶‚É“ü‚ê‚Ä‚­‚¾‚³‚¢B
-’ÊíA(V‚µ‚­‰Á“ü‚µ‚½)ƒT[ƒo‚Íƒp[ƒgƒi[‚É‘Î‚µ‚ÄƒŠ[ƒXî•ñ‚ğ—v‹‚µAƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ğ“¯Šú‚µ‚æ‚¤‚Æ‚µ‚Ü‚·B
-‚µ‚©‚µA(áŠQ‚É)c‚Á‚½ƒCƒ“ƒXƒ^ƒ“ƒX‚É‚àáŠQ‚ª”­¶‚µAƒŠ[ƒXî•ñ‚ªŒ‡‘¹‚·‚é‰Â”\«‚à‚ ‚è‚Ü‚·B
-‚±‚Ìê‡‚Í‰½‚©‚µ‚ç‚ÌŠO•”ƒ\[ƒXiƒoƒbƒNƒAƒbƒvƒT[ƒo“™j‚©‚ç—¼•û‚ÌƒT[ƒo‚ÌƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ğ•œŒ³‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB
-ƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ªREST API‚ÅÄ\’z‚ğs‚Á‚Ä‚¢‚éŠÔAƒCƒ“ƒXƒ^ƒ“ƒX‚Í‘Ò‹@ó‘Ô‚Å‚¢‚é•K—v‚ª‚ ‚è‚Ü‚·B
-ƒT[ƒo‚Í(TODO)ƒŠ[ƒXƒf[ƒ^ƒx[ƒX“¯Šú‚Ìs‚ğ‚µ‚½‚èADHCPƒNƒ‰ƒCƒAƒ“ƒg‚ÉƒT[ƒrƒX‚ğŠJn‚µ‚Ä‚Í‚È‚è‚Ü‚¹‚ñB
+ã¾ãŸã€ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã™ã¹ã¦ãŒå¤±ã‚ã‚Œã‚‹éšœå®³ã‚‚ã‚ã‚‹ã“ã¨ã‚’è€ƒæ…®ã«å…¥ã‚Œã¦ãã ã•ã„ã€‚
+é€šå¸¸ã€(æ–°ã—ãåŠ å…¥ã—ãŸ)ã‚µãƒ¼ãƒã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«å¯¾ã—ã¦ãƒªãƒ¼ã‚¹æƒ…å ±ã‚’è¦æ±‚ã—ã€ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’åŒæœŸã—ã‚ˆã†ã¨ã—ã¾ã™ã€‚
+ã—ã‹ã—ã€(éšœå®³æ™‚ã«)æ®‹ã£ãŸã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã«ã‚‚éšœå®³ãŒç™ºç”Ÿã—ã€ãƒªãƒ¼ã‚¹æƒ…å ±ãŒæ¬ æã™ã‚‹å¯èƒ½æ€§ã‚‚ã‚ã‚Šã¾ã™ã€‚
+ã“ã®å ´åˆã¯ä½•ã‹ã—ã‚‰ã®å¤–éƒ¨ã‚½ãƒ¼ã‚¹ï¼ˆãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒç­‰ï¼‰ã‹ã‚‰ä¸¡æ–¹ã®ã‚µãƒ¼ãƒã®ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’å¾©å…ƒã—ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚
+ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãŒREST APIã§å†æ§‹ç¯‰ã‚’è¡Œã£ã¦ã„ã‚‹é–“ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯å¾…æ©ŸçŠ¶æ…‹ã§ã„ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
+ã‚µãƒ¼ãƒã¯(TODO)ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹åŒæœŸã®è©¦è¡Œã‚’ã—ãŸã‚Šã€DHCPã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã«ã‚µãƒ¼ãƒ“ã‚¹ã‚’é–‹å§‹ã—ã¦ã¯ãªã‚Šã¾ã›ã‚“ã€‚
 </p>
 <p id="en">
 Consider a server failure which results in a loss of the entire lease database. Typically, the server will rebuild its lease database when it enters the syncing state by querying the partner server for leases, but it is possible that the partner was also experiencing a failure and lacks lease information. In this case, it may be required to reconstruct lease databases on both servers from some external source, e.g. a backup server. If the lease database is going to be reconstructed via RESTful API, the servers should be started in the initial, i.e. waiting state and remain in this state while leases are being added. In particular, the servers should not attempt to synchronize their lease databases nor start serving DHCP clients.
 </p>
 
 <p id="jp">
-HA‚ÌƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ÍHAƒXƒe[ƒg‚Ìˆê’â~EÄŠJ‚ğs‚¤ƒRƒ“ƒtƒBƒOAƒRƒ}ƒ“ƒh‚ğ’ñ‹Ÿ‚µ‚Ä‚¢‚Ü‚·B
+HAã®ãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯HAã‚¹ãƒ†ãƒ¼ãƒˆã®ä¸€æ™‚åœæ­¢ãƒ»å†é–‹ã‚’è¡Œã†ã‚³ãƒ³ãƒ•ã‚£ã‚°ã€ã‚³ãƒãƒ³ãƒ‰ã‚’æä¾›ã—ã¦ã„ã¾ã™ã€‚
 </p>
 <p id="en">
 
@@ -718,20 +718,20 @@ The HA hooks library provides configuration parameters and a command to control 
 }</code></pre>
 
 <p id="jp">
-ˆê’â~‚Ìƒpƒ‰ƒ[ƒ^‚Ì’l"once"‚Í‘Ò‹@ƒXƒe[ƒg‚É‘JˆÚ‚·‚é‘O‚Éˆê’â~ƒXƒe[ƒg‚É‚·‚é‚±‚Æ‚ğ¦‚µ‚Ä‚¢‚Ü‚·B
-once‚Í‰‰ñ‚Ì‚İ—LŒø‚ÅA(‹N“®‚µ‚½Œã‚É)‚Ü‚½‘Ò‹@ƒXƒe[ƒg‚É‚È‚Á‚½Û‚É‚Íˆê’â~ƒXƒe[ƒg‚É‚Í‚È‚è‚Ü‚¹‚ñB
-‘¼‚Ìƒpƒ‰ƒ[ƒ^’l‚Æ‚µ‚Ä‚Íalways, never‚ª‚ ‚è‚Ü‚·B
-never‚ÍŠeó‘Ô‚É‚¨‚¢‚Ä•W€‚Ì’l‚Å‚·B‚Â‚Ü‚èAó‘Ô‘JˆÚ‚É‚Íˆê’â~‚µ‚Ü‚¹‚ñB
+ä¸€æ™‚åœæ­¢ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å€¤"once"ã¯å¾…æ©Ÿã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»ã™ã‚‹å‰ã«ä¸€æ™‚åœæ­¢ã‚¹ãƒ†ãƒ¼ãƒˆã«ã™ã‚‹ã“ã¨ã‚’ç¤ºã—ã¦ã„ã¾ã™ã€‚
+onceã¯åˆå›ã®ã¿æœ‰åŠ¹ã§ã€(èµ·å‹•ã—ãŸå¾Œã«)ã¾ãŸå¾…æ©Ÿã‚¹ãƒ†ãƒ¼ãƒˆã«ãªã£ãŸéš›ã«ã¯ä¸€æ™‚åœæ­¢ã‚¹ãƒ†ãƒ¼ãƒˆã«ã¯ãªã‚Šã¾ã›ã‚“ã€‚
+ä»–ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å€¤ã¨ã—ã¦ã¯always, neverãŒã‚ã‚Šã¾ã™ã€‚
+neverã¯å„çŠ¶æ…‹ã«ãŠã„ã¦æ¨™æº–ã®å€¤ã§ã™ã€‚ã¤ã¾ã‚Šã€çŠ¶æ…‹é·ç§»æ™‚ã«ã¯ä¸€æ™‚åœæ­¢ã—ã¾ã›ã‚“ã€‚
 
-ˆê’â~‚ğ‰ğœ‚·‚é‚½‚ß‚É‚Íha-continueƒRƒ}ƒ“ƒh‚ğ‘—M‚µ‚Ü‚·B
-‚±‚ÌƒRƒ}ƒ“ƒh‚Íˆø”‚Í•s—v‚Å‚·BÚ×‚É‚Â‚¢‚Ä‚Í15.4.8.13‚ğŒ©‚Ä‚­‚¾‚³‚¢B
+ä¸€æ™‚åœæ­¢ã‚’è§£é™¤ã™ã‚‹ãŸã‚ã«ã¯ha-continueã‚³ãƒãƒ³ãƒ‰ã‚’é€ä¿¡ã—ã¾ã™ã€‚
+ã“ã®ã‚³ãƒãƒ³ãƒ‰ã¯å¼•æ•°ã¯ä¸è¦ã§ã™ã€‚è©³ç´°ã«ã¤ã„ã¦ã¯15.4.8.13ã‚’è¦‹ã¦ãã ã•ã„ã€‚
 
-‚Ü‚½A‰º‹L‚Ì‚æ‚¤‚É•¡”‚ÌƒXƒe[ƒg‚Éˆê’â~‚ğ‹²‚İ‚Ş‚±‚Æ‚à‚Å‚«‚Ü‚·B
+ã¾ãŸã€ä¸‹è¨˜ã®ã‚ˆã†ã«è¤‡æ•°ã®ã‚¹ãƒ†ãƒ¼ãƒˆã«ä¸€æ™‚åœæ­¢ã‚’æŒŸã¿è¾¼ã‚€ã“ã¨ã‚‚ã§ãã¾ã™ã€‚
 </p>
 <p id="en">
 The pause parameter value once denotes that the state machine should be paused upon the first transition to the waiting state. Later transitions to this state won't cause the state machine to pause. Two other supported values of the pause parameter are: always and never. The latter is the default value for each state, which instructs the server to never pause the state machine.
 
-In order to "unpause" the state machine the ha-continue command must be sent to the paused server. This command does not take any arguments. See Section 15.4.8.13, gControl Commands for High Availabilityh for details about commands specific for HA hooks library.
+In order to "unpause" the state machine the ha-continue command must be sent to the paused server. This command does not take any arguments. See Section 15.4.8.13, â€œControl Commands for High Availabilityâ€ for details about commands specific for HA hooks library.
 
 It is possible to configure the state machine to pause in more than one state. Consider the following configuration.
 
@@ -786,24 +786,24 @@ It is possible to configure the state machine to pause in more than one state. C
 }</code></pre>
 
 <p id="jp">
-ã‹L‚É¦‚µ‚½ƒRƒ“ƒtƒBƒO‚ÍReadyƒXƒe[ƒg‚É‘JˆÚ‚·‚é‚Æ–ˆ‰ñA‚Ü‚½Aƒp[ƒgƒi[‚ªƒ_ƒEƒ“‚·‚é‚Æˆê“x‚¾‚¯Aó
-ó‘Ô‚ğˆê’â~‚É‚µ‚Ü‚·B
+ä¸Šè¨˜ã«ç¤ºã—ãŸã‚³ãƒ³ãƒ•ã‚£ã‚°ã¯Readyã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»ã™ã‚‹ã¨æ¯å›ã€ã¾ãŸã€ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ãŒãƒ€ã‚¦ãƒ³ã™ã‚‹ã¨ä¸€åº¦ã ã‘ã€çŠ¶
+çŠ¶æ…‹ã‚’ä¸€æ™‚åœæ­¢ã«ã—ã¾ã™ã€‚
 </p>
 <p id="en">
 This configuration instructs the server to pause the state machine every time it transitions to the ready state and upon the first transition to the partner-down state.
 </p>
 
 <p id="jp">
-ƒT[ƒoó‘Ô‚ÌƒŠƒXƒg‚Í15.4.8.3‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢B
-‚·‚×‚Ä‚Ìó‘Ô‘JˆÚ‚Éˆê’â~‚ğ“ü‚ê‚é‚±‚Æ‚Í‰Â”\‚Å‚·‚ªA‚±‚Ìó‘Ô‚©‚ç‘JˆÚ‚·‚é‚±‚Æ‚Í‚È‚¢‚½‚ßAbackupƒXƒe[ƒgAterminatedƒXƒe[ƒg‚É‘Î‚µ‚Äˆê’â~‚ğ‹²‚Ş‚±‚Æ‚Í—L—p‚ÆŒ¾‚¦‚Ü‚¹‚ñB
+ã‚µãƒ¼ãƒçŠ¶æ…‹ã®ãƒªã‚¹ãƒˆã¯15.4.8.3ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
+ã™ã¹ã¦ã®çŠ¶æ…‹é·ç§»æ™‚ã«ä¸€æ™‚åœæ­¢ã‚’å…¥ã‚Œã‚‹ã“ã¨ã¯å¯èƒ½ã§ã™ãŒã€ã“ã®çŠ¶æ…‹ã‹ã‚‰é·ç§»ã™ã‚‹ã“ã¨ã¯ãªã„ãŸã‚ã€backupã‚¹ãƒ†ãƒ¼ãƒˆã€terminatedã‚¹ãƒ†ãƒ¼ãƒˆã«å¯¾ã—ã¦ä¸€æ™‚åœæ­¢ã‚’æŒŸã‚€ã“ã¨ã¯æœ‰ç”¨ã¨è¨€ãˆã¾ã›ã‚“ã€‚
 </p>
 <p id="en">
-Refer to the Section 15.4.8.3, gServer Statesh for a complete of list of server states. The state machine can be paused in any of the supported states, however it is not practical for the backup and terminated states because the server never transitions out of these states anyway.
+Refer to the Section 15.4.8.3, â€œServer Statesâ€ for a complete of list of server states. The state machine can be paused in any of the supported states, however it is not practical for the backup and terminated states because the server never transitions out of these states anyway.
 </p>
 
 <p id="jp">
-syncingó‘Ô‚Åpause‚·‚éİ’è‚Æ‚·‚é‚ÆA“¯Šú‚ğŠJn‚·‚é‘O‚Épause‚µ‚Ü‚·B
-readyó‘Ô‚Åpause‚·‚éİ’è‚Æ‚·‚é‚ÆA“¯Šú‚ÌI—¹Œã‚Épause‚µ‚Ü‚·B
+syncingçŠ¶æ…‹ã§pauseã™ã‚‹è¨­å®šã¨ã™ã‚‹ã¨ã€åŒæœŸã‚’é–‹å§‹ã™ã‚‹å‰ã«pauseã—ã¾ã™ã€‚
+readyçŠ¶æ…‹ã§pauseã™ã‚‹è¨­å®šã¨ã™ã‚‹ã¨ã€åŒæœŸã®çµ‚äº†å¾Œã«pauseã—ã¾ã™ã€‚
 </p>
 <p id="en">
 Note:
@@ -811,10 +811,10 @@ In the syncing state the server is paused before it makes an attempt to synchron
 </p>
 
 <p id="jp">
-HA‚Ìó‘Ô‚Íƒp[ƒgƒi[‚È‚Ç‚ÌƒT[ƒo‚Ìó‘Ô‚É[‚­ˆË‘¶‚µ‚Ü‚·B
-‚±‚Ì‚½‚ßAˆê’â~‚Íê‡‚É‚æ‚Á‚Äƒp[ƒgƒi[‚É‘å‚«‚È‰e‹¿‚ğ—^‚¦‚é‚±‚Æ‚ª‚ ‚è‚Ü‚·B
-—á‚¦‚ÎAƒvƒ‰ƒCƒ}ƒŠƒT[ƒo[‚ªwaitingó‘Ô‚Å‚Ìpause‚ğ“ü‚ê‚é‚ÆA
-ƒp[ƒgƒi[‘¤‚Íƒvƒ‰ƒCƒ}ƒŠ‚Ìready‚ğ‘Ò‚¿‘±‚¯‚Ä“¯—l‚Éwaiting‚Ì‚Ü‚Ü‚Æ‚È‚Á‚Ä‚µ‚Ü‚¢‚Ü‚·B
+HAã®çŠ¶æ…‹ã¯ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ãªã©ã®ã‚µãƒ¼ãƒã®çŠ¶æ…‹ã«æ·±ãä¾å­˜ã—ã¾ã™ã€‚
+ã“ã®ãŸã‚ã€ä¸€æ™‚åœæ­¢ã¯å ´åˆã«ã‚ˆã£ã¦ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã«å¤§ããªå½±éŸ¿ã‚’ä¸ãˆã‚‹ã“ã¨ãŒã‚ã‚Šã¾ã™ã€‚
+ä¾‹ãˆã°ã€ãƒ—ãƒ©ã‚¤ãƒãƒªã‚µãƒ¼ãƒãƒ¼ãŒwaitingçŠ¶æ…‹ã§ã®pauseã‚’å…¥ã‚Œã‚‹ã¨ã€
+ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼å´ã¯ãƒ—ãƒ©ã‚¤ãƒãƒªã®readyã‚’å¾…ã¡ç¶šã‘ã¦åŒæ§˜ã«waitingã®ã¾ã¾ã¨ãªã£ã¦ã—ã¾ã„ã¾ã™ã€‚
 </p>
 <p id="en">
 Note:
@@ -825,17 +825,17 @@ The state of the HA state machine depends on the state of the cooperating server
 
 </div>
 
-<h2 id="jp">15.4.8.12. §ŒäƒG[ƒWƒFƒ“ƒg‚Ìİ’è</h2>
+<h2 id="jp">15.4.8.12. åˆ¶å¾¡ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®è¨­å®š</h2>
 <h2 id="en">Control Agent Configuration</h2>
 <div id="section">
 <p id="jp">
-7Í‚Å‚ÍƒT[ƒoƒCƒ“ƒXƒ^ƒ“ƒX‚ğ§Œä‚·‚éREST API‚ğ’ñ‹Ÿ‚µ‚Ä‚¢‚éKeaƒf[ƒ‚ƒ“‚É‚Â‚¢‚Äà–¾‚µ‚Ü‚µ‚½B
-ŠeƒT[ƒo‚Í‘¼‚ÌƒT[ƒo‚Ìó‘ÔŠm”F‚Ì‚½‚ß‚ÉA“¯—l‚Ìd‘g‚İ‚ğ—˜—p‚µ‚Ü‚·B
-‚Â‚Ü‚èAHAƒ‰ƒCƒuƒ‰ƒŠ‚Å‚ÍHA‚ğ‹N“®‚·‚éÛ‚ÌŠeDHCPƒCƒ“ƒXƒ^ƒ“ƒX‚É‘Î‚µ‚Ä§ŒäƒG[ƒWƒFƒ“ƒg‚ª‹N“®‚µ‚Ä‚¢‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB
-‚à‚µA‚ ‚éƒT[ƒo‚É‚Ä(DHCPƒvƒƒZƒX©g‚Í‹N“®‚µ‚Ä‚¢‚½‚Æ‚µ‚Ä‚à)ƒG[ƒWƒFƒ“ƒg‚ª‹N“®‚µ‚Ä‚¢‚È‚¢ê‡AHA‚ÌƒsƒA‚ªŠm—§‚Å‚«‚¸A‚»‚ÌƒT[ƒo‚ğƒIƒtƒ‰ƒCƒ“‚Æ‚İ‚È‚µ‚Ü‚·B
+7ç« ã§ã¯ã‚µãƒ¼ãƒã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆ¶å¾¡ã™ã‚‹REST APIã‚’æä¾›ã—ã¦ã„ã‚‹Keaãƒ‡ãƒ¼ãƒ¢ãƒ³ã«ã¤ã„ã¦èª¬æ˜ã—ã¾ã—ãŸã€‚
+å„ã‚µãƒ¼ãƒã¯ä»–ã®ã‚µãƒ¼ãƒã®çŠ¶æ…‹ç¢ºèªã®ãŸã‚ã«ã€åŒæ§˜ã®ä»•çµ„ã¿ã‚’åˆ©ç”¨ã—ã¾ã™ã€‚
+ã¤ã¾ã‚Šã€HAãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§ã¯HAã‚’èµ·å‹•ã™ã‚‹éš›ã®å„DHCPã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã«å¯¾ã—ã¦åˆ¶å¾¡ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆãŒèµ·å‹•ã—ã¦ã„ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚
+ã‚‚ã—ã€ã‚ã‚‹ã‚µãƒ¼ãƒã«ã¦(DHCPãƒ—ãƒ­ã‚»ã‚¹è‡ªèº«ã¯èµ·å‹•ã—ã¦ã„ãŸã¨ã—ã¦ã‚‚)ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆãŒèµ·å‹•ã—ã¦ã„ãªã„å ´åˆã€HAã®ãƒ”ã‚¢ãŒç¢ºç«‹ã§ããšã€ãã®ã‚µãƒ¼ãƒã‚’ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ã¨ã¿ãªã—ã¾ã™ã€‚
 
-ˆÈ‰º‚ÉAƒvƒ‰ƒCƒ}ƒŠƒT[ƒo‚Å‚Ì§ŒäƒG[ƒWƒFƒ“ƒg‚ÌƒRƒ“ƒtƒBƒO—á‚ğ‹LÚ‚µ‚Ü‚·B
-‚±‚Ì\¬‚Íƒ[ƒhƒoƒ‰ƒ“ƒVƒ“ƒOAƒzƒbƒgƒXƒ^ƒ“ƒoƒCƒ‚[ƒh‚¢‚¸‚ê‚Å‚à—˜—p‚Å‚«‚Ü‚·B
+ä»¥ä¸‹ã«ã€ãƒ—ãƒ©ã‚¤ãƒãƒªã‚µãƒ¼ãƒã§ã®åˆ¶å¾¡ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ä¾‹ã‚’è¨˜è¼‰ã—ã¾ã™ã€‚
+ã“ã®æ§‹æˆã¯ãƒ­ãƒ¼ãƒ‰ãƒãƒ©ãƒ³ã‚·ãƒ³ã‚°ã€ãƒ›ãƒƒãƒˆã‚¹ã‚¿ãƒ³ãƒã‚¤ãƒ¢ãƒ¼ãƒ‰ã„ãšã‚Œã§ã‚‚åˆ©ç”¨ã§ãã¾ã™ã€‚
 </p>
 <p id="en">
 The Chapter 7, Kea Control Agent describes in detail the Kea deamon which provides RESTful interface to control Kea servers. The same functionality is used by High Availability hook library to establish communication between the HA peers. Therefore, the HA library requires that Control Agent is started for each DHCP instance within HA setup. If the Control Agent is not started the peers will not be able to communicate with the particular DHCP server (even if the DHCP server itself is online) and may eventually consider this server to be offline.
@@ -865,21 +865,21 @@ The following is the example configuration for the CA running on the same machin
 
 
 
-<h2 id="jp">15.4.8.13. HA§ŒäƒRƒ}ƒ“ƒh</h2>
+<h2 id="jp">15.4.8.13. HAåˆ¶å¾¡ã‚³ãƒãƒ³ãƒ‰</h2>
 <h2 id="en">Control Commands for High Availability</h2>
 <div id="section">
 <p id="jp">
-HAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ÍƒŠ[ƒX‚Ì“¯Šú‚ğs‚¢ADHCPƒgƒ‰ƒtƒBƒbƒN‚ğ¶‘¶‚µ‚Ä‚¢‚éƒT[ƒo‚Åˆ—‚·‚é‚±‚Æ‚Å
-DHCPƒT[ƒrƒX‚É‘Î‚·‚éáŠQ‚ğ©“®“I‚É‰ğŒˆ‚·‚é‚æ‚¤‚ÉİŒv‚³‚ê‚Ä‚¢‚Ü‚·B
-‚µ‚©‚µAKea‚Å‚ÍŠÇ—Ò©g‚ªÀs‰Â”\‚ÈHAƒRƒ}ƒ“ƒh‚ğ’ñ‹Ÿ‚µ‚Ä‚¢‚Ü‚·B
-—á‚¦‚ÎA”CˆÓ‚Ìƒ^ƒCƒ~ƒ“ƒO‚Å‚Ìƒf[ƒ^ƒx[ƒX“¯Šú‚ÌÀs‚È‚Ç‚Å‚àB
-‚ ‚é‚¢‚ÍHA‚ÌScope‚ğè“®‚Å•ÏX‚Å‚«‚Ü‚·B
+HAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯ãƒªãƒ¼ã‚¹ã®åŒæœŸã‚’è¡Œã„ã€DHCPãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚’ç”Ÿå­˜ã—ã¦ã„ã‚‹ã‚µãƒ¼ãƒã§å‡¦ç†ã™ã‚‹ã“ã¨ã§
+DHCPã‚µãƒ¼ãƒ“ã‚¹ã«å¯¾ã™ã‚‹éšœå®³ã‚’è‡ªå‹•çš„ã«è§£æ±ºã™ã‚‹ã‚ˆã†ã«è¨­è¨ˆã•ã‚Œã¦ã„ã¾ã™ã€‚
+ã—ã‹ã—ã€Keaã§ã¯ç®¡ç†è€…è‡ªèº«ãŒå®Ÿè¡Œå¯èƒ½ãªHAã‚³ãƒãƒ³ãƒ‰ã‚’æä¾›ã—ã¦ã„ã¾ã™ã€‚
+ä¾‹ãˆã°ã€ä»»æ„ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§ã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹åŒæœŸã®å®Ÿè¡Œãªã©ã§ã‚‚ã€‚
+ã‚ã‚‹ã„ã¯HAã®Scopeã‚’æ‰‹å‹•ã§å¤‰æ›´ã§ãã¾ã™ã€‚
 
-‚Ü‚½A—¼•û‚ÌƒAƒNƒeƒBƒuƒT[ƒo‚ÉáŠQ‚ª”­¶‚µ‚½ê‡‚ÍƒoƒbƒNƒAƒbƒvƒT[ƒo‚ªˆ—‚ğŠJn‚Å‚«‚é‚Ì‚Å‚·‚ªA
-Kea‚ÌHAƒoƒbƒNƒAƒbƒvƒT[ƒo‚Í©“®“I‚ÉƒtƒFƒCƒ‹ƒI[ƒo[‚ğ‚µ‚Ü‚¹‚ñB
-‚±‚Ì‚½‚ßAƒoƒbƒNƒAƒbƒvƒT[ƒo‚ğ—˜—p‚·‚é‚É‚ÍŠÇ—Ò‚ªØ‚è‘Ö‚¦‚é•K—v‚ª‚ ‚è‚Ü‚·B
+ã¾ãŸã€ä¸¡æ–¹ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã«éšœå®³ãŒç™ºç”Ÿã—ãŸå ´åˆã¯ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒãŒå‡¦ç†ã‚’é–‹å§‹ã§ãã‚‹ã®ã§ã™ãŒã€
+Keaã®HAãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã¯è‡ªå‹•çš„ã«ãƒ•ã‚§ã‚¤ãƒ«ã‚ªãƒ¼ãƒãƒ¼ã‚’ã—ã¾ã›ã‚“ã€‚
+ã“ã®ãŸã‚ã€ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã‚’åˆ©ç”¨ã™ã‚‹ã«ã¯ç®¡ç†è€…ãŒåˆ‡ã‚Šæ›¿ãˆã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
 
-ã‹L‚ğÀŒ»‚·‚é‚Ì‚ªHAƒtƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒRƒ}ƒ“ƒh‚Å‚·BˆÈ‰º‚É‚»‚ê‚ç‚ğ¦‚µ‚Ü‚·B
+ä¸Šè¨˜ã‚’å®Ÿç¾ã™ã‚‹ã®ãŒHAãƒ•ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚³ãƒãƒ³ãƒ‰ã§ã™ã€‚ä»¥ä¸‹ã«ãã‚Œã‚‰ã‚’ç¤ºã—ã¾ã™ã€‚
 </p>
 <p id="en">
 Even though the HA hook library is designed to automatically resolve issues with DHCP service interruptions by redirecting the DHCP traffic to a surviving server and synchronizing the lease database when required, it may be useful for the administrator to have control over the server behavior. In particular, it may be useful be able to trigger lease database synchronization on demand. It may also be useful to manually set the HA scopes that are being served.
@@ -893,15 +893,15 @@ The following sections describe commands supported by the HA hook library which 
 <h3 id="jp">15.4.8.13.1. ha-sync command</h3>
 <div id="section">
 <p id="jp">
-ha-syncƒRƒ}ƒ“ƒh‚Íƒ[ƒJƒ‹‚ÌƒŠ[ƒXƒf[ƒ^ƒx[ƒX‚ğ“¯Šú‚·‚éƒsƒAæ‚ğw’è‚·‚é‚Ì‚É—p‚¢‚ç‚ê‚Ü‚·B
-ƒT[ƒo‚Íw’è‚µ‚½ƒsƒA‚©‚ç‚·‚×‚Ä‚ÌƒŠ[ƒXî•ñ‚ğæ“¾‚µ‚ÄAƒ[ƒJƒ‹‚É‚ ‚éŒÃ‚¢ƒŠ[ƒXî•ñ‚ğXV‚µ‚Ü‚·B
-æ“¾‚µ‚½ƒŠ[ƒXî•ñ‚ª‚È‚¢ê‡‚ÍV‹K‚Éì¬‚µ‚Ü‚·B
-®Aæ“¾‚³‚ê‚È‚¢‚ªƒ[ƒJƒ‹‚É‚ ‚éƒŠ[ƒX‚Ííœ‚³‚ê‚Ü‚¹‚ñB
-‚±‚ÌƒRƒ}ƒ“ƒh‚Å‚ÍƒsƒA‚Ö‚Ì“¯Šú‚Ís‚í‚ê‚Ü‚¹‚ñB‚Â‚Ü‚èA•Ğ•ûŒü‚Ì“¯Šú‚Å‚·B
-—¼•ûŒü‚Å‚Ì“¯Šú‚ğs‚¢‚½‚¢ê‡‚Í—¼Ò‚ÌƒT[ƒo‚Åha-sync‚ğ”­s‚µ‚Ä‚­‚¾‚³‚¢B
+ha-syncã‚³ãƒãƒ³ãƒ‰ã¯ãƒ­ãƒ¼ã‚«ãƒ«ã®ãƒªãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’åŒæœŸã™ã‚‹ãƒ”ã‚¢å…ˆã‚’æŒ‡å®šã™ã‚‹ã®ã«ç”¨ã„ã‚‰ã‚Œã¾ã™ã€‚
+ã‚µãƒ¼ãƒã¯æŒ‡å®šã—ãŸãƒ”ã‚¢ã‹ã‚‰ã™ã¹ã¦ã®ãƒªãƒ¼ã‚¹æƒ…å ±ã‚’å–å¾—ã—ã¦ã€ãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚ã‚‹å¤ã„ãƒªãƒ¼ã‚¹æƒ…å ±ã‚’æ›´æ–°ã—ã¾ã™ã€‚
+å–å¾—ã—ãŸãƒªãƒ¼ã‚¹æƒ…å ±ãŒãªã„å ´åˆã¯æ–°è¦ã«ä½œæˆã—ã¾ã™ã€‚
+å°šã€å–å¾—ã•ã‚Œãªã„ãŒãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚ã‚‹ãƒªãƒ¼ã‚¹ã¯å‰Šé™¤ã•ã‚Œã¾ã›ã‚“ã€‚
+ã“ã®ã‚³ãƒãƒ³ãƒ‰ã§ã¯ãƒ”ã‚¢ã¸ã®åŒæœŸã¯è¡Œã‚ã‚Œã¾ã›ã‚“ã€‚ã¤ã¾ã‚Šã€ç‰‡æ–¹å‘ã®åŒæœŸã§ã™ã€‚
+ä¸¡æ–¹å‘ã§ã®åŒæœŸã‚’è¡Œã„ãŸã„å ´åˆã¯ä¸¡è€…ã®ã‚µãƒ¼ãƒã§ha-syncã‚’ç™ºè¡Œã—ã¦ãã ã•ã„ã€‚
 
-ƒf[ƒ^ƒx[ƒX‚Ì“¯Šú‚ÍƒAƒNƒeƒBƒuƒT[ƒo‚Å‚àƒoƒbƒNƒAƒbƒvƒT[ƒo‚Å‚àŒÄ‚Î‚ê‚Ü‚·B
-ha-sync‚ÌƒRƒ“ƒtƒBƒO—á‚ğˆÈ‰º‚É¦‚µ‚Ü‚·B
+ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åŒæœŸã¯ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚µãƒ¼ãƒã§ã‚‚ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚µãƒ¼ãƒã§ã‚‚å‘¼ã°ã‚Œã¾ã™ã€‚
+ha-syncã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ä¾‹ã‚’ä»¥ä¸‹ã«ç¤ºã—ã¾ã™ã€‚
 </p>
 <p id="en">
 The ha-sync is issued to instruct the server to synchronize its local lease database with the selected peer. The server fetches all leases from the peer and updates those locally stored leases which are older comparing to those fetched. It also creates new leases when any of those fetched do not exist in the local database. All leases that are not returned by the peer but are in the local database are preserved. The database synchronization is unidirectional, i.e. only the database on the server to which the command has been sent is updated. In order to synchronize the peer's database a separate ha-sync has to be issued to that peer.
@@ -934,12 +934,12 @@ The max-period value should be sufficiently long to guarantee that it doesn't el
 <h3 id="jp">15.4.8.13.2. ha-scopes command</h3>
 <div id="section">
 <p id="jp">
-ha-scopesƒRƒ}ƒ“ƒh‚ÍƒT[ƒo‚Ì’ñ‹Ÿ‚·‚éƒXƒR[ƒv‚ğ•ÏX‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
-ƒXƒR[ƒv‚É‚Â‚¢‚Ä‚Í15.4.8.5‹y‚Ñ15.4.8.7‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢B
-DHCPv4ƒT[ƒo‚Ìha-scopesƒRƒ}ƒ“ƒh‚Ì—á‚ğˆÈ‰º‚É¦‚µ‚Ü‚·B
+ha-scopesã‚³ãƒãƒ³ãƒ‰ã¯ã‚µãƒ¼ãƒã®æä¾›ã™ã‚‹ã‚¹ã‚³ãƒ¼ãƒ—ã‚’å¤‰æ›´ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
+ã‚¹ã‚³ãƒ¼ãƒ—ã«ã¤ã„ã¦ã¯15.4.8.5åŠã³15.4.8.7ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
+DHCPv4ã‚µãƒ¼ãƒã®ha-scopesã‚³ãƒãƒ³ãƒ‰ã®ä¾‹ã‚’ä»¥ä¸‹ã«ç¤ºã—ã¾ã™ã€‚
 </p>
 <p id="en">
-This command allows for modifying the HA scopes that the server is serving. Consult Section 15.4.8.5, gLoad Balancing Configurationh and Section 15.4.8.7, gHot Standby Configurationh to learn what scopes are available for different HA modes of operation. The ha-scopes command has the following structure (DHCPv4 server case):
+This command allows for modifying the HA scopes that the server is serving. Consult Section 15.4.8.5, â€œLoad Balancing Configurationâ€ and Section 15.4.8.7, â€œHot Standby Configurationâ€ to learn what scopes are available for different HA modes of operation. The ha-scopes command has the following structure (DHCPv4 server case):
 </p>
 
 <pre id="code"><code>{
@@ -951,8 +951,8 @@ This command allows for modifying the HA scopes that the server is serving. Cons
 }</code></pre>
 
 <p id="jp">
-ã‹L‚Ìİ’è‚ÍHA_server1, HA_server2‚ÌƒXƒR[ƒv‚ğ‚·‚×‚Äˆ—‚·‚é‚æ‚¤‚ÉHAİ’è‚ğ•ÏX‚µ‚Ü‚·B
-‚·‚×‚Ä‚ÌƒXƒR[ƒv‚ğ–³Œø‚É‚·‚é‚Ì‚ÍˆÈ‰º‚Ì‚æ‚¤‚É‹ó‚ÌƒŠƒXƒg‚ğg‚Á‚Ä‚­‚¾‚³‚¢B
+ä¸Šè¨˜ã®è¨­å®šã¯HA_server1, HA_server2ã®ã‚¹ã‚³ãƒ¼ãƒ—ã‚’ã™ã¹ã¦å‡¦ç†ã™ã‚‹ã‚ˆã†ã«HAè¨­å®šã‚’å¤‰æ›´ã—ã¾ã™ã€‚
+ã™ã¹ã¦ã®ã‚¹ã‚³ãƒ¼ãƒ—ã‚’ç„¡åŠ¹ã«ã™ã‚‹ã®ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«ç©ºã®ãƒªã‚¹ãƒˆã‚’ä½¿ã£ã¦ãã ã•ã„ã€‚
 </p>
 <p id="en">
 This command configures the server to handle traffic from both HA_server1 and HA_server2 scopes. In order to disable all scopes specify an empty list:
@@ -974,12 +974,12 @@ This command configures the server to handle traffic from both HA_server1 and HA
 <h3 id="jp">15.4.8.13.3. ha-continue command</h3>
 <div id="section">
 <p id="jp">
-‚±‚ÌƒRƒ}ƒ“ƒh‚Í15.4.8.11uHAó‘Ôƒ}ƒVƒ“‚Ìˆê’â~v‚Ì’Ê‚è
-ˆê’â~ó‘Ô‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğÄŠJ‚³‚¹‚é‚½‚ß‚É—p‚¢‚Ü‚·B
-ˆø”‚Í‚ ‚è‚Ü‚¹‚ñB<br>
+ã“ã®ã‚³ãƒãƒ³ãƒ‰ã¯15.4.8.11ã€ŒHAçŠ¶æ…‹ãƒã‚·ãƒ³ã®ä¸€æ™‚åœæ­¢ã€ã®é€šã‚Š
+ä¸€æ™‚åœæ­¢çŠ¶æ…‹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å†é–‹ã•ã›ã‚‹ãŸã‚ã«ç”¨ã„ã¾ã™ã€‚
+å¼•æ•°ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚<br>
 </p>
 <p id="en">
-This command is used to resume the operation of the paused HA state machine as described in the Section 15.4.8.11, gPausing HA State Machineh. It takes no arguments, so the command structure is as simple as:
+This command is used to resume the operation of the paused HA state machine as described in the Section 15.4.8.11, â€œPausing HA State Machineâ€. It takes no arguments, so the command structure is as simple as:
 </p>
 
 <pre id="code"><code>{
@@ -991,7 +991,7 @@ This command is used to resume the operation of the paused HA state machine as d
 
 
 <div id="footer">
-	&copy;2019 b Akira KANAI
+	&copy;2019 ï½œ Akira KANAI
 </div>
 
 <div id="footer">
