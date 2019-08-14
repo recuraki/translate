@@ -12,7 +12,7 @@
 *{
 	margin: 0px;
 	padding: 0px;
-	font-family: Verdana, "ŸàƒSƒVƒbƒN", YuGothic, "ƒqƒ‰ƒMƒmŠpƒS ProN W3", "Hiragino Kaku Gothic ProN", "ƒƒCƒŠƒI", Meiryo, sans-serif;
+	font-family: Verdana, "æ¸¸ã‚´ã‚·ãƒƒã‚¯", YuGothic, "ãƒ’ãƒ©ã‚®ãƒè§’ã‚´ ProN W3", "Hiragino Kaku Gothic ProN", "ãƒ¡ã‚¤ãƒªã‚ª", Meiryo, sans-serif;
 }
 </style>
 </head>
@@ -21,7 +21,7 @@
 <h1 id="jp">Junos and BGP FlowSpec </h1>
 
 	<p id="jp">
-	Œ´’˜: 
+	åŸè‘—: 
         <a href="http://www.junosandme.net/article-junos-and-bgp-flowspec-119193150.html">
 	Junos and BGP FlowSpec - JUNOS & ME
 	</a>
@@ -35,14 +35,14 @@
 	<p>
 
 
-<h2 id="jp">‚Í‚¶‚ß‚É</h2>
+<h2 id="jp">ã¯ã˜ã‚ã«</h2>
 <h2 id="en">Introduction</h2>
 
 <div id="section">
 
 	<p id="jp">
-	–{e‚Å‚ÍTRIO MPC‚ğ“‹Ú‚µ‚½MX960‚ğ—p‚¢‚½FlowSpecÀ‘•‚Ì•]‰¿‚ÌŒ‹‰Ê‚É‚Â‚¢‚Äq‚×‚Ü‚·B
-	JUNOS‚Í12.3ƒŠƒŠ[ƒX”Å‚Æ‚È‚è‚Ü‚·B
+	æœ¬ç¨¿ã§ã¯TRIO MPCã‚’æ­è¼‰ã—ãŸMX960ã‚’ç”¨ã„ãŸFlowSpecå®Ÿè£…ã®è©•ä¾¡ã®çµæœã«ã¤ã„ã¦è¿°ã¹ã¾ã™ã€‚
+	JUNOSã¯12.3ãƒªãƒªãƒ¼ã‚¹ç‰ˆã¨ãªã‚Šã¾ã™ã€‚
 	</p>
 
 	<p id="en">
@@ -50,11 +50,11 @@
 	<p>
 
 
-	<p id="jp">¡‰ñ‚ÌŒ±“à—e‚ÍŸ‚Ì’Ê‚è‚Å‚·B
+	<p id="jp">ä»Šå›ã®è©¦é¨“å†…å®¹ã¯æ¬¡ã®é€šã‚Šã§ã™ã€‚
 		<ul class="jp">
-			<li class="jp">IPv4‚Ìƒuƒ‰ƒbƒNƒz[ƒ‹Œo˜H‹@”\</li>
-			<li class="jp">IPv4‚Ì‘Ñˆæ§Œä‹@”\</li>
-			<li class="jp">IPv4‚Ìƒgƒ‰ƒtƒBƒbƒNŠÉ˜a‚Ì‚½‚ß‚ÌƒŠƒ_ƒCƒŒƒNƒVƒ‡ƒ“(VRF‚ğ—p‚¢‚½“]‘—)</li>
+			<li class="jp">IPv4ã®ãƒ–ãƒ©ãƒƒã‚¯ãƒ›ãƒ¼ãƒ«çµŒè·¯æ©Ÿèƒ½</li>
+			<li class="jp">IPv4ã®å¸¯åŸŸåˆ¶å¾¡æ©Ÿèƒ½</li>
+			<li class="jp">IPv4ã®ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ç·©å’Œã®ãŸã‚ã®ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³(VRFã‚’ç”¨ã„ãŸè»¢é€)</li>
 		</ul>
 	</p>
 
@@ -67,36 +67,36 @@
 	</p>
 
 	<p id="jp">
-	ƒŠƒ_ƒCƒŒƒNƒVƒ‡ƒ“‚©‚ÂƒŠƒ~ƒe[ƒVƒ‡ƒ“‹y‚Ñ‚Í‘S‚Ä—ÇD‚É“®ì‚µ‚Ü‚µ‚½B
-	–{e‚Å‚ÍFlowSpec‚ªRE/PFE‚ÌƒŒƒxƒ‹‚Å‚Ç‚Ì‚æ‚¤‚ÉÀ‘•‚³‚ê‚Ä‚¢‚é‚©‚àĞ‰î‚µ‚Ü‚·B
-	‚Ü‚½AVRF‚ğ—p‚¢‚½ƒŠƒ_ƒCƒŒƒNƒVƒ‡ƒ“‚Ìè–@‚É‚Â‚¢‚Ä‚àq‚×‚Ü‚·B
-	®A"Remaking"‚Ì‹@”\‚É‚Â‚¢‚Ä‚Í¡‰ñŒ±‚µ‚Ä‚¢‚Ü‚¹‚ñB
+	ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‹ã¤ãƒªãƒŸãƒ†ãƒ¼ã‚·ãƒ§ãƒ³åŠã³ã¯å…¨ã¦è‰¯å¥½ã«å‹•ä½œã—ã¾ã—ãŸã€‚
+	æœ¬ç¨¿ã§ã¯FlowSpecãŒRE/PFEã®ãƒ¬ãƒ™ãƒ«ã§ã©ã®ã‚ˆã†ã«å®Ÿè£…ã•ã‚Œã¦ã„ã‚‹ã‹ã‚‚ç´¹ä»‹ã—ã¾ã™ã€‚
+	ã¾ãŸã€VRFã‚’ç”¨ã„ãŸãƒªãƒ€ã‚¤ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã®æ‰‹æ³•ã«ã¤ã„ã¦ã‚‚è¿°ã¹ã¾ã™ã€‚
+	å°šã€"Remaking"ã®æ©Ÿèƒ½ã«ã¤ã„ã¦ã¯ä»Šå›è©¦é¨“ã—ã¦ã„ã¾ã›ã‚“ã€‚
 	</p>
 
 	<p id="en">
-	All tests have been passed with success with just a limitation on traffic redirection presented below. This post presents, how FlowSpec is implemented at RE and PFE level. It presents also the configuration template for Redirecting Traffic through a specific VRF. The gremarkingh feature has not been tested.
+	All tests have been passed with success with just a limitation on traffic redirection presented below. This post presents, how FlowSpec is implemented at RE and PFE level. It presents also the configuration template for Redirecting Traffic through a specific VRF. The â€œremarkingâ€ feature has not been tested.
 	</p>
 
 </div> <!-- section -->
 
-<h2 id="jp">FlowSpecfs theory</h2>
-<h2 id="en">FlowSpecfs theory</h2>
+<h2 id="jp">FlowSpecâ€™s theory</h2>
+<h2 id="en">FlowSpecâ€™s theory</h2>
 <div id="section">
 	<p id="jp">
-	BGP FlowSpec‚ÍRFC5575‚Å’è‹`‚³‚ê‚Ä‚¢‚Ü‚·B
-	RFC‚Å‚Í ƒtƒ[î•ñ(IPsrc, dst, port‚È‚Ç..)‚ÆƒAƒNƒVƒ‡ƒ“/ƒ‹[ƒ‹(‘Ñˆæ§ŒÀAƒŠƒ_ƒCƒŒƒNƒgAƒŠƒ}[ƒN)
-	‚ğ•\‚·(ƒtƒ[ƒXƒyƒbƒNŠg’£‚Ì‚½‚ß‚Ì)NLRI‚ª¦‚³‚ê‚Ä‚¢‚Ü‚·B
-	FlowSpec‚ÍIPv4‚ğƒTƒ|[ƒg‚µ‚Ä‚¢‚Ü‚·B(AFI=1 SAFI=133)B
-	ƒtƒ[î•ñ‚ÆƒAƒNƒVƒ‡ƒ“/ƒ‹[ƒ‹î•ñ‚ğ‰^‚Ô‚½‚ß‚É‚Q‚Â‚ÌBGP‚Ì"ƒRƒ“ƒeƒi"‚ğ—p‚¢‚Ü‚·B
+	BGP FlowSpecã¯RFC5575ã§å®šç¾©ã•ã‚Œã¦ã„ã¾ã™ã€‚
+	RFCã§ã¯ ãƒ•ãƒ­ãƒ¼æƒ…å ±(IPsrc, dst, portãªã©..)ã¨ã‚¢ã‚¯ã‚·ãƒ§ãƒ³/ãƒ«ãƒ¼ãƒ«(å¸¯åŸŸåˆ¶é™ã€ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã€ãƒªãƒãƒ¼ã‚¯)
+	ã‚’è¡¨ã™(ãƒ•ãƒ­ãƒ¼ã‚¹ãƒšãƒƒã‚¯æ‹¡å¼µã®ãŸã‚ã®)NLRIãŒç¤ºã•ã‚Œã¦ã„ã¾ã™ã€‚
+	FlowSpecã¯IPv4ã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã¾ã™ã€‚(AFI=1 SAFI=133)ã€‚
+	ãƒ•ãƒ­ãƒ¼æƒ…å ±ã¨ã‚¢ã‚¯ã‚·ãƒ§ãƒ³/ãƒ«ãƒ¼ãƒ«æƒ…å ±ã‚’é‹ã¶ãŸã‚ã«ï¼’ã¤ã®BGPã®"ã‚³ãƒ³ãƒ†ãƒŠ"ã‚’ç”¨ã„ã¾ã™ã€‚
 	</p>
 
 	<p id="en">
-	BGP FlowSpec is defined within the RFC 5575: gDissemination of Flow Specification Rulesh. This RFC describes a new NLRI that allows to convey flow specifications (@IP src ; DST ; proto ; port number c) and traffic Action/Rules associated (rate-limiting, redirect, remark c). For IPv4 purposes, RFC defines the following AFI/SAFI value: AFI=1 SAFI=133. FlowSpec uses two existing BGP gcontainersh to convey both Flow specifications and rules associated.
+	BGP FlowSpec is defined within the RFC 5575: â€œDissemination of Flow Specification Rulesâ€. This RFC describes a new NLRI that allows to convey flow specifications (@IP src ; DST ; proto ; port number â€¦) and traffic Action/Rules associated (rate-limiting, redirect, remark â€¦). For IPv4 purposes, RFC defines the following AFI/SAFI value: AFI=1 SAFI=133. FlowSpec uses two existing BGP â€œcontainersâ€ to convey both Flow specifications and rules associated.
 	</p>
 
 	<p id="jp">
-	À‘•‚Æ‚µ‚ÄAFlowî•ñî•ñ‚ÍMP_REACH_NLRI‚ÆMP_UNREACH_NLRI‚Ì‘®«‚Å“`’B‚³‚ê‚Ü‚·B
-	ƒAƒNƒVƒ‡ƒ“‚ÆŒ‹‚Ñ‚Â‚¢‚½ƒ‹[ƒ‹‚ÍŠg’£ƒRƒ~ƒ…ƒjƒeƒB‚Æ‚µ‚Ä“`’B‚³‚ê‚Ü‚·B
+	å®Ÿè£…ã¨ã—ã¦ã€Flowæƒ…å ±æƒ…å ±ã¯MP_REACH_NLRIã¨MP_UNREACH_NLRIã®å±æ€§ã§ä¼é”ã•ã‚Œã¾ã™ã€‚
+	ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¨çµã³ã¤ã„ãŸãƒ«ãƒ¼ãƒ«ã¯æ‹¡å¼µã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£ã¨ã—ã¦ä¼é”ã•ã‚Œã¾ã™ã€‚
 	</p>
 
 	<p id="en">
@@ -105,11 +105,11 @@
 
 
 	<p id="jp">
-	MP_REACH_NLRI‚É‘‚©‚ê‚éƒtƒ[î•ñ‚Í‚¢‚­‚Â‚©‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌƒZƒbƒg‚Å¬‚è—§‚Á‚Ä‚¢‚Ü‚·B
-	ŠeƒRƒ“ƒ|[ƒgƒlƒ“ƒg‚ÍANDğŒ‚Å•]‰¿‚³‚ê‚Äƒtƒ[‚ğ¯•Ê‚µ‚Ü‚·B
-	–{•¶’†‚Å‚¢‚­‚Â‚©‚Ìƒtƒ[‚Ì—á‚Æ‚È‚éƒRƒ“ƒ|[ƒlƒ“ƒg‚ğ¦‚µ‚Ü‚·B(NLRI‚Ì’l‚Æ‚µ‚Ä)
-	®ARFC5575‚Å‚ÍNext-Hop‚Ì’·‚³‚Æ’l‚Í"0"‚ÉƒZƒbƒg‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB
-	¦draft-simpson-idr-FlowSpec-redirect-02.txt‚Å‚ÍAIP Next-Hop‚ğ—p‚¢‚½ƒŠƒ_ƒCƒŒƒNƒVƒ‡ƒ“‚Ì‚É‚Í0ˆÈŠO‚Ì’l‚Æ‚È‚è‚Ü‚·B
+	MP_REACH_NLRIã«æ›¸ã‹ã‚Œã‚‹ãƒ•ãƒ­ãƒ¼æƒ…å ±ã¯ã„ãã¤ã‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚»ãƒƒãƒˆã§æˆã‚Šç«‹ã£ã¦ã„ã¾ã™ã€‚
+	å„ã‚³ãƒ³ãƒãƒ¼ãƒˆãƒãƒ³ãƒˆã¯ANDæ¡ä»¶ã§è©•ä¾¡ã•ã‚Œã¦ãƒ•ãƒ­ãƒ¼ã‚’è­˜åˆ¥ã—ã¾ã™ã€‚
+	æœ¬æ–‡ä¸­ã§ã„ãã¤ã‹ã®ãƒ•ãƒ­ãƒ¼ã®ä¾‹ã¨ãªã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç¤ºã—ã¾ã™ã€‚(NLRIã®å€¤ã¨ã—ã¦)
+	å°šã€RFC5575ã§ã¯Next-Hopã®é•·ã•ã¨å€¤ã¯"0"ã«ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚
+	â€»draft-simpson-idr-FlowSpec-redirect-02.txtã§ã¯ã€IP Next-Hopã‚’ç”¨ã„ãŸãƒªãƒ€ã‚¤ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã®æ™‚ã«ã¯0ä»¥å¤–ã®å€¤ã¨ãªã‚Šã¾ã™ã€‚
 	</p>
 
 	<p id="en">
@@ -118,16 +118,16 @@
 </div>
 
 
-<h2 id="jp">ƒoƒŠƒf[ƒVƒ‡ƒ“</h2>
+<h2 id="jp">ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³</h2>
 <h2 id="en">NLRI FlowSpec Validation:</h2>
  
 <div id="section">
 	<p id="jp">
-	ƒ‹[ƒ^‚ÍFlowSpec BGP‚ÌUpdateƒƒbƒZ[ƒW‚ğóM‚µ‚½Û‚É‚ÍA
-	ƒtƒ[î•ñ‚ğAdj-RIB-INƒe[ƒuƒ‹‚©‚çLOC-RIBƒe[ƒuƒ‹‚ÉƒCƒ“ƒXƒg[ƒ‹‚·‚é‘O‚É
-	ƒoƒŠƒf[ƒVƒ‡ƒ“ƒ`ƒFƒbƒN‚ğ‚·‚×‚«‚Å‚·B(RFC 5575)
-	­‚È‚­‚Æ‚àARFC5575‚Å‚ÍNext-Hop‚Ì’l‚Í0‚Ì‚½‚ßƒoƒŠƒf[ƒVƒ‡ƒ“ƒ`ƒFƒbƒN‚É‚Íl—¶‚µ‚Ü‚¹‚ñB
-	‚µ‚©‚µA‘¼‚Ì’l‚ÉŠÖ‚µ‚Ä‚Íƒ`ƒFƒbƒN‚ğs‚Á‚½‚Ì‚¿‚ÉLOC-RIB‚ÉƒCƒ“ƒXƒg[ƒ‹‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB
+	ãƒ«ãƒ¼ã‚¿ã¯FlowSpec BGPã®Updateãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å—ä¿¡ã—ãŸéš›ã«ã¯ã€
+	ãƒ•ãƒ­ãƒ¼æƒ…å ±ã‚’Adj-RIB-INãƒ†ãƒ¼ãƒ–ãƒ«ã‹ã‚‰LOC-RIBãƒ†ãƒ¼ãƒ–ãƒ«ã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹å‰ã«
+	ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ã‚’ã™ã¹ãã§ã™ã€‚(RFC 5575)
+	å°‘ãªãã¨ã‚‚ã€RFC5575ã§ã¯Next-Hopã®å€¤ã¯0ã®ãŸã‚ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ã«ã¯è€ƒæ…®ã—ã¾ã›ã‚“ã€‚
+	ã—ã‹ã—ã€ä»–ã®å€¤ã«é–¢ã—ã¦ã¯ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã£ãŸã®ã¡ã«LOC-RIBã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚
 	</p>
 
 	<p id="en">
@@ -135,8 +135,8 @@
 	</p>
 
 	<p id="jp">
-	ğŒA: ‚±‚ÌƒoƒŠƒf[ƒVƒ‡ƒ“‚Í
-	ƒtƒ[î•ñ‚ÌƒIƒŠƒWƒl[ƒ^‚ªƒtƒ[î•ñ‚É–„‚ß‚Ü‚ê‚½ˆ¶æƒvƒŒƒtƒBƒbƒNƒXŒü‚¯‚Ì(best-match‚·‚é)ƒ†ƒjƒLƒƒƒXƒgŒo˜H‚ÌƒIƒŠƒWƒl[ƒ^‚Æˆê’v‚·‚é‚©‚ğƒ`ƒFƒbƒN‚µ‚Ü‚·B
+	æ¡ä»¶A: ã“ã®ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã¯
+	ãƒ•ãƒ­ãƒ¼æƒ…å ±ã®ã‚ªãƒªã‚¸ãƒãƒ¼ã‚¿ãŒãƒ•ãƒ­ãƒ¼æƒ…å ±ã«åŸ‹ã‚è¾¼ã¾ã‚ŒãŸå®›å…ˆãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹å‘ã‘ã®(best-matchã™ã‚‹)ãƒ¦ãƒ‹ã‚­ãƒ£ã‚¹ãƒˆçµŒè·¯ã®ã‚ªãƒªã‚¸ãƒãƒ¼ã‚¿ã¨ä¸€è‡´ã™ã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã—ã¾ã™ã€‚
 	</p>
 
 	<p id="en">
@@ -144,8 +144,8 @@
 	</p>
 
 	<p id="jp">
-	ğŒB: ƒtƒ[‚Ìˆ¶æƒvƒŒƒtƒBƒbƒNƒX‚Æ”äŠr‚·‚é‚Æ‚«‚É,
-	‘¼‚ÌAS‚©‚ç‚æ‚èƒxƒXƒg‚ÈƒpƒX‚Æ‚È‚é‘¼‚Ìƒ†ƒjƒLƒƒƒXƒgƒ‹[ƒg‚ª‘¶İ‚µ‚È‚¢‚±‚ÆB
+	æ¡ä»¶B: ãƒ•ãƒ­ãƒ¼ã®å®›å…ˆãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã¨æ¯”è¼ƒã™ã‚‹ã¨ãã«,
+	ä»–ã®ASã‹ã‚‰ã‚ˆã‚Šãƒ™ã‚¹ãƒˆãªãƒ‘ã‚¹ã¨ãªã‚‹ä»–ã®ãƒ¦ãƒ‹ã‚­ãƒ£ã‚¹ãƒˆãƒ«ãƒ¼ãƒˆãŒå­˜åœ¨ã—ãªã„ã“ã¨ã€‚
 	</p>
 
 	<p id="en">
@@ -153,8 +153,8 @@
 	</p>
 
 	<p id="jp">
-	RFC‚Åq‚×‚ç‚ê‚Ä‚¢‚éƒoƒŠƒf[ƒVƒ‡ƒ“‚Í‘¼‚Ì˜AŒgƒVƒXƒeƒ€‚Ì‚©‚çFlowSprecŒo˜H‚ğƒCƒ“ƒXƒg[ƒ‹‚µ‚æ‚¤‚Æ‚·‚éÛ‚Ìá•Ç‚Æ‚È‚è‚Ü‚·B
-	‚±‚Ì‚½‚ßAÀÛ‚É‚ÍƒoƒŠƒf[ƒVƒ‡ƒ“ƒ`ƒFƒbƒN‹@”\‚Í–³Œø‚É‚³‚ê‚é‚±‚Æ‚ª‚ ‚è‚Ü‚·B
+	RFCã§è¿°ã¹ã‚‰ã‚Œã¦ã„ã‚‹ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã¯ä»–ã®é€£æºã‚·ã‚¹ãƒ†ãƒ ã®ã‹ã‚‰FlowSprecçµŒè·¯ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã‚ˆã†ã¨ã™ã‚‹éš›ã®éšœå£ã¨ãªã‚Šã¾ã™ã€‚
+	ã“ã®ãŸã‚ã€å®Ÿéš›ã«ã¯ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯æ©Ÿèƒ½ã¯ç„¡åŠ¹ã«ã•ã‚Œã‚‹ã“ã¨ãŒã‚ã‚Šã¾ã™ã€‚
 	</p>
 	<p id="en">
 	These validations can cause some problems when you use for example external Server to inject FlowSpec updates. Implementations may de-activate these validation steps
@@ -163,7 +163,7 @@
 </div>
 
 
-<h2 id="jp">ƒRƒ“ƒ|[ƒlƒ“ƒg</h2>
+<h2 id="jp">ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ</h2>
 <h2 id="en">FlowSpec components</h2>
 
 <div id="section">
@@ -172,19 +172,19 @@
 	</div>
 
 	<p id="jp">
-	RFCã‚Ì•\‹L‚æ‚è:
-	ƒtƒ[î•ñ‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ÍğŒ‚Ì‡˜‚ªŒµ–§‚Å‚È‚¢‚Æ‚È‚ç‚è‚Ü‚¹‚ñB
-	‚±‚ê‚©‚çq‚×‚éƒ^ƒCƒv‚Í‚·‚×‚Äw’è‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢‚í‚¯‚Å‚Í‚ ‚è‚Ü‚¹‚ñB
-	‚½‚¾‚µA‚»‚Ìƒ^ƒCƒv‚Ì’l‚Í‘¼‚Ì‚à‚Ì‚æ‚è‘O‚É”z’u‚³‚ê‚È‚¢‚Æ‚È‚è‚Ü‚¹‚ñB
-	(‚Â‚Ü‚èA¸‡‚É‚µ‚æ‚¤‚Æ‚¢‚¤‚±‚Æ)
+	RFCä¸Šã®è¡¨è¨˜ã‚ˆã‚Š:
+	ãƒ•ãƒ­ãƒ¼æƒ…å ±ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã¯æ¡ä»¶ã®é †åºãŒå³å¯†ã§ãªã„ã¨ãªã‚‰ã‚Šã¾ã›ã‚“ã€‚
+	ã“ã‚Œã‹ã‚‰è¿°ã¹ã‚‹ã‚¿ã‚¤ãƒ—ã¯ã™ã¹ã¦æŒ‡å®šã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã‚ã‘ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
+	ãŸã ã—ã€ãã®ã‚¿ã‚¤ãƒ—ã®å€¤ã¯ä»–ã®ã‚‚ã®ã‚ˆã‚Šå‰ã«é…ç½®ã•ã‚Œãªã„ã¨ãªã‚Šã¾ã›ã‚“ã€‚
+	(ã¤ã¾ã‚Šã€æ˜‡é †ã«ã—ã‚ˆã†ã¨ã„ã†ã“ã¨)
 	</p>
 
 	<p id="en">
-	Notice from the RFC: gFlow specification components must follow strict type ordering. A given component type may or may not be present in the specification, but if present, it MUST precede any component of higher numeric type value.h
+	Notice from the RFC: â€œFlow specification components must follow strict type ordering. A given component type may or may not be present in the specification, but if present, it MUST precede any component of higher numeric type value.â€
 	</p>
 
 <h3 id="jp">
-Type 1: DestƒAƒhƒŒƒX(Destination prefix component)
+Type 1: Destã‚¢ãƒ‰ãƒ¬ã‚¹(Destination prefix component)
 </h3>
 
 <div id="img">
@@ -193,7 +193,7 @@ Type 1: DestƒAƒhƒŒƒX(Destination prefix component)
 
 
 <h3 id="jp">
-Type 2: SrcƒAƒhƒŒƒX(Source prefix component)
+Type 2: Srcã‚¢ãƒ‰ãƒ¬ã‚¹(Source prefix component)
 </h3>
 
 <div id="img">
@@ -209,14 +209,14 @@ Type 3: IP Protocol component
 <img id="normal" src="img/type3.png"/>
 </div>
 
-<p id="jp">ŠeƒIƒvƒVƒ‡ƒ“ƒoƒCƒg‚Ì’è‹`‚ÍˆÈ‰º‚Ì’Ê‚è
+<p id="jp">å„ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒã‚¤ãƒˆã®å®šç¾©ã¯ä»¥ä¸‹ã®é€šã‚Š
 	<ul class="jp">
-			<li class="jp">E bit: ƒIƒvƒVƒ‡ƒ“‚ÌI‚í‚è(ÅŒã‚ÌƒIƒvƒVƒ‡ƒ“‚Í1‚ÉƒZƒbƒg‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢)</li>
-			<li class="jp">A bit: ANDƒrƒbƒgB‚±‚Ìƒrƒbƒg‚ªƒIƒvƒVƒ‡ƒ“‚ ‚é‚¢‚Í’l‚ÌŠÔ‚É‚ ‚éê‡A‚±‚ê‚ğAND‚Å‚Â‚È‚®B‚à‚µA‚±‚ê‚ª‚È‚¢‚Ì‚Å‚ ‚ê‚ÎOR‚Å‚Â‚È‚®B®AÅ‰‚ÌƒIƒvƒVƒ‡ƒ“‚Æ‚µ‚Äw’è‚µ‚Ä‚Í‚È‚ç‚È‚¢B</li>
-			<li class="jp">Len: 0‚Å‚ ‚éê‡AŸ‚Ì’l‚Í1byte‚Æ‚µ‚Ä‰ğß‚³‚ê‚éB‚à‚µ1‚Å‚ ‚éê‡AŸ‚Ì’l‚Í2byte‚Æ‚µ‚Ä‰ğß‚³‚ê‚éB</li>
-			<li class="jp">Lt: Less-Than ˆÈ‰ºƒrƒbƒg</li>
-			<li class="jp">Gt: Greater-Than ˆÈãƒrƒbƒg</li>
-			<li class="jp">Eq: Equal “™‚µ‚¢ƒrƒbƒg</li>
+			<li class="jp">E bit: ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®çµ‚ã‚ã‚Š(æœ€å¾Œã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¯1ã«ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„)</li>
+			<li class="jp">A bit: ANDãƒ“ãƒƒãƒˆã€‚ã“ã®ãƒ“ãƒƒãƒˆãŒã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚ã‚‹ã„ã¯å€¤ã®é–“ã«ã‚ã‚‹å ´åˆã€ã“ã‚Œã‚’ANDã§ã¤ãªãã€‚ã‚‚ã—ã€ã“ã‚ŒãŒãªã„ã®ã§ã‚ã‚Œã°ORã§ã¤ãªãã€‚å°šã€æœ€åˆã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¨ã—ã¦æŒ‡å®šã—ã¦ã¯ãªã‚‰ãªã„ã€‚</li>
+			<li class="jp">Len: 0ã§ã‚ã‚‹å ´åˆã€æ¬¡ã®å€¤ã¯1byteã¨ã—ã¦è§£é‡ˆã•ã‚Œã‚‹ã€‚ã‚‚ã—1ã§ã‚ã‚‹å ´åˆã€æ¬¡ã®å€¤ã¯2byteã¨ã—ã¦è§£é‡ˆã•ã‚Œã‚‹ã€‚</li>
+			<li class="jp">Lt: Less-Than ä»¥ä¸‹ãƒ“ãƒƒãƒˆ</li>
+			<li class="jp">Gt: Greater-Than ä»¥ä¸Šãƒ“ãƒƒãƒˆ</li>
+			<li class="jp">Eq: Equal ç­‰ã—ã„ãƒ“ãƒƒãƒˆ</li>
 	</ul>
 </p>
 
@@ -232,7 +232,7 @@ Type 3: IP Protocol component
 </p>
 
 <h3 id="jp">
-Type 4: ƒ|[ƒg”Ô†(Port number component)
+Type 4: ãƒãƒ¼ãƒˆç•ªå·(Port number component)
 </h3>
 
 <div id="img">
@@ -240,7 +240,7 @@ Type 4: ƒ|[ƒg”Ô†(Port number component)
 </div>
 
 <h3 id="jp">
-Type 5: ˆ¶æƒ|[ƒg(Destination port number component)
+Type 5: å®›å…ˆãƒãƒ¼ãƒˆ(Destination port number component)
 </h3>
 
 <div id="img">
@@ -248,7 +248,7 @@ Type 5: ˆ¶æƒ|[ƒg(Destination port number component)
 </div>
 
 <h3 id="jp">
-Type 6: ‘—‚èŒ³ƒ|[ƒg(Source port number component)
+Type 6: é€ã‚Šå…ƒãƒãƒ¼ãƒˆ(Source port number component)
 </h3>
 
 <div id="img">
@@ -256,7 +256,7 @@ Type 6: ‘—‚èŒ³ƒ|[ƒg(Source port number component)
 </div>
 
 <h3 id="jp">
-Type 7: ICMPƒ^ƒCƒv(ICMP Type component)
+Type 7: ICMPã‚¿ã‚¤ãƒ—(ICMP Type component)
 </h3>
  
 <div id="img">
@@ -264,7 +264,7 @@ Type 7: ICMPƒ^ƒCƒv(ICMP Type component)
 </div>
 
 <h3 id="jp">
-Type 8: ICMPƒR[ƒh(ICMP Code component)
+Type 8: ICMPã‚³ãƒ¼ãƒ‰(ICMP Code component)
 </h3>
 
 <div id="img">
@@ -272,20 +272,20 @@ Type 8: ICMPƒR[ƒh(ICMP Code component)
 </div>
 
 <h3 id="jp">
-Type 9: TCPƒtƒ‰ƒO(TCP Flags component)
+Type 9: TCPãƒ•ãƒ©ã‚°(TCP Flags component)
 </h3>
 
 <div id="img">
 <img id="normal" src="img/type9.png"/>
 </div>
 
-<p id="jp">ŠeƒIƒvƒVƒ‡ƒ“ƒoƒCƒg‚Ì’è‹`‚ÍˆÈ‰º‚Ì’Ê‚è
+<p id="jp">å„ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒã‚¤ãƒˆã®å®šç¾©ã¯ä»¥ä¸‹ã®é€šã‚Š
 	<ul class="jp">
-			<li class="jp">E bit: ƒIƒvƒVƒ‡ƒ“‚ÌI‚í‚è(ÅŒã‚ÌƒIƒvƒVƒ‡ƒ“‚Í1‚ÉƒZƒbƒg‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢)</p>
-			<li class="jp">A bit: ANDƒrƒbƒgB‚±‚Ìƒrƒbƒg‚ªƒIƒvƒVƒ‡ƒ“‚ ‚é‚¢‚Í’l‚ÌŠÔ‚É‚ ‚éê‡A‚±‚ê‚ğAND‚Å‚Â‚È‚®B‚à‚µA‚±‚ê‚ª‚È‚¢‚Ì‚Å‚ ‚ê‚ÎOR‚Å‚Â‚È‚®B®AÅ‰‚ÌƒIƒvƒVƒ‡ƒ“‚Æ‚µ‚Äw’è‚µ‚Ä‚Í‚È‚ç‚È‚¢B</p>
-			<li class="jp">Len: 0‚Å‚ ‚éê‡AŸ‚Ì’l‚Í1byte‚Æ‚µ‚Ä‰ğß‚³‚ê‚éB‚à‚µ1‚Å‚ ‚éê‡AŸ‚Ì’l‚Í2byte‚Æ‚µ‚Ä‰ğß‚³‚ê‚éB</p>
-			<li class="jp">Not: —^‚¦‚ç‚ê‚½ƒf[ƒ^‚Æ’l‚ª“™‚µ‚­‚È‚¢ğŒ</p>
-			<li class="jp">m bit: —^‚¦‚ç‚ê‚½ƒf[ƒ^‚Æ’l‚ª“™‚µ‚¢ğŒ</p>
+			<li class="jp">E bit: ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®çµ‚ã‚ã‚Š(æœ€å¾Œã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¯1ã«ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ãªã‘ã‚Œã°ãªã‚‰ãªã„)</p>
+			<li class="jp">A bit: ANDãƒ“ãƒƒãƒˆã€‚ã“ã®ãƒ“ãƒƒãƒˆãŒã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚ã‚‹ã„ã¯å€¤ã®é–“ã«ã‚ã‚‹å ´åˆã€ã“ã‚Œã‚’ANDã§ã¤ãªãã€‚ã‚‚ã—ã€ã“ã‚ŒãŒãªã„ã®ã§ã‚ã‚Œã°ORã§ã¤ãªãã€‚å°šã€æœ€åˆã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¨ã—ã¦æŒ‡å®šã—ã¦ã¯ãªã‚‰ãªã„ã€‚</p>
+			<li class="jp">Len: 0ã§ã‚ã‚‹å ´åˆã€æ¬¡ã®å€¤ã¯1byteã¨ã—ã¦è§£é‡ˆã•ã‚Œã‚‹ã€‚ã‚‚ã—1ã§ã‚ã‚‹å ´åˆã€æ¬¡ã®å€¤ã¯2byteã¨ã—ã¦è§£é‡ˆã•ã‚Œã‚‹ã€‚</p>
+			<li class="jp">Not: ä¸ãˆã‚‰ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã¨å€¤ãŒç­‰ã—ããªã„æ¡ä»¶</p>
+			<li class="jp">m bit: ä¸ãˆã‚‰ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã¨å€¤ãŒç­‰ã—ã„æ¡ä»¶</p>
 	</ul>
 </p>
 
@@ -301,7 +301,7 @@ Type 9: TCPƒtƒ‰ƒO(TCP Flags component)
 
 
 <h3 id="jp">
-Type 10: ƒpƒPƒbƒg’·(Packet Length component)
+Type 10: ãƒ‘ã‚±ãƒƒãƒˆé•·(Packet Length component)
 </h3>
 
 <div id="img">
@@ -317,7 +317,7 @@ Type 11: DSCP(DSCP Value component)
 </div>
 
 <h3 id="jp">
-Type 12: ƒtƒ‰ƒOƒƒ“ƒg(Fragment component)
+Type 12: ãƒ•ãƒ©ã‚°ãƒ¡ãƒ³ãƒˆ(Fragment component)
 </h3>
 
 <div id="img">
@@ -325,7 +325,7 @@ Type 12: ƒtƒ‰ƒOƒƒ“ƒg(Fragment component)
 </div>
  
 <p id="jp">
-ƒtƒ[’è‹`‚Ì‚ ‚ÆAƒAƒNƒVƒ‡ƒ“(ƒ‹[ƒ‹)‚ªŠg’£ƒRƒ~ƒ…ƒjƒeƒB(RFC4360)‚ª‘±‚«‚Ü‚·B
+ãƒ•ãƒ­ãƒ¼å®šç¾©ã®ã‚ã¨ã€ã‚¢ã‚¯ã‚·ãƒ§ãƒ³(ãƒ«ãƒ¼ãƒ«)ãŒæ‹¡å¼µã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£(RFC4360)ãŒç¶šãã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -338,12 +338,12 @@ After the flow definition, Traffic Actions (rules) are encoded as Extended Commu
 
 
 <p id="jp">
-Šg’£ƒRƒ~ƒ…ƒjƒeƒB‚ÌTYPEƒtƒB[ƒ‹ƒh‚É“ü‚ê‚é’l‚É‚æ‚è4‚Â‚ÌƒAƒNƒVƒ‡ƒ“‚ª’è‹`‚³‚ê‚Ä‚¢‚Ü‚·B
-ˆÈ‰º‚ÉŒ»İ—LŒø‚ÈƒAƒNƒVƒ‡ƒ“‚ğ¦‚µ‚Ü‚·B
+æ‹¡å¼µã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£ã®TYPEãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å…¥ã‚Œã‚‹å€¤ã«ã‚ˆã‚Š4ã¤ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãŒå®šç¾©ã•ã‚Œã¦ã„ã¾ã™ã€‚
+ä»¥ä¸‹ã«ç¾åœ¨æœ‰åŠ¹ãªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’ç¤ºã—ã¾ã™ã€‚
 </p>
 
 <p id="en">
-There are 4 types of gActionh, each of them has a dedicated Extended Community TYPE. The tab below lists the current Actions available:
+There are 4 types of â€œActionâ€, each of them has a dedicated Extended Community TYPE. The tab below lists the current Actions available:
 </p>
 
 <div id="img">
@@ -351,17 +351,17 @@ There are 4 types of gActionh, each of them has a dedicated Extended Community
 </div>
 
 <h3 name="jp">
-‘Ñˆæ§ŒäƒAƒNƒVƒ‡ƒ“(Traffic-rate action)
+å¸¯åŸŸåˆ¶å¾¡ã‚¢ã‚¯ã‚·ãƒ§ãƒ³(Traffic-rate action)
 </h3>
 
 
 <p id="jp">
-‚±‚ÌƒAƒNƒVƒ‡ƒ“‚Íƒgƒ‰ƒtƒBƒbƒN‚Ì”jŠü‚ ‚é‚¢‚Í‘Ñˆæ§Œä‚É—p‚¢‚ç‚ê‚Ü‚·B
-”jŠü‚Í‘Ñˆæ§Œä‚ÌƒŒ[ƒg‚ğ0‚É‚µ‚Ü‚·B
-4ƒIƒNƒeƒbƒg‚ÌƒŒ[ƒgî•ñ‚ÍIEEE‚Ì•‚“®¬”“_ƒtƒH[ƒ}ƒbƒg‚É‚æ‚èw’è‚µ‚Ü‚·B
-‚±‚ÌƒtƒH[ƒ}ƒbƒg•ÏŠ·‚É‚Í
+ã“ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¯ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ã®ç ´æ£„ã‚ã‚‹ã„ã¯å¸¯åŸŸåˆ¶å¾¡ã«ç”¨ã„ã‚‰ã‚Œã¾ã™ã€‚
+ç ´æ£„ã¯å¸¯åŸŸåˆ¶å¾¡ã®ãƒ¬ãƒ¼ãƒˆã‚’0ã«ã—ã¾ã™ã€‚
+4ã‚ªã‚¯ãƒ†ãƒƒãƒˆã®ãƒ¬ãƒ¼ãƒˆæƒ…å ±ã¯IEEEã®æµ®å‹•å°æ•°ç‚¹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«ã‚ˆã‚ŠæŒ‡å®šã—ã¾ã™ã€‚
+ã“ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆå¤‰æ›ã«ã¯
 http://www.h-schmidt.net/FloatConverter/IEEE754.html
-‚ª–ğ‚É—§‚Â‚Å‚µ‚å‚¤B
+ãŒå½¹ã«ç«‹ã¤ã§ã—ã‚‡ã†ã€‚
 </p>
 
 <p id="en">
@@ -377,8 +377,8 @@ Traffic-action
 </h3>
 
 <p id="jp">
-“Á’è‚Ìƒtƒ[‚ğó‚¯æ‚Á‚½Û‚Ìˆ—‚ğ’è‹`‚µ‚Ü‚·B
-Œ»İ‚Í6ƒoƒCƒg(48ƒrƒbƒg)’†A2ƒrƒbƒg‚ÌƒAƒNƒVƒ‡ƒ“‚¾‚¯‚ª’è‹`‚³‚ê‚Ä‚¢‚Ü‚·B
+ç‰¹å®šã®ãƒ•ãƒ­ãƒ¼æ™‚ã‚’å—ã‘å–ã£ãŸéš›ã®å‡¦ç†ã‚’å®šç¾©ã—ã¾ã™ã€‚
+ç¾åœ¨ã¯6ãƒã‚¤ãƒˆ(48ãƒ“ãƒƒãƒˆ)ä¸­ã€2ãƒ“ãƒƒãƒˆã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã ã‘ãŒå®šç¾©ã•ã‚Œã¦ã„ã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -390,12 +390,12 @@ Used to trigger specific processing the corresponding flow. Only the last 2 Bits
 </div>
 
 <p id="jp">
-- TerminalƒAƒNƒVƒ‡ƒ“(47ƒrƒbƒg–Ú): ‚±‚Ìƒrƒbƒg‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚é‚Æ
- ƒgƒ‰ƒtƒBƒbƒNƒtƒBƒ‹ƒ^ƒŠƒ“ƒOƒGƒ“ƒWƒ“‚Í‚»‚ê‚É]‚Á‚½ˆ—‚ğs‚¢‚Ü‚·B
- (‚±‚Ìˆ—ƒ‹[ƒ‹‚Í‡˜‚¾‚Á‚½ˆ—‚ªs‚í‚ê‚Ü‚·)
- ‚±‚ê‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚È‚¢ê‡A‚±‚Ìƒ‹[ƒ‹‚ª“K‰‚³‚ê‚½ˆ—‚ğ‚»‚Ìƒgƒ‰ƒtƒBƒbƒNƒtƒBƒ‹ƒ^‚Ís‚¢‚Ü‚¹‚ñB
+- Terminalã‚¢ã‚¯ã‚·ãƒ§ãƒ³(47ãƒ“ãƒƒãƒˆç›®): ã“ã®ãƒ“ãƒƒãƒˆãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã¨
+ ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°ã‚¨ãƒ³ã‚¸ãƒ³ã¯ãã‚Œã«å¾“ã£ãŸå‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
+ (ã“ã®å‡¦ç†ãƒ«ãƒ¼ãƒ«ã¯é †åºã ã£ãŸå‡¦ç†ãŒè¡Œã‚ã‚Œã¾ã™)
+ ã“ã‚ŒãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ãªã„å ´åˆã€ã“ã®ãƒ«ãƒ¼ãƒ«ãŒé©å¿œã•ã‚ŒãŸå‡¦ç†ã‚’ãã®ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ•ã‚£ãƒ«ã‚¿ã¯è¡Œã„ã¾ã›ã‚“ã€‚
 <br/>
-- SampleƒAƒNƒVƒ‡ƒ“(46ƒrƒbƒg–Ú): ƒgƒ‰ƒtƒBƒbƒN‚ÌƒTƒ“ƒvƒŠƒ“ƒO‚ÆƒƒMƒ“ƒO‚ğs‚¢‚Ü‚·B
+- Sampleã‚¢ã‚¯ã‚·ãƒ§ãƒ³(46ãƒ“ãƒƒãƒˆç›®): ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ã®ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã¨ãƒ­ã‚®ãƒ³ã‚°ã‚’è¡Œã„ã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -405,16 +405,16 @@ Used to trigger specific processing the corresponding flow. Only the last 2 Bits
 </p>
 
 <h3 id="jp">
-ƒŠƒ_ƒCƒŒƒNƒg(Redirect action)
+ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆ(Redirect action)
 </h3>
 
 <p id="jp">
-ƒ‹[ƒ^‚É‚Ä“Á’è‚ÌVRF‚ÉƒŠƒ_ƒCƒŒƒNƒg‚·‚é‚½‚ß‚Ì
-ƒgƒ‰ƒtƒBƒbƒN‚ğw’è‚µ‚½Route Targetî•ñ‚ğŠÜ‚İ‚Ü‚·B
+ãƒ«ãƒ¼ã‚¿ã«ã¦ç‰¹å®šã®VRFã«ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã™ã‚‹ãŸã‚ã®
+ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚’æŒ‡å®šã—ãŸRoute Targetæƒ…å ±ã‚’å«ã¿ã¾ã™ã€‚
 </p>
 
 <p id="en">
-Traffic redirection allows to specify a groute-targeth community which will be handled by the router to redirect a Flow to a specific VRF.
+Traffic redirection allows to specify a â€œroute-targetâ€ community which will be handled by the router to redirect a Flow to a specific VRF.
 </p>
 
 <div id="img">
@@ -423,10 +423,10 @@ Traffic redirection allows to specify a groute-targeth community which will be
 
 
 <h3 id="jp">
-ƒ}[ƒLƒ“ƒO(Traffic-marking action)
+ãƒãƒ¼ã‚­ãƒ³ã‚°(Traffic-marking action)
 </h3>
 <p id="jp">
-ƒ}ƒbƒ`‚·‚éƒtƒ[‚ÌDSCP’l‚ğ‘‚«Š·‚¦‚Ü‚·B
+ãƒãƒƒãƒã™ã‚‹ãƒ•ãƒ­ãƒ¼ã®DSCPå€¤ã‚’æ›¸ãæ›ãˆã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -441,16 +441,16 @@ Used to force a flow to be re-writted with a specific DSCP value when it leaves 
 
 
 <h2 id="jp">
-JUNOS‚Å‚ÌÀ‘•
+JUNOSã§ã®å®Ÿè£…
 </h2>
 <h2 id="en">
 Flow Specification and JUNOS
 </h2>
 <div id="section">
 	<p id="jp">
-	JUNOS‚Í‚Q‚Â‚Ìí—Ş‚Ìƒtƒ[Œo˜H‚ğƒTƒ|[ƒg‚µ‚Ü‚·B
+	JUNOSã¯ï¼’ã¤ã®ç¨®é¡ã®ãƒ•ãƒ­ãƒ¼çµŒè·¯ã‚’ã‚µãƒãƒ¼ãƒˆã—ã¾ã™ã€‚
 	<br/>
-	1)Ã“I‚Èƒtƒ[Œo˜H‚ÍˆÈ‰º‚Ì‚æ‚¤‚É‘‚«‚Ü‚·B
+	1)é™çš„ãªãƒ•ãƒ­ãƒ¼çµŒè·¯ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«æ›¸ãã¾ã™ã€‚
 	</p>
 
 	<p id="en">
@@ -469,9 +469,9 @@ route static-flow1 {
 }</code></pre>
 
 	<p id="jp">
-	2)BGP‚Åƒtƒ[‚Ìƒtƒ@ƒ~ƒŠ(= inetflow.0)‚ğ“`’B‚·‚é‚É‚ÍˆÈ‰º‚Ì‚æ‚¤‚Éİ’è‚µ‚Ü‚·B<br>
-	‚±‚ÌÛAƒoƒŠƒf[ƒVƒ‡ƒ“ƒ`ƒFƒbƒN‚Ì–³Œø‰»‚ğpolicy-statement‚É‹LÚ‚Å‚«‚Ü‚·B</br>
-	(‚±‚ê‚ÅLOC-RIB‚ÉŒo˜H‚ğƒoƒŠƒf[ƒVƒ‡ƒ“‚È‚µ‚É’¼ÚƒCƒ“ƒXƒg[ƒ‹‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·)
+	2)BGPã§ãƒ•ãƒ­ãƒ¼ã®ãƒ•ã‚¡ãƒŸãƒª(= inetflow.0)ã‚’ä¼é”ã™ã‚‹ã«ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«è¨­å®šã—ã¾ã™ã€‚<br>
+	ã“ã®éš›ã€ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ã®ç„¡åŠ¹åŒ–ã‚’policy-statementã«è¨˜è¼‰ã§ãã¾ã™ã€‚</br>
+	(ã“ã‚Œã§LOC-RIBã«çµŒè·¯ã‚’ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãªã—ã«ç›´æ¥ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™)
 	</p>
 
 	<p id="en">
@@ -501,11 +501,11 @@ policy-statement NO-VAIDATION {
 }</code></pre>
 
 	<p id="jp">
-	BGP‚©‚çóM‚µ‚½ƒtƒ[Œo˜H‚ ‚é‚¢‚ÍÃ“I‚É’è‹`‚µ‚½ƒtƒ[Œo˜H‚Íinetflow.0‚ÉƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ü‚·B
+	BGPã‹ã‚‰å—ä¿¡ã—ãŸãƒ•ãƒ­ãƒ¼çµŒè·¯ã‚ã‚‹ã„ã¯é™çš„ã«å®šç¾©ã—ãŸãƒ•ãƒ­ãƒ¼çµŒè·¯ã¯inetflow.0ã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¾ã™ã€‚
 	</p>
 
 	<p id="en">
-	Flow routes (BGP or static) are installed within the table ginetflow.0h.
+	Flow routes (BGP or static) are installed within the table â€œinetflow.0â€.
 	</p>
 
 <pre id="code"><code>sponge@bob> show route table inetflow.0 detail
@@ -527,9 +527,9 @@ inetflow.0: 1 destinations, 1 routes (2 active, 0 holddown, 0 hidden)
                 Communities: traffic-rate:0:1875</code></pre>
 
 	<p id="jp">
-	‘Oq‚Ì‚Æ‚¨‚èANext-Hop‚Íí‚ÉFictitious‚Æ‚È‚è‚Ü‚·(0‚ªƒZƒbƒg‚³‚ê‚é‚©‚ç)B
-	ƒtƒ[‚ÍnŒÂ‚Ìƒ^ƒvƒ‹‚Å¬‚è—§‚Âƒtƒ[’è‹`‚ÆŠg’£ƒRƒ~ƒ…ƒjƒeƒB‚Ìƒ‹[ƒ‹‚Å‚È‚Á‚Ä‚¢‚Ü‚·B
-	ã‚Ì—á‚Å‚ÍAƒ‹[ƒ‹‚Í‘Ñˆæ§Œä‚Å‚ ‚èA‚±‚Ì’l‚Æ‚µ‚Ärate=0(‚Â‚Ü‚è”jŠü)‚Æ‚È‚Á‚Ä‚¢‚Ü‚·B
+	å‰è¿°ã®ã¨ãŠã‚Šã€Next-Hopã¯å¸¸ã«Fictitiousã¨ãªã‚Šã¾ã™(0ãŒã‚»ãƒƒãƒˆã•ã‚Œã‚‹ã‹ã‚‰)ã€‚
+	ãƒ•ãƒ­ãƒ¼ã¯nå€‹ã®ã‚¿ãƒ—ãƒ«ã§æˆã‚Šç«‹ã¤ãƒ•ãƒ­ãƒ¼å®šç¾©ã¨æ‹¡å¼µã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£ã®ãƒ«ãƒ¼ãƒ«ã§ãªã£ã¦ã„ã¾ã™ã€‚
+	ä¸Šã®ä¾‹ã§ã¯ã€ãƒ«ãƒ¼ãƒ«ã¯å¸¯åŸŸåˆ¶å¾¡ã§ã‚ã‚Šã€ã“ã®å€¤ã¨ã—ã¦rate=0(ã¤ã¾ã‚Šç ´æ£„)ã¨ãªã£ã¦ã„ã¾ã™ã€‚
 	</p>
 
 	<p id="en">
@@ -537,12 +537,12 @@ inetflow.0: 1 destinations, 1 routes (2 active, 0 holddown, 0 hidden)
 	</p>
 
 	<p id="jp">
-	JUNOS‚Í‚±‚ÌŒo˜H‚ğ firewall-filter(__FlowSpec_default_inet__)‚ÉƒvƒbƒVƒ…‚µ‚Ü‚·B<br/>
-        ‚±‚ÌƒtƒBƒ‹ƒ^‚ÍŠePFE‚É‚¨‚¢‚ÄIn/Out•ûŒü‚ÉƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ü‚·B
+	JUNOSã¯ã“ã®çµŒè·¯ã‚’ firewall-filter(__FlowSpec_default_inet__)ã«ãƒ—ãƒƒã‚·ãƒ¥ã—ã¾ã™ã€‚<br/>
+        ã“ã®ãƒ•ã‚£ãƒ«ã‚¿ã¯å„PFEã«ãŠã„ã¦In/Outæ–¹å‘ã«ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¾ã™ã€‚
 	<p>
 
 	<p id="en">
-	Junos then converts this route on a well-known firewall-filter and pushes the filter update on every PFE in both directions (Input / Output). This Firewall Filter is called g__FlowSpec_default_inet__h.
+	Junos then converts this route on a well-known firewall-filter and pushes the filter update on every PFE in both directions (Input / Output). This Firewall Filter is called â€œ__FlowSpec_default_inet__â€.
 	</p>
 
 
@@ -552,7 +552,7 @@ inetflow.0: 1 destinations, 1 routes (2 active, 0 holddown, 0 hidden)
 
 
 	<p id="jp">
-	‚±‚ê‚Íhidden‘®«ƒtƒBƒ‹ƒ^‚Å‚Í‚È‚¢‚Ì‚ÅƒRƒ}ƒ“ƒh‚ÅŠm”F‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+	ã“ã‚Œã¯hiddenå±æ€§ãƒ•ã‚£ãƒ«ã‚¿ã§ã¯ãªã„ã®ã§ã‚³ãƒãƒ³ãƒ‰ã§ç¢ºèªã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 	</p>
 
 	<p id="en">
@@ -577,40 +577,40 @@ Name                                                Bytes              Packets
 15K_*,10.1.1.1,proto=17,port=53                         0                    0</code></pre>
 
 	<p id="jp">
-	ƒtƒ[ƒXƒyƒbƒNƒtƒ@ƒCƒAƒEƒH[ƒ‹ƒtƒBƒ‹ƒ^‚ÌÀ‘Ì‚Í
-	FirewallƒtƒBƒ‹ƒ^‚É‚¨‚¯‚é“®“I‚Èƒtƒ[’è‹`‚ÆƒAƒNƒVƒ‡ƒ“‚Å‚·B
-	term‚Ìfrom‚Æ‚µ‚Ä’è‹`‚³‚ê‚½ƒtƒ[‚ªthen‚Æ‚µ‚Ä’è‹`‚³‚ê‚½ƒAƒNƒVƒ‡ƒ“‚ğs‚¤ƒ‹[ƒ‹‚Æ‚µ‚Ä•\¦‚³‚ê‚Ü‚·B
+	ãƒ•ãƒ­ãƒ¼ã‚¹ãƒšãƒƒã‚¯ãƒ•ã‚¡ã‚¤ã‚¢ã‚¦ã‚©ãƒ¼ãƒ«ãƒ•ã‚£ãƒ«ã‚¿ã®å®Ÿä½“ã¯
+	Firewallãƒ•ã‚£ãƒ«ã‚¿ã«ãŠã‘ã‚‹å‹•çš„ãªãƒ•ãƒ­ãƒ¼å®šç¾©ã¨ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã§ã™ã€‚
+	termã®fromã¨ã—ã¦å®šç¾©ã•ã‚ŒãŸãƒ•ãƒ­ãƒ¼ãŒthenã¨ã—ã¦å®šç¾©ã•ã‚ŒãŸã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’è¡Œã†ãƒ«ãƒ¼ãƒ«ã¨ã—ã¦è¡¨ç¤ºã•ã‚Œã¾ã™ã€‚
 	</p>
 
 	<p id="en">
-	Actually, flow spec firewall filter is a dynamic FW filter which combines in one FW filter all the Flow Specification routes (as a gfromh criteria) and their associated rules (as a gthenh criteria). Each route can be view as a term.
+	Actually, flow spec firewall filter is a dynamic FW filter which combines in one FW filter all the Flow Specification routes (as a â€œfromâ€ criteria) and their associated rules (as a â€œthenâ€ criteria). Each route can be view as a term.
 	</p>
 
 	<p id="jp">
-	FlowSpecƒtƒ@ƒCƒAƒEƒH[ƒ‹ƒtƒBƒ‹ƒ^‚Í‚à‚Á‚Æ‚àÅ‰‚É“K‰‚³‚ê‚éƒtƒ@ƒCƒAƒEƒH[ƒ‹ƒtƒBƒ‹ƒ^‚Å‚·B
-	‚Å‚·‚ªA’è‹`‚µ‚½•Ê‚ÌƒtƒBƒ‹ƒ^‚ğin/out–ˆ‚É‚±‚ê‚æ‚è‘O‚É“K‰‚·‚é‚±‚Æ‚à‚Å‚«‚Ü‚·B
-        (set interface xxx family inet filter [input|input-list|output|output-list]‚ğg‚¢‚Ü‚·B)
+	FlowSpecãƒ•ã‚¡ã‚¤ã‚¢ã‚¦ã‚©ãƒ¼ãƒ«ãƒ•ã‚£ãƒ«ã‚¿ã¯ã‚‚ã£ã¨ã‚‚æœ€åˆã«é©å¿œã•ã‚Œã‚‹ãƒ•ã‚¡ã‚¤ã‚¢ã‚¦ã‚©ãƒ¼ãƒ«ãƒ•ã‚£ãƒ«ã‚¿ã§ã™ã€‚
+	ã§ã™ãŒã€å®šç¾©ã—ãŸåˆ¥ã®ãƒ•ã‚£ãƒ«ã‚¿ã‚’in/outæ¯ã«ã“ã‚Œã‚ˆã‚Šå‰ã«é©å¿œã™ã‚‹ã“ã¨ã‚‚ã§ãã¾ã™ã€‚
+        (set interface xxx family inet filter [input|input-list|output|output-list]ã‚’ä½¿ã„ã¾ã™ã€‚)
 	</p>
 
 	<p id="en">
-	FlowSpec firewall filter is always the first Firewall Filter analysed. But, you can use after your own Firewall Filter(s) applied in both directions via the command gset interface xxx family inet filter [input|input-list|output|output-list]h. Your FW filter will be always analyzed first before the flow spec FW filter. 
+	FlowSpec firewall filter is always the first Firewall Filter analysed. But, you can use after your own Firewall Filter(s) applied in both directions via the command â€œset interface xxx family inet filter [input|input-list|output|output-list]â€. Your FW filter will be always analyzed first before the flow spec FW filter. 
 	</p>
 
 	<p id="jp">
-	¦__FlowSpec_default_inet__‚ğƒoƒCƒpƒX‚·‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB
-	  ‚Ü‚½APFEƒŒƒxƒ‹‚Å‚Íinput•ûŒü‚Å“K‰‚³‚ê‚é‚±‚Æ‚É’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B
+	â€»__FlowSpec_default_inet__ã‚’ãƒã‚¤ãƒ‘ã‚¹ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚
+	  ã¾ãŸã€PFEãƒ¬ãƒ™ãƒ«ã§ã¯inputæ–¹å‘ã§é©å¿œã•ã‚Œã‚‹ã“ã¨ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚
 	</p>
 
 	<p id="en">
-	Notice: you can never bypass the g__FlowSpec_default_inet__h filter. Also remember that FLOW SPEC Firewall Filter is applied in input direction at PFE level.
+	Notice: you can never bypass the â€œ__FlowSpec_default_inet__â€ filter. Also remember that FLOW SPEC Firewall Filter is applied in input direction at PFE level.
 	</p>
 
 	<p id="jp">
-	PFEã‚Ì__FlowSpec_default_inet__‚ÍˆÈ‰º‚ÌƒRƒ}ƒ“ƒh‚ÅŒ©‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+	PFEä¸Šã®__FlowSpec_default_inet__ã¯ä»¥ä¸‹ã®ã‚³ãƒãƒ³ãƒ‰ã§è¦‹ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 	</p>
 
 	<p id="en">
-	At PFE Level you can use this command to check how the g__FlowSpec_default_inet__h is programed.
+	At PFE Level you can use this command to check how the â€œ__FlowSpec_default_inet__â€ is programed.
 	</p>
 
 <pre id="code"><code>ADPC0(bob vty)# show filter
@@ -618,13 +618,13 @@ Program Filters:
 ---------------
    Index     Dir     Cnt    Text     Bss  Name
 --------  ------  ------  ------  ------  --------
-[c]
+[â€¦]
    17000      52       0       4       4  __default_arp_policer__
    57008     104     288      16      16  __cfm_filter_shared_lc__
    65024     104     144      36      36  __FlowSpec_default_inet__
    65280      52       0       4       4  __auto_policer_template__
    65281     104       0      16      16  __auto_policer_template_1__
-[c]
+[â€¦]
 16777216     104     288      36      36  fnp-filter-level-all
 
 ADPC0(bob vty)# show filter index 65024 program
@@ -661,13 +661,13 @@ Program instructions: 9 words
 
 
 <p id="jp">
-Ÿ‚ÌƒAƒNƒVƒ‡ƒ“‚ÍƒŠƒ_ƒCƒŒƒNƒg‚Å‚·B
-JUNOS‚Å‚ÍAVRF‚ğ“Á’è‚ÌƒŠƒ_ƒCƒŒƒNƒg‚ğÀŒ»‚·‚é‚½‚ß‚É‚±‚ÌƒRƒ~ƒ…ƒjƒeƒB‚ğ—p‚¢‚Ü‚·B
-ƒŠƒ_ƒCƒŒƒNƒg‚ÍIDP‚Æ˜AŒg‚µ‚½‘ÑˆæŒyŒ¸‚É”ñí‚É—L—p‚Å‚·B
+æ¬¡ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¯ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã§ã™ã€‚
+JUNOSã§ã¯ã€VRFã‚’ç‰¹å®šã®ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚’å®Ÿç¾ã™ã‚‹ãŸã‚ã«ã“ã®ã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£ã‚’ç”¨ã„ã¾ã™ã€‚
+ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã¯IDPã¨é€£æºã—ãŸå¸¯åŸŸè»½æ¸›ã«éå¸¸ã«æœ‰ç”¨ã§ã™ã€‚
 </p>
 
 <p id="en">
-As presented in chapter 1 ; the second useful Action type is gredirecth. A redirect action is also encoded in a specific extended community. In Junos you can then use this specific community to redirect a specific traffic within a VRF. Very useful for traffic mitigation or traffic inspection (IDP).
+As presented in chapter 1 ; the second useful Action type is â€œredirectâ€. A redirect action is also encoded in a specific extended community. In Junos you can then use this specific community to redirect a specific traffic within a VRF. Very useful for traffic mitigation or traffic inspection (IDP).
 </p>
 
 A flow route with the redirect action example:
@@ -694,18 +694,18 @@ inetflow.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
                 Router ID: 81.253.192.94</code></pre>
 
 <p id="jp">
-JUNOS‚É‚¨‚¯‚é—Bˆê‚Ì§ŒÀ‚ÍAƒgƒ‰ƒtƒBƒbƒN‚ğŒyŒ¸/’²¸‚·‚éƒŠƒ_ƒCƒŒƒNƒgæ‚ÌƒT[ƒo‚ª"“¯‚¶ƒ‹[ƒ^"‚ÉÚ‘±‚³‚ê‚Ä‚¢‚Ä‚Í‚È‚ç‚È‚¢‚±‚Æ‚Å‚·B
-‚È‚º‚È‚çAJUNOS‚ÌÀ‘•‚É‚¨‚¢‚ÄAƒŠƒ_ƒCƒŒƒNƒg‚Í‘S‚Ä‚ÌPFE‚É‘Î‚µ‚ÄƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ü‚·B
-ƒgƒ‰ƒtƒBƒbƒNˆ—‚Ì‚½‚ß‚Éƒgƒ‰ƒtƒBƒbƒN‚ªƒT[ƒo‚ÉƒŠƒ_ƒCƒŒƒNƒg‚³‚êA
-Ä‚Ñƒ‹[ƒ^‚É–ß‚Á‚Ä‚­‚é‚ÆA(PFE‚É‚æ‚Á‚ÄÄ“xƒgƒ‰ƒtƒBƒbƒN‚ÍƒT[ƒo‚É–ß‚Á‚Ä‚¢‚«)ƒgƒ‰ƒtƒBƒbƒN‚Íloop‚µ‚Ä‚µ‚Ü‚¢‚Ü‚·B
+JUNOSã«ãŠã‘ã‚‹å”¯ä¸€ã®åˆ¶é™ã¯ã€ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚’è»½æ¸›/èª¿æŸ»ã™ã‚‹ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆå…ˆã®ã‚µãƒ¼ãƒãŒ"åŒã˜ãƒ«ãƒ¼ã‚¿"ã«æ¥ç¶šã•ã‚Œã¦ã„ã¦ã¯ãªã‚‰ãªã„ã“ã¨ã§ã™ã€‚
+ãªãœãªã‚‰ã€JUNOSã®å®Ÿè£…ã«ãŠã„ã¦ã€ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã¯å…¨ã¦ã®PFEã«å¯¾ã—ã¦ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¾ã™ã€‚
+ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯å‡¦ç†ã®ãŸã‚ã«ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ãŒã‚µãƒ¼ãƒã«ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã•ã‚Œã€
+å†ã³ãƒ«ãƒ¼ã‚¿ã«æˆ»ã£ã¦ãã‚‹ã¨ã€(PFEã«ã‚ˆã£ã¦å†åº¦ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ã¯ã‚µãƒ¼ãƒã«æˆ»ã£ã¦ã„ã)ãƒˆãƒ©ãƒ•ã‚£ãƒƒã‚¯ã¯loopã—ã¦ã—ã¾ã„ã¾ã™ã€‚
 </p>
 
 <p id="en">
-The only limitation on Junos when you redirect traffic is that the server which will be in charge of mitigation or inspection or anything else must not be directly connected to the same router attached to the VRF. Indeed, Junos pushes FlowSpec routes towards all PFE. So if you dynamically redirect a traffic to a server to perform gtraffic processingh, the gcoming backh traffic will be again redirect and so onc In this configuration you will experience a forwarding loop.
+The only limitation on Junos when you redirect traffic is that the server which will be in charge of mitigation or inspection or anything else must not be directly connected to the same router attached to the VRF. Indeed, Junos pushes FlowSpec routes towards all PFE. So if you dynamically redirect a traffic to a server to perform â€œtraffic processingâ€, the â€œcoming backâ€ traffic will be again redirect and so onâ€¦ In this configuration you will experience a forwarding loop.
 </p>
 
 <p id="jp">
-ˆÈ‰º‚Ì}‚É‚±‚Ì—lq‚Æ‚Q‚Â‚ÌİŒv“I‚È‰ñ”ğô‚ğ¦‚µ‚Ü‚·B
+ä»¥ä¸‹ã®å›³ã«ã“ã®æ§˜å­ã¨ï¼’ã¤ã®è¨­è¨ˆçš„ãªå›é¿ç­–ã‚’ç¤ºã—ã¾ã™ã€‚
 </p>
 
 <p id="en">
@@ -718,7 +718,7 @@ The diagram below shows this limitation and 2 workarounds (design based).
  
 
 On Junos traffic redirection is configured as following:
-ƒŠƒ_ƒCƒŒƒNƒVƒ‡ƒ“‚ÌƒRƒ“ƒtƒBƒO—á:
+ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ä¾‹:
 
 <pre id="code"><code>[edit protocols bgp]
 group FLOWSPEC {
@@ -759,7 +759,7 @@ PROCESSING-VRF {
             defaults {
                 resolve;
             }
-            # ƒT[ƒo‚ªVRF‚É’¼ÚÚ‘±‚³‚ê‚Ä‚¢‚éê‡‚Ìˆ¶æ(DEFAULT)
+            # ã‚µãƒ¼ãƒãŒVRFã«ç›´æ¥æ¥ç¶šã•ã‚Œã¦ã„ã‚‹å ´åˆã®å®›å…ˆ(DEFAULT)
             # DEFAULT route if Server in charge of processing traffic is directly attached
             # to the VRF
             route 0.0.0.0/0 next-hop 10.128.2.10;
@@ -770,7 +770,7 @@ PROCESSING-VRF {
 </div> <!-- section -->
 
 <div id="footer">
-	&copy;2015 b Akira KANAI
+	&copy;2015 ï½œ Akira KANAI
 </div>
 
 <div id="footer">
