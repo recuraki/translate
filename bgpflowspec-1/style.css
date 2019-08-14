@@ -1,0 +1,169 @@
+<style type="text/css">
+*{
+	margin: 0px;
+	padding: 0px;
+	font-family: Verdana, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+}
+
+body{
+	margin: 10px;
+}
+
+#jp{
+}
+
+#en{
+}
+
+#footer {
+	text-align: center;
+	clear: both;
+	margin: 20px 0 0 0;
+	padding: 0.5em 0;
+}
+
+p{
+	line-height: 1.5em;
+}
+
+h1{
+	font-size: 50px;
+	font-family: "Century Gothic";
+	letter-spacing: 3px;
+	margin: 5px ;
+}
+
+h2#jp{
+	font-size: 40px;
+	color: #099;
+	border-bottom: 5px solid #099;
+	width: 80%;
+	margin: 30px 0 0 30px;
+}
+
+h2#en{
+	font-size: 30px;
+	color: #999;
+	font-family: "Century Gothic";
+	text-align:right;
+	width: 80%;
+	margin: -45px 0 30px 0;
+}
+
+h3#jp{
+	font-size: ;
+	width: 80%;
+	margin: 20px 0 10px 0;
+	padding: 5px;
+	border: 1px dashed #c33;
+	border-left: 20px solid #c33;
+}
+
+h3#en{
+	font-size: 75%;
+	width: 80%;
+	margin: 3px 30px;
+	background-color: #aaaaaa;
+}
+
+p#jp{
+	font-size: 100%;
+}
+
+ul.jp{
+	margin: 10px 0 0 60px;
+}
+
+li.jp{
+	list-style-type: circle
+}
+
+p#en{
+	font-size: 75%;
+	line-height: 1.8em;
+	width: auto;
+	margin: 10px 30px;
+	padding: 5px;
+	background-color: #ffc;
+}
+
+ul.en {
+	font-size: 75%;
+	line-height: 1.8em;
+	margin: 10px 0 10px 60px;
+	padding: 5px;
+	background-color: #ffc;
+}
+
+li.en{
+	list-style-type: square;
+	line-height: 1.8em;
+	background-color: #ffc;
+	margin: 0 0 0 30px;
+}
+
+img {
+	text-align: center;
+	width: auto;
+	margin: 10px;
+	padding: 10px;
+	background-color: #eee;
+	border: 1px solid #999;
+}
+
+#img{
+	text-align: center;
+	width: auto;
+}
+
+img.normal{
+	width: auto;
+}
+
+dl{
+	width: 400px;
+	margin: 50px auto;
+}
+
+dl dt{
+	background: #77aabb;
+	border-bottom: 1px solid #ffffff;
+	cursor: pointer;
+}
+
+dl dd{
+	border: 1px solid #77aabb;
+	border-top: one;
+	height: 300px;
+}
+div#section{
+	border: 1px solid #77aabb;
+	border-top: one;
+	width: 80%;
+	margin: 10px 10px 10px 30px;
+	padding: 10px;
+}
+
+
+pre{
+	width: 80%;
+	padding: 5px 0 5px 10px;
+	margin: 10px 0 30px 50px;
+	color: #fff;
+	background-color: #000;
+	white-space: -moz-pre-wrap; /* Mozilla */
+	white-space: -pre-wrap;     /* Opera 4-6 */
+	white-space: -o-pre-wrap;   /* Opera 7 */
+	white-space: pre-wrap;      /* CSS3 */
+	word-wrap: break-word;      /* IE 5.5+ */
+}
+
+code {
+	font-family: monospace;
+	font-weight: normal;
+	line-height: 1.5em;
+	text-align: left;
+	margin-bottom: 5px;
+}
+
+</style>

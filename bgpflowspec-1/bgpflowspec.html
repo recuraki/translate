@@ -1,0 +1,783 @@
+<html>
+<head>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+ google.load("jquery", "1.3");
+</script>
+
+<script type="text/javascript">
+</script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style type="text/css">
+*{
+	margin: 0px;
+	padding: 0px;
+	font-family: Verdana, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+}
+</style>
+</head>
+<body>
+
+<h1 id="jp">Junos and BGP FlowSpec </h1>
+
+	<p id="jp">
+	原著: 
+        <a href="http://www.junosandme.net/article-junos-and-bgp-flowspec-119193150.html">
+	Junos and BGP FlowSpec - JUNOS & ME
+	</a>
+	</p>
+
+	<p id="en">
+	Original: 
+        <a href="http://www.junosandme.net/article-junos-and-bgp-flowspec-119193150.html">
+	Junos and BGP FlowSpec - JUNOS & ME
+	</a>
+	<p>
+
+
+<h2 id="jp">はじめに</h2>
+<h2 id="en">Introduction</h2>
+
+<div id="section">
+
+	<p id="jp">
+	本稿ではTRIO MPCを搭載したMX960を用いたFlowSpec実装の評価の結果について述べます。
+	JUNOSは12.3リリース版となります。
+	</p>
+
+	<p id="en">
+	Recently I carried out tests in labs to evaluate the FlowSpec implementation on MX960 router with TRIO MPC cards. I used a 12.3 Junos release.
+	<p>
+
+
+	<p id="jp">今回の試験内容は次の通りです。
+		<ul class="jp">
+			<li class="jp">IPv4のブラックホール経路機能</li>
+			<li class="jp">IPv4の帯域制御機能</li>
+			<li class="jp">IPv4のトラフィック緩和のためのリダイレクション(VRFを用いた転送)</li>
+		</ul>
+	</p>
+
+	<p id="en">Those tests have covered:
+		<ul class="en">
+			<li class="en">IPv4 blackholing traffic feature</li>
+			<li class="en">IPv4 rate-limiting traffic feature</li>
+			<li class="en">IPv4 traffic redirection for traffic mitigation (redirect within a VRF)</li>
+		</ul>
+	</p>
+
+	<p id="jp">
+	リダイレクションかつリミテーション及びは全て良好に動作しました。
+	本稿ではFlowSpecがRE/PFEのレベルでどのように実装されているかも紹介します。
+	また、VRFを用いたリダイレクションの手法についても述べます。
+	尚、"Remaking"の機能については今回試験していません。
+	</p>
+
+	<p id="en">
+	All tests have been passed with success with just a limitation on traffic redirection presented below. This post presents, how FlowSpec is implemented at RE and PFE level. It presents also the configuration template for Redirecting Traffic through a specific VRF. The “remarking” feature has not been tested.
+	</p>
+
+</div> <!-- section -->
+
+<h2 id="jp">FlowSpec’s theory</h2>
+<h2 id="en">FlowSpec’s theory</h2>
+<div id="section">
+	<p id="jp">
+	BGP FlowSpecはRFC5575で定義されています。
+	RFCでは フロー情報(IPsrc, dst, portなど..)とアクション/ルール(帯域制限、リダイレクト、リマーク)
+	を表す(フロースペック拡張のための)NLRIが示されています。
+	FlowSpecはIPv4をサポートしています。(AFI=1 SAFI=133)。
+	フロー情報とアクション/ルール情報を運ぶために２つのBGPの"コンテナ"を用います。
+	</p>
+
+	<p id="en">
+	BGP FlowSpec is defined within the RFC 5575: “Dissemination of Flow Specification Rules”. This RFC describes a new NLRI that allows to convey flow specifications (@IP src ; DST ; proto ; port number …) and traffic Action/Rules associated (rate-limiting, redirect, remark …). For IPv4 purposes, RFC defines the following AFI/SAFI value: AFI=1 SAFI=133. FlowSpec uses two existing BGP “containers” to convey both Flow specifications and rules associated.
+	</p>
+
+	<p id="jp">
+	実装として、Flow情報情報はMP_REACH_NLRIとMP_UNREACH_NLRIの属性で伝達されます。
+	アクションと結びついたルールは拡張コミュニティとして伝達されます。
+	</p>
+
+	<p id="en">
+	Indeed, FLOW specifications are encoded within the MP_REACH_NLRI and MP_UNREACH_NLRI attributes. Rules (Actions associated) are encoded in Extended Community attribute.
+
+
+
+	<p id="jp">
+	MP_REACH_NLRIに書かれるフロー情報はいくつかのコンポーネントのセットで成り立っています。
+	各コンポートネントはAND条件で評価されてフローを識別します。
+	本文中でいくつかのフローの例となるコンポーネントを示します。(NLRIの値として)
+	尚、RFC5575ではNext-Hopの長さと値は"0"にセットされていなければなりません。
+	※draft-simpson-idr-FlowSpec-redirect-02.txtでは、IP Next-Hopを用いたリダイレクションの時には0以外の値となります。
+	</p>
+
+	<p id="en">
+	Within the MP_REACH_NLRI a flow specification is made of a set of components, each component of the flow is combined with each other with an AND operator. Below we describe the different components we have to describe a specific flow (encoded on the NLRI variable field). The Next-Hop length and Next-hop value should be set to 0 (in case of the RFC 5575). Note is should be set other than 0 in this case: BGP Flow-Spec Extended Community for Traffic Redirect to IP Next Hop (draft-simpson-idr-FlowSpec-redirect-02.txt)
+	</p>
+</div>
+
+
+<h2 id="jp">バリデーション</h2>
+<h2 id="en">NLRI FlowSpec Validation:</h2>
+ 
+<div id="section">
+	<p id="jp">
+	ルータはFlowSpec BGPのUpdateメッセージを受信した際には、
+	フロー情報をAdj-RIB-INテーブルからLOC-RIBテーブルにインストールする前に
+	バリデーションチェックをすべきです。(RFC 5575)
+	少なくとも、RFC5575ではNext-Hopの値は0のためバリデーションチェックには考慮しません。
+	しかし、他の値に関してはチェックを行ったのちにLOC-RIBにインストールしなければなりません。
+	</p>
+
+	<p id="en">
+	FlowSpec BGP update received should pass Validation Steps before their installation from the Adj-RIB-IN to LOC-RIB. Next-Hop validation must not be taken into account, because NH FlowSpec (RFC 5575) is always set to 0. But other Validations have to be done before installation (extracted from RFC):
+	</p>
+
+	<p id="jp">
+	条件A: このバリデーションは
+	フロー情報のオリジネータがフロー情報に埋め込まれた宛先プレフィックス向けの(best-matchする)ユニキャスト経路のオリジネータと一致するかをチェックします。
+	</p>
+
+	<p id="en">
+	a)    The originator of the flow specification matches the originator of the best-match unicast route for the destination prefix embedded in the flow specification.
+	</p>
+
+	<p id="jp">
+	条件B: フローの宛先プレフィックスと比較するときに,
+	他のASからよりベストなパスとなる他のユニキャストルートが存在しないこと。
+	</p>
+
+	<p id="en">
+	b)    There are no more specific unicast routes, when compared with the flow destination prefix, that have been received from a different neighboring AS than the best-match unicast route, which has been determined in step a).
+	</p>
+
+	<p id="jp">
+	RFCで述べられているバリデーションは他の連携システムのからFlowSprec経路をインストールしようとする際の障壁となります。
+	このため、実際にはバリデーションチェック機能は無効にされることがあります。
+	</p>
+	<p id="en">
+	These validations can cause some problems when you use for example external Server to inject FlowSpec updates. Implementations may de-activate these validation steps
+	</p>
+ 
+</div>
+
+
+<h2 id="jp">コンポーネント</h2>
+<h2 id="en">FlowSpec components</h2>
+
+<div id="section">
+	<div id="img">
+	<img class="normal" src="img/NLRI.png">
+	</div>
+
+	<p id="jp">
+	RFC上の表記より:
+	フロー情報のコンポーネントは条件の順序が厳密でないとならりません。
+	これから述べるタイプはすべて指定しなければならないわけではありません。
+	ただし、そのタイプの値は他のものより前に配置されないとなりません。
+	(つまり、昇順にしようということ)
+	</p>
+
+	<p id="en">
+	Notice from the RFC: “Flow specification components must follow strict type ordering. A given component type may or may not be present in the specification, but if present, it MUST precede any component of higher numeric type value.”
+	</p>
+
+<h3 id="jp">
+Type 1: Destアドレス(Destination prefix component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type1.png"/>
+</div>
+
+
+<h3 id="jp">
+Type 2: Srcアドレス(Source prefix component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type2.png"/>
+</div>
+
+ 
+<h3 id="jp">
+Type 3: IP Protocol component
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type3.png"/>
+</div>
+
+<p id="jp">各オプションバイトの定義は以下の通り
+	<ul class="jp">
+			<li class="jp">E bit: オプションの終わり(最後のオプションは1にセットされていなければならない)</li>
+			<li class="jp">A bit: ANDビット。このビットがオプションあるいは値の間にある場合、これをANDでつなぐ。もし、これがないのであればORでつなぐ。尚、最初のオプションとして指定してはならない。</li>
+			<li class="jp">Len: 0である場合、次の値は1byteとして解釈される。もし1である場合、次の値は2byteとして解釈される。</li>
+			<li class="jp">Lt: Less-Than 以下ビット</li>
+			<li class="jp">Gt: Greater-Than 以上ビット</li>
+			<li class="jp">Eq: Equal 等しいビット</li>
+	</ul>
+</p>
+
+<p id="en">The option byte is defined as following:
+	<ul class="en">
+			<li class="en">E bit: end of option (Must be set to 1 for the last Option)</li>
+			<li class="en">A bit: AND bit, if set the operation between several [option/value] is AND, if unset the operation is a logical OR. Never set for the first Option</li>
+			<li class="en">Len: If 0 the following value is encoded in 1 byte ; if 1 the following value is encoded in 2 bytes</li>
+			<li class="en">Lt bit: less than comparison between the Data and the given value</li>
+			<li class="en">Gt bit: greater than comparison between the Data and the given value</li>
+			<li class="en">Eq bit: equal comparison between the Data and the given value</li>
+	</ul>
+</p>
+
+<h3 id="jp">
+Type 4: ポート番号(Port number component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type4.png"/>
+</div>
+
+<h3 id="jp">
+Type 5: 宛先ポート(Destination port number component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type5.png"/>
+</div>
+
+<h3 id="jp">
+Type 6: 送り元ポート(Source port number component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type6.png"/>
+</div>
+
+<h3 id="jp">
+Type 7: ICMPタイプ(ICMP Type component)
+</h3>
+ 
+<div id="img">
+<img id="normal" src="img/type7.png"/>
+</div>
+
+<h3 id="jp">
+Type 8: ICMPコード(ICMP Code component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type8.png"/>
+</div>
+
+<h3 id="jp">
+Type 9: TCPフラグ(TCP Flags component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type9.png"/>
+</div>
+
+<p id="jp">各オプションバイトの定義は以下の通り
+	<ul class="jp">
+			<li class="jp">E bit: オプションの終わり(最後のオプションは1にセットされていなければならない)</p>
+			<li class="jp">A bit: ANDビット。このビットがオプションあるいは値の間にある場合、これをANDでつなぐ。もし、これがないのであればORでつなぐ。尚、最初のオプションとして指定してはならない。</p>
+			<li class="jp">Len: 0である場合、次の値は1byteとして解釈される。もし1である場合、次の値は2byteとして解釈される。</p>
+			<li class="jp">Not: 与えられたデータと値が等しくない条件</p>
+			<li class="jp">m bit: 与えられたデータと値が等しい条件</p>
+	</ul>
+</p>
+
+<p id="en">The option byte is defined as following:
+	<ul class="en">
+		<li class="en">E bit: end of option (Must be set to 1 for the last Option)</li>
+		<li class="en">A bit: AND bit, if set the operation between several [option/value] is AND, if unset the operation is a logical OR. Never set for the first Option</li>
+		<li class="en">Len: If 0 the following value is encoded in 1 byte ; if 1 the following value is encoded in 2 bytes</li>
+		<li class="en">NOT bit: logical negation operation between Data and the given value</li>
+		<li class="en">m bit: match operation between the Data and the given value</li>
+	</ul>
+</p>
+
+
+<h3 id="jp">
+Type 10: パケット長(Packet Length component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type10.png"/>
+</div>
+
+<h3 id="jp">
+Type 11: DSCP(DSCP Value component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type11.png"/>
+</div>
+
+<h3 id="jp">
+Type 12: フラグメント(Fragment component)
+</h3>
+
+<div id="img">
+<img id="normal" src="img/type12.png"/>
+</div>
+ 
+<p id="jp">
+フロー定義のあと、アクション(ルール)が拡張コミュニティ(RFC4360)が続きます。
+</p>
+
+<p id="en">
+After the flow definition, Traffic Actions (rules) are encoded as Extended Community Attribute (see RFC 4360)
+</p>
+
+<div id="img">
+<img id="normal" src="img/extended.png"/>
+</div>
+
+
+<p id="jp">
+拡張コミュニティのTYPEフィールドに入れる値により4つのアクションが定義されています。
+以下に現在有効なアクションを示します。
+</p>
+
+<p id="en">
+There are 4 types of “Action”, each of them has a dedicated Extended Community TYPE. The tab below lists the current Actions available:
+</p>
+
+<div id="img">
+<img id="normal" src="img/tab-action.png"/>
+</div>
+
+<h3 name="jp">
+帯域制御アクション(Traffic-rate action)
+</h3>
+
+
+<p id="jp">
+このアクションはトラフィックの破棄あるいは帯域制御に用いられます。
+破棄は帯域制御のレートを0にします。
+4オクテットのレート情報はIEEEの浮動小数点フォーマットにより指定します。
+このフォーマット変換には
+http://www.h-schmidt.net/FloatConverter/IEEE754.html
+が役に立つでしょう。
+</p>
+
+<p id="en">
+Used for discard or rate-limit a specific flow. Discard action is actually a rate equal to zero. The remaining 4 octets carry the rate (in Bytes/sec) information in IEEE floating point [IEEE.754.1985] format. A nice link to troubleshoot encoded rate can be find here: http://www.h-schmidt.net/FloatConverter/IEEE754.html
+</p>
+
+<div id="img">
+<img id="normal" src="img/traffic-rate.png"/>
+</div>
+
+<h3 id="jp">
+Traffic-action
+</h3>
+
+<p id="jp">
+特定のフロー時を受け取った際の処理を定義します。
+現在は6バイト(48ビット)中、2ビットのアクションだけが定義されています。
+</p>
+
+<p id="en">
+Used to trigger specific processing the corresponding flow. Only the last 2 Bits of the 6 bytes are currently defined as following:
+</p>
+
+<div id="img">
+<img id="normal" src="img/traffic-action.png"/>
+</div>
+
+<p id="jp">
+- Terminalアクション(47ビット目): このビットがセットされていると
+ トラフィックフィルタリングエンジンはそれに従った処理を行います。
+ (この処理ルールは順序だった処理が行われます)
+ これがセットされていない場合、このルールが適応された処理をそのトラフィックフィルタは行いません。
+<br/>
+- Sampleアクション(46ビット目): トラフィックのサンプリングとロギングを行います。
+</p>
+
+<p id="en">
+-    Terminal Action (bit 47): When this bit is set, the traffic filtering engine will apply any subsequent filtering rules (as defined by the ordering procedure). If not set, the evaluation of the traffic filter stops when this rule is applied.
+<br/>
+-    Sample (bit 46): Enables traffic sampling and logging for this flow specification.
+</p>
+
+<h3 id="jp">
+リダイレクト(Redirect action)
+</h3>
+
+<p id="jp">
+ルータにて特定のVRFにリダイレクトするための
+トラフィックを指定したRoute Target情報を含みます。
+</p>
+
+<p id="en">
+Traffic redirection allows to specify a “route-target” community which will be handled by the router to redirect a Flow to a specific VRF.
+</p>
+
+<div id="img">
+<img id="normal" src="img/redirect.png"/>
+</div>
+
+
+<h3 id="jp">
+マーキング(Traffic-marking action)
+</h3>
+<p id="jp">
+マッチするフローのDSCP値を書き換えます。
+</p>
+
+<p id="en">
+Used to force a flow to be re-writted with a specific DSCP value when it leaves the routers.
+</p>
+
+<div id="img">
+<img id="normal" src="img/remark.png"/>
+</div>
+
+</div> <!-- section -->
+
+
+<h2 id="jp">
+JUNOSでの実装
+</h2>
+<h2 id="en">
+Flow Specification and JUNOS
+</h2>
+<div id="section">
+	<p id="jp">
+	JUNOSは２つの種類のフロー経路をサポートします。
+	<br/>
+	1)静的なフロー経路は以下のように書きます。
+	</p>
+
+	<p id="en">
+	Junos allows 2 kind of Flow Routes. First of all, static flow routes which are configured like this:
+	</p>
+
+<pre id="code"><code>#Example: Rate-limiting flow (@IP source 10.1.1.1/32 DNS traffic) at 15Kbits/s
+sponge@bob# show routing-options flow
+route static-flow1 {
+    match {
+        source 10.1.1.1/32;
+        protocol udp;
+        port 53;
+    }
+    then rate-limit 15k;
+}</code></pre>
+
+	<p id="jp">
+	2)BGPでフローのファミリ(= inetflow.0)を伝達するには以下のように設定します。<br>
+	この際、バリデーションチェックの無効化をpolicy-statementに記載できます。</br>
+	(これでLOC-RIBに経路をバリデーションなしに直接インストールすることができます)
+	</p>
+
+	<p id="en">
+	BGP flow routes family is configured as following. Associated to the flow family you can add a policy-statement to disable the validation process of the route (allows direct installation of FlowSpec routes in the BGP LOC-RIB and bypass the FLOW SPEC routes validation process described in chapter 1)
+	</p>
+
+<pre id="code"><code>[edit protocols bgp]
+group FLOWSPEC {
+    type internal;
+    local-address 10.1.1.3;
+    family inet {
+        unicast;
+        flow {
+            no-validate NO-VAIDATION;
+        }
+    }
+    neighbor 10.1.1.2 {
+        description FS-SERVER;
+    }
+}
+
+[edit policy-options]
+policy-statement NO-VAIDATION {
+    term 1 {
+        then accept;
+    }
+}</code></pre>
+
+	<p id="jp">
+	BGPから受信したフロー経路あるいは静的に定義したフロー経路はinetflow.0にインストールされます。
+	</p>
+
+	<p id="en">
+	Flow routes (BGP or static) are installed within the table “inetflow.0”.
+	</p>
+
+<pre id="code"><code>sponge@bob> show route table inetflow.0 detail
+inetflow.0: 1 destinations, 1 routes (2 active, 0 holddown, 0 hidden)
+
+*,10.1.1.1,proto=17,port=53/term:2 (1 entry, 1 announced)
+        *Flow   Preference: 5
+                Next hop type: Fictitious
+                Address: 0x904d5e4
+                Next-hop reference count: 2
+                State: Active
+                Local AS: 65000
+                Age: 38
+                Validation State: unverified
+                Task: RT Flow
+                Announcement bits (2): 0-Flow 1-BGP_RT_Background
+                AS path: I
+                AS path: Recorded
+                Communities: traffic-rate:0:1875</code></pre>
+
+	<p id="jp">
+	前述のとおり、Next-Hopは常にFictitiousとなります(0がセットされるから)。
+	フローはn個のタプルで成り立つフロー定義と拡張コミュニティのルールでなっています。
+	上の例では、ルールは帯域制御であり、この値としてrate=0(つまり破棄)となっています。
+	</p>
+
+	<p id="en">
+	As I said previously, Next-Hop is always Fictitious (because it is set to 0). The Flow Specification is encoded in an n-turple (the BGP FLOW routes) and rules as an extended-community. Here, the rule type is traffic-rate used for rate-limiting or discarding (rate=0) a specific flow.
+	</p>
+
+	<p id="jp">
+	JUNOSはこの経路を firewall-filter(__FlowSpec_default_inet__)にプッシュします。<br/>
+        このフィルタは各PFEにおいてIn/Out方向にインストールされます。
+	<p>
+
+	<p id="en">
+	Junos then converts this route on a well-known firewall-filter and pushes the filter update on every PFE in both directions (Input / Output). This Firewall Filter is called “__FlowSpec_default_inet__”.
+	</p>
+
+
+	<div id="img">
+	<img id="normal" src="img/FS-implem.png"/>
+	</div>
+
+
+	<p id="jp">
+	これはhidden属性フィルタではないのでコマンドで確認することができます。
+	</p>
+
+	<p id="en">
+	This is not an hidden filter and you can have access to it via the cli command:
+	</p>
+
+<pre id="code"><code>set routing-options flow route test-3 match destination 192.168.101.0/24
+set routing-options flow route test-3 match protocol icmp
+set routing-options flow route test-3 then discard
+set routing-options flow route test-5 match destination 192.168.96.0/22
+set routing-options flow route test-5 match protocol icmp
+set routing-options flow route test-5 then discard
+
+sponge@bob> show firewall filter __FlowSpec_default_inet__
+
+Filter: __FlowSpec_default_inet__
+Counters:
+Name                                                Bytes              Packets
+*,10.1.1.1,proto=17,port=53                             0                    0
+Policers:
+Name                                                Bytes              Packets
+15K_*,10.1.1.1,proto=17,port=53                         0                    0</code></pre>
+
+	<p id="jp">
+	フロースペックファイアウォールフィルタの実体は
+	Firewallフィルタにおける動的なフロー定義とアクションです。
+	termのfromとして定義されたフローがthenとして定義されたアクションを行うルールとして表示されます。
+	</p>
+
+	<p id="en">
+	Actually, flow spec firewall filter is a dynamic FW filter which combines in one FW filter all the Flow Specification routes (as a “from” criteria) and their associated rules (as a “then” criteria). Each route can be view as a term.
+	</p>
+
+	<p id="jp">
+	FlowSpecファイアウォールフィルタはもっとも最初に適応されるファイアウォールフィルタです。
+	ですが、定義した別のフィルタをin/out毎にこれより前に適応することもできます。
+        (set interface xxx family inet filter [input|input-list|output|output-list]を使います。)
+	</p>
+
+	<p id="en">
+	FlowSpec firewall filter is always the first Firewall Filter analysed. But, you can use after your own Firewall Filter(s) applied in both directions via the command “set interface xxx family inet filter [input|input-list|output|output-list]”. Your FW filter will be always analyzed first before the flow spec FW filter. 
+	</p>
+
+	<p id="jp">
+	※__FlowSpec_default_inet__をバイパスすることはできません。
+	  また、PFEレベルではinput方向で適応されることに注意してください。
+	</p>
+
+	<p id="en">
+	Notice: you can never bypass the “__FlowSpec_default_inet__” filter. Also remember that FLOW SPEC Firewall Filter is applied in input direction at PFE level.
+	</p>
+
+	<p id="jp">
+	PFE上の__FlowSpec_default_inet__は以下のコマンドで見ることができます。
+	</p>
+
+	<p id="en">
+	At PFE Level you can use this command to check how the “__FlowSpec_default_inet__” is programed.
+	</p>
+
+<pre id="code"><code>ADPC0(bob vty)# show filter
+Program Filters:
+---------------
+   Index     Dir     Cnt    Text     Bss  Name
+--------  ------  ------  ------  ------  --------
+[…]
+   17000      52       0       4       4  __default_arp_policer__
+   57008     104     288      16      16  __cfm_filter_shared_lc__
+   65024     104     144      36      36  __FlowSpec_default_inet__
+   65280      52       0       4       4  __auto_policer_template__
+   65281     104       0      16      16  __auto_policer_template_1__
+[…]
+16777216     104     288      36      36  fnp-filter-level-all
+
+ADPC0(bob vty)# show filter index 65024 program
+Program Filters:
+---------------
+   Index     Dir     Cnt    Text     Bss  Name
+--------  ------  ------  ------  ------  --------
+   65024     104     144      36      36  __FlowSpec_default_inet__
+
+Action directory: 2 entries (104 bytes)
+    0: accept counter 0 policer 0
+       -> 7:
+    1: accept
+       -> 8:(bss location 3:)
+Counter directory: 1 entry (144 bytes)
+    0: Counter name "*,10.1.1.1,proto=17,port=53": 1 reference
+Policer directory: 1 entry (176 bytes)
+    0: Policer name "15K_*,10.1.1.1,proto=17,port=53": 1 reference
+       Bandwidth Limit: 1875 bytes/sec.
+       Burst Size: 15000 bytes.
+       discard
+Program instructions: 9 words
+
+    0: match protocol != 17 -> 8:
+       set icmp-type
+       match source-port == 53 -> 5:
+       set destination-port
+       match destination-port != 53 -> 8:
+
+    5: match source-address != 0x0a010101 -> 8:
+       terminate -> action index 0
+
+    8: terminate -> action index 1</code></pre>
+
+
+<p id="jp">
+次のアクションはリダイレクトです。
+JUNOSでは、VRFを特定のリダイレクトを実現するためにこのコミュニティを用います。
+リダイレクトはIDPと連携した帯域軽減に非常に有用です。
+</p>
+
+<p id="en">
+As presented in chapter 1 ; the second useful Action type is “redirect”. A redirect action is also encoded in a specific extended community. In Junos you can then use this specific community to redirect a specific traffic within a VRF. Very useful for traffic mitigation or traffic inspection (IDP).
+</p>
+
+A flow route with the redirect action example:
+
+<pre id="code"><code>sponge@bob> show route 10.1.1.0/30 detail
+
+inetflow.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
+10.1.1.0,*,proto=17/term:1 (1 entry, 1 announced)
+        *BGP    Preference: 170/-101
+                Next hop type: Fictitious
+                Address: 0x9041484
+                Next-hop reference count: 1
+                State: Active Int Ext
+                Local AS: 65000 Peer AS: 65000
+                Age: 48
+                Validation State: unverified
+                Task: BGP_65000.81.253.192.94+31919
+                Announcement bits (1): 0-Flow
+                AS path: ?
+                AS path: Recorded
+                Communities: redirect:65000:123456
+                Accepted
+                Localpref: 100
+                Router ID: 81.253.192.94</code></pre>
+
+<p id="jp">
+JUNOSにおける唯一の制限は、トラフィックを軽減/調査するリダイレクト先のサーバが"同じルータ"に接続されていてはならないことです。
+なぜなら、JUNOSの実装において、リダイレクトは全てのPFEに対してインストールされます。
+トラフィック処理のためにトラフィックがサーバにリダイレクトされ、
+再びルータに戻ってくると、(PFEによって再度トラフィックはサーバに戻っていき)トラフィックはloopしてしまいます。
+</p>
+
+<p id="en">
+The only limitation on Junos when you redirect traffic is that the server which will be in charge of mitigation or inspection or anything else must not be directly connected to the same router attached to the VRF. Indeed, Junos pushes FlowSpec routes towards all PFE. So if you dynamically redirect a traffic to a server to perform “traffic processing”, the “coming back” traffic will be again redirect and so on… In this configuration you will experience a forwarding loop.
+</p>
+
+<p id="jp">
+以下の図にこの様子と２つの設計的な回避策を示します。
+</p>
+
+<p id="en">
+The diagram below shows this limitation and 2 workarounds (design based).
+</p>
+
+<div id="img">
+<img id="normal" src="img/redirect-example.png" style="width:90%;" />
+</div>
+ 
+
+On Junos traffic redirection is configured as following:
+リダイレクションのコンフィグ例:
+
+<pre id="code"><code>[edit protocols bgp]
+group FLOWSPEC {
+    type internal;
+    local-address 10.1.1.3;
+    family inet {
+        unicast;
+        flow {
+            no-validate NO-VAIDATION;
+        }
+    }
+    neighbor 10.1.1.2 {
+        description FS-SERVER;
+    }
+}
+
+[edit policy-options]
+policy-statement NO-VAIDATION {
+    term 1 {
+        from community redirect;
+        to instance PROCESSING-VRF;
+        then accept;
+    }
+    term 2 {
+        then accept;
+    }
+}
+community redirect members redirect:65000:123456;
+
+[edit routing-instances]
+PROCESSING-VRF {
+    instance-type vrf;
+    interface ge-2/2/1.0;
+    route-distinguisher 12.2.2.2:1234;
+    vrf-target target:65000:123456;
+    routing-options {
+        static {
+            defaults {
+                resolve;
+            }
+            # サーバがVRFに直接接続されている場合の宛先(DEFAULT)
+            # DEFAULT route if Server in charge of processing traffic is directly attached
+            # to the VRF
+            route 0.0.0.0/0 next-hop 10.128.2.10;
+        }
+    }
+}</code></pre>
+
+</div> <!-- section -->
+
+<div id="footer">
+	&copy;2015 ｜ Akira KANAI
+</div>
+
+<div id="footer">
+	Original article was written by David Roy.
+</div>
+
+
+</body> 
+
+</html>
