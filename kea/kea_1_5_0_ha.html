@@ -177,7 +177,7 @@ The DHCP server operating within an HA setup runs a state machine and the state 
 
 <p id="jp">
 partner-down状態でも、パートナーに対してha-heartbeat APIは試行し続けられます。
-障害状態から回復したパートナーがリースデータベースの同期を完了し、運用可能状態となると、通常状態に戻ります。
+障害状態から回復したパートナーがリースデータベースの同期を完了し、運用可能状態となると、通常運用状態に戻ります。
 </p>
 <p id="en">
 In this case, the surviving server continues to send the ha-heartbeat command to detect when the partner wakes up. The partner synchronizes the lease database and when it is finally ready to operate, the surviving server returns to the normal operation, i.e. load-balancing or hot-standby state.
@@ -190,7 +190,7 @@ In this case, the surviving server continues to send the ha-heartbeat command to
 The following is the list of all possible states into which the servers may transition:
 </p>
 
-<b>backup</b>
+<h3 id="jp">backup</h3>
 <p id="jp">
 バックアップサーバの正常状態。アクティブサーバからのリース更新を受信する。
 </p>
@@ -198,17 +198,16 @@ The following is the list of all possible states into which the servers may tran
 normal operation of the backup server. In this state it receives lease updates from the active servers.
 </p>
 
-<b>hot-standby</b>
-<p id="jp">
+<h3 id="jp">hot-standby</h3>
 ホットスタンバイモードのアクティブサーバにおける正常状態。
-プライマリとセカンダリは通常この状態となる。
+プライマリとスタンバイは通常この状態となる。
 プライマリはDHCP要求に応答し、スタンバイとバックアップサーバにリース更新を送信する。
 </p>
 <p id="en">
 normal operation of the active server running in the hot standby mode. Both primary and standby server are in this state during their normal operation. The primary server is responding to the DHCP queries and sends lease updates to the standby server and to the backup servers, if any backup servers are present.
 </p>
 
-<b>load-balancing</b>
+<h3 id="jp">load-balancing</h3>
 <p id="jp">
 負荷分散モードのアクティブサーバにおける正常状態。
 プライマリとセカンダリは通常この状態となる。
@@ -219,33 +218,35 @@ normal operation of the active server running in the hot standby mode. Both prim
 normal operation of the active server running in the load balancing mode. Both primary and secondary server are in this state during their normal operation. Both servers are responding to the DHCP queries and send lease updates to each other and to the backup servers, if any backup servers are present.
 </p>
 
-<b>partner-down</b>
+<h3 id="jp">partner-down</h3>
 <p id="jp">
 アクティブサーバはパートナーがオフライン状態であることを検出するとこの状態となる。
 尚、バックアップサーバはパートナーに含まれない。
-この状態では(相手方がDHCP要求に応答できないとみなすため)通常はパートナーが処理するとみなす処理しない要求にも応答する。
+この(partner-down)状態では(相手方がDHCP要求に応答できないとみなすため)通常はパートナーが処理するとみなす処理しない要求にも応答する。
 </p>
 <p id="en">
 an active server transitions to this state after detecting that its partner (another active server) is offline. The server doesn't transition to this state if any of the backup servers is unavailable. In the partner-down state the server responds to all DHCP queries, so also those queries which are normally handled by the active server which is now unavailable.
 </p>
 
-<b>ready</b>
+<h3 id="jp">ready</h3>
 <p id="jp">
 アクティブサーバはリースデータベースをパートナーと同期するとこの状態となる。
-partner-down状態のサーバは障害が回復してパートナーとの同期が完了するとこの状態となり、正常動作となる。
+partner-down状態のサーバは障害が回復してパートナーとの同期が完了するとこの(ready)状態となり、正常動作となる。
 
 </p>
 <p id="en">
 an active server transitions to this state after synchronizing its lease database with an active partner. This state is to indicate to the partner (likely being in the partner-down state that it may return to the normal operation. When it does, the server being in the ready state will also start normal operation.
 </p>
 
-<b>syncing</b>
+<h3 id="jp">syncing</h3>
 <p id="jp">
-アクティブサーバはこの状態に移行して、パートナーからのリースを取得し、自身のリースデータベースを更新しようする。
-この状態では、dhcp-disable APIを発行することでパートナーのDHCPを最大60秒の間無効にする。60描画経過した後は自動的に有効となる。なぜなら、dhcp-disableを要求したノードに障害が起きるとずっとdisableになってしまうからである。
+アクティブサーバはこの状態に移行して、パートナーからのリースを取得し、ローカルのリースデータベースを更新しようする。
+この状態では、dhcp-disable APIを発行することでパートナーのDHCPを最大60秒の間無効にする。60秒が経過した後、パートナーのdisable状態は自動的に有効となる。
+なぜなら、dhcp-disableを要求したノードに障害が起きるとずっとdisableになってしまうからである。
 無事にリースデータベースの更新が完了した場合、dhcp-enableコマンドを発行してパートナーのDHCPを有効にする。
-つまり、リースの同期が行われている間、DHCP要求に対しては応答しない。
-ただし、sync-leasesパラメータをfalseにしているサーバ(パートナーとの同期を行わなくしているサーバ)はこの状態に遷移することはなく、waitingからreadyに直接遷移する。
+つまり、パートナーはリースの同期が行われている間、DHCP要求に対しては応答しない。
+ただし、後述のsync-leasesパラメータをfalseにしているサーバ(パートナーとの同期を行わなくしているサーバ)はこの状態に遷移することはなく、
+waitingからreadyに直接遷移する。
 <br>
 
 </p>
@@ -253,22 +254,22 @@ an active server transitions to this state after synchronizing its lease databas
 an active server transitions to this state to fetch leases from the active partner and update the local lease database. When it this state, it issues the dhcp-disable to disable the DHCP service of the partner from which the leases are fetched. The DHCP servie is disabled for the maximum time of 60 seconds, after which it is automatically enabled, in case the syncing partner has died again failing to re-enable the service. If the synchronization is completed the syncing server issues the dhcp-enable to re-enable the DHCP service of the partner. The syncing operation is synchronous. The server is waiting for an answer from the partner and is not doing anything else while the leases synchronization takes place. A server which is configured to not synchronize its database with the partner, i.e. when the sync-leases configuration parameter is set to false, will never transition to this state. Instead, it will transition directly from the waiting to ready state.
 </p>
 
-<b>terminated</b>
+<h3 id="jp">terminated</h3>
 <p id="jp">
 HAライブラリが高可用性サービスを提供できず、管理者のオペレーションが必要な場合、この状態となる。
 現在、この状態になる条件はそうそうないが、様々な問題によってこの状態になる可能性がある。
 Kea 1.4.0時点で、この状態となる唯一の条件はアクティブなサーバ間での60秒以上の時刻ずれである。
 <br>
 この状態では、サーバは選択されたHAモードの通りにDHCPクライアントに応答し続けるものの、リース更新は交換されず、また、ハートビートも送出しない。
-一度この状態になると(運用者のオペレーションが必要であるため)インスタンスが再起動されるまでこの状態となる。
+一度この(terminated)状態になると(運用者のオペレーションが必要であるため)インスタンスが再起動されるまでこの状態となる。
 そのため、管理者はこの状態となった原因を解消なければならない。
-もし、解決せずに再起動を行ったなら、再度この状態となるだろう。
+もし、解決せずに再起動を行ったなら、再度この状態に遷移する。
 </p>
 <p id="en">
 an active server transitions to this state when the High Availability hooks library is unable to further provide reliable service and a manual intervention of the administrator is required to correct the problem. It is envisaged that various issues with the HA setup may cause the server to transition to this state in the future. As of Kea 1.4.0 release, the only issue causing the HA service to terminate is unacceptably high clock skew between the active servers, i.e. if the clocks on respective servers are more than 60 seconds apart. While in this state, the server will continue responding to the DHCP clients based on the HA mode selected (load balancing or hot standby), but the lease updates won't be exchanged and the heartbeats won't be sent. Once a server has entered the "terminated" state it will remain in this state until it is restarted. The administrator must correct the issue which caused this situation prior to restarting the server (e.g. synchronize clocks). Otherwise, the server will return to the "terminated" state as soon as it finds that the clock skew is still too high.
 </p>
 
-<b>waiting</b>
+<h3 id="jp">waiting</h3>
 <p id="jp">
 起動したサーバインスタンスの初期状態である。
 バックアップサーバはこの状態からbackupステートに遷移する。
@@ -283,12 +284,14 @@ each started server instance enters this state. The backup server will transitio
 
  If both servers appear to be in the waiting state (concurrent startup) the primary server will transition to the next state first. The secondary or standby server will remain in the waiting state until the primary transitions to the ready state.
 </p>
-
+<br>
+<hr>
+<br>
 <p id="jp">
-KeaがDHCP要求に応答するか、また、どの要求に応答するかというのは上記に示したステートによって決定される。
-次の表で各ステートにおけるふるまい(ただし、defaultの)を示す。
+KeaがDHCP要求に応答するか、また、どの要求に応答するかというのは上記に示したステートによって決定されます。
+次の表に各ステートにおけるふるまい(ただし、defaultの)を示します。
 
-DHCPサーバスコープとは、受信するクエリの分類であり、後述する。
+DHCPサーバスコープとは、受信するクエリの分類のことで後述します。
 </p>
 <p id="en">
 Whether the server responds to the DHCP queries and which queries it responds to is a matter of the server's state, if no administrative action is performed to configure the server otherwise. The following table provides the default behavior for various states.
@@ -296,23 +299,88 @@ Whether the server responds to the DHCP queries and which queries it responds to
 The DHCP Server Scopes denotes what group of received DHCP queries the server responds to in the given state. The in-depth explanation what the scopes are can be found below.
 </p>
 
-TODO: ここに表を貼る
+<div class="table">
+ <p class="title"><b>Table 15.2. Default behavior of the server in various HA states</b></p>
+<div class="table-contents">
+<table class="table" summary="Default behavior of the server in various HA states" border="1">
+<colgroup>
+ <col class="state"><col align="center" class="server type">
+ <col align="center" class="dhcp-service">
+ <col align="center" class="dhcp-service-scopes">
+</colgroup>
+<thead><tr>
+ <th>State</th>
+ <th align="center">Server Type</th>
+ <th align="center">DHCP Service</th>
+ <th align="center">DHCP Service Scopes</th>
+</tr></thead>
+
+<tbody>
+<tr>
+ <td>backup</td>
+ <td align="center">backup server</td>
+ <td align="center">disabled</td>
+ <td align="center">none</td>
+</tr><tr>
+ <td>hot-standby</td>
+ <td align="center">primary or standby (hot standby mode)</td>
+ <td align="center">enabled</td>
+ <td align="center"><span class="command"><strong>HA_server1</strong></span> if primary, none otherwise</td>
+</tr><tr>
+ <td>load-balancing</td>
+ <td align="center">primary or secondary (load balancing mode)</td>
+ <td align="center">enabled</td>
+ <td align="center"><span class="command"><strong>HA_server1</strong></span> or <span class="command"><strong>HA_server2</strong></span></td>
+</tr><tr>
+ <td>partner-down</td>
+ <td align="center">active server</td>
+ <td align="center">enabled</td>
+ <td align="center">all scopes</td>
+</tr><tr>
+ <td>ready</td>
+ <td align="center">active server</td>
+ <td align="center">disabled</td>
+ <td align="center">none</td>
+</tr><tr>
+ <td>syncing</td>
+ <td align="center">active server</td>
+ <td align="center">disabled</td>
+ <td align="center">none</td>
+</tr><tr>
+ <td>terminated</td>
+ <td align="center">active server</td>
+ <td align="center">enabled</td>
+ <td align="center">same as in the load-balancing or hot-standby state</td>
+</tr><tr>
+ <td>waiting</td>
+ <td align="center">any server</td>
+ <td align="center">disabled</td>
+ <td align="center">none</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<br>
 
 <p id="jp">
 DHCPサービススコープについて補足します。
 HA構成では各サーバに対して一意な名前を設定しなければなりません。
 本ドキュメントでは、プライマリサーバをserver1、セカンダリまたはスタンバイサーバをserver2、
-バックアップサーバにはserver3という名前を用います。実際はどのような名前でも構いません。
+バックアップサーバにはserver3という名前を用いますがどのような名前でも構いません。
 <br>
-負荷分散モード: HA_server1とHA_server2の２つのスコープが存在します。
+【負荷分散モード】 HA_server1とHA_server2の２つのスコープが存在します。
 server1が処理したクエリはHA_server1に属し、
 server2が処理したクエリはHA_server2に属します。
 partner-down状態の場合、両方のスコープにサービスを提供することになります。
 <br>
-ホットスタンバイモード: HA_server1というスコープだけが存在します。
+【ホットスタンバイモード】 HA_server1というスコープだけが存在します。
 server2はserver1が使用できなくなればこのスコープにサービスを提供します。
 <br>
-バックアップサーバ：独自のスコープはありません。ただいくつかの状況では、アクティブサーバのスコープに応答することがあります。partner-down状態でも通常状態でもサーバはスコープを提供しません。
+【バックアップサーバ】独自のスコープはありません。
+ただいくつかの状況では、アクティブサーバのスコープに応答することがあります。
+partner-down状態でも通常状態でもサーバはスコープを提供しません。
 <br>
 スコープ名を利用することで、プール、サブネット、およびネットワークを特定のサーバに紐づけることができ、
 そのサーバのみで行うことができます。
@@ -333,15 +401,13 @@ The scope names can be used to associate pools, subnets and networks with certai
 </div> <!-- section -->
 
 
-
-
 <h2 id="jp">15.4.8.4. パートナーダウン時のスコープの移行</h2>
 <h2 id="en">Scope Transition in Partner Down Case</h2>
 <div id="section">
 <p id="jp">
-あるサーバがパートナーの障害を検知した際、自身のスコープに加えて、障害を検知したパートナーのスコープの要求にも応答する。
-つまり、DHCPDISCOVER (DHCPv4)やSolicit (DHCPv6)に対してであり、これらの要求はブロードキャストされるため容易に実現できる。
-Partner-down状態のサーバはこれらのクエリにすべて応答する。
+あるサーバはパートナーの障害を検知した際、自身のスコープに加えて、障害を検知したパートナーのスコープの要求にも応答します。
+つまり、DHCPDISCOVER (DHCPv4)やSolicit (DHCPv6)に対して処理を開始します。これらの要求はブロードキャストされるため容易に実現できます。
+Partner-down状態にあるサーバはこれらのクエリにすべて応答します。
 
 </p>
 <p id="en">
@@ -349,20 +415,21 @@ When one of the servers finds that its partner is unavailble, it will start serv
 </p>
 
 <p id="jp">
-クライアントがリース更新を要求する際はブロードキャストではなく、割り当ててもらったサーバにDHCPREQUEST（DHCPv4）またはRenew（DHCPv6）を送出する。
-しかし、そのサーバが障害状態である場合、クライアントは応答を受け取ることができない。
-クライアントはrebindタイマ(T2)の時間が経過するまでそのリースを利用するし、リースの更新を試行する。
-経過後はrebindフェイズとなり、DHCPREQUEST（DHCPv4）またはRebind（DHCPv6）をブロードキャストで送出する。ここで他の生存しているサーバは要求を受信して(おそらくは)リース時間の延長を行う応答を行う。
-クライアントは新しいサーバからのアドレス更新を受け取ると、そのサーバに引き続きrenewを依頼することとなる。
+クライアントがリース更新を要求する際はブロードキャストではなく、割り当ててもらったサーバにDHCPREQUEST（DHCPv4）またはRenew（DHCPv6）を送出します。
+しかし、そのサーバが障害状態である場合、クライアントは応答を受け取ることができません。
+このため、クライアントはrebindタイマ(T2)の時間が経過するまでそのリースを利用し、リースの更新を試行し続けます。
+T2経過後はrebindフェイズとなり、DHCPREQUEST（DHCPv4）またはRebind（DHCPv6）をブロードキャストで送出します。
+ここで他の生存しているサーバ(パートナー)は要求を受信して(おそらくは)リース時間の延長を行う応答を行います。
+クライアントは新しいサーバからのアドレス更新を受け取ると、次回以降はそのサーバに引き続きrenewを依頼します。
 </p>
 <p id="en">
 When the client is renewing a lease, it will send its DHCPREQUEST (DHCPv4) or Renew (DHCPv6) message directly to the server which has allocated the lease being renewed. Because this server is unavailable, the client will not get any response. In that case, the client continues to use its lease and re-tries to renew until the rebind timer (T2) elapses. The client will now enter the rebinding phase, in which it will send DHCPREQUEST (DHCPv4) or Rebind (DHCPv6) message to any available server. The surviving server will receive the rebinding request and will (typically) extend the lifetime of the lease. The client will continue to contact that new server to renew its lease as appropriate.
 </p>
 
 <p id="jp">
-障害状態であったサーバが回復すると、HAの状態は正常に回復し、従来のスコープの処理を行おうとする。
-障害時にそのスコープの処理を行っていたサーバはこのスコープの処理をやめる。
-つまり、クライアントは再度上記に述べたrebindフェイズを経て、本来のサーバに更新を依頼することとなる。
+障害状態であったサーバが回復すると、HAの状態は正常に回復し、従来のスコープの処理に戻ります。
+障害時にそのスコープの処理を行っていた(つまり代理で応答していた)サーバはこのスコープの処理を停止します。
+このため、クライアントは再度上記に述べたrebindフェイズを経て、本来のサーバに更新を処理を依頼することとなります。
 </p>
 <p id="en">
 When the other server becomes available, both active servers will eventually transition to the load-balancing or hot-standby state, in which they will be responsible for their own scopes. Some clients belonging to the scope of the started server will be trying to renew their leases via the surviving server. This server will not respond to them anymore and the client will eventually transition back to the right server via rebinding mechanism again.
@@ -394,7 +461,7 @@ T.B.D.
 <h2 id="en">Hot Standby Configuration</h2>
 <div id="section">
 <p id="jp">
-以下に、ホットスタンバイモードのプライマリ側設定を示す。
+以下に、ホットスタンバイモードのプライマリ側設定を例示します。
 </p>
 <p id="en">
 The following is the example configuration of the primary server in the hot standby configuratio
@@ -473,8 +540,7 @@ The following is the example configuration of the primary server in the hot stan
 }</code></pre>
 
 <p id="jp">
-この設定はロードバランスモードで説明した負荷分散構成に似ているが、
-いくつかのおおきな違いがあります。
+この設定はロードバランスモードで説明した負荷分散構成に似ていますが、いくつかのおおきな違いがあります。
 <br>
 ホットスタンバイモードに設定されると、ただ1台のアクティブサーバがDHCP要求を処理します。
 プライマリがオンライン状態である限り、すべてのDHCP要求はプライマリで処理されます。
@@ -493,6 +559,10 @@ In this mode, the non-primary active server is called standby and that's what th
 
 
 <p id="jp">
+DHCPクエリに応答するサーバは常に１台であるため、プール定義のスコープはHA_server1のみです。
+異なるサーバによるリソースプールの競合は発生しえないため、実際の設定ではclient-class変数(HA_server1)は存在しなくて構いません。
+上記の例ではあくまでロードバランスモードとの比較のために変数を残しています。
+
 </p>
 <p id="en">
 Finally, because there is always one server responding to the DHCP queries, there is only one scope HA_server1 in use within pools definitions. In fact, the client-class parameter could be removed from this configuration without harm, because there are no conflicts in lease allocations by different servers as they do not allocate leases concurrently. The client-class is left in this example mostly for demonstration purposes, to highlight the differences between the hot standby and load balancing mode of operation.
@@ -508,7 +578,7 @@ Finally, because there is always one server responding to the DHCP queries, ther
 <p id="jp">
 HAが有効になっているDHCPでは、アクティブなパートナーに対して適切なコントロール用のコマンドを送ることで、リース割当とリース更新の情報を伝達します。
 パートナーはこれによって自身のリースデータベースを更新します。
-インスタンスが起動した際あるいは障害からの復旧時、サーバはパートナーとのリースデータベース同期を試みます。これのメカニズムによってHAサーバ間におけるリースの一貫性が保てるため、障害時にもDHCPサービスを提供し続けることができます。
+インスタンスの起動時あるいは障害からの復旧時、サーバはパートナーとのリースデータベース同期を試みます。これのメカニズムによってHAサーバ間におけるリースの一貫性が保てるため、障害時にもDHCPサービスを提供し続けることができます。
 </p>
 
 <p id="en">
@@ -516,8 +586,8 @@ An HA enabled server informs its active partner about allocated or renewed lease
 </p>
 
 <p id="jp">
-リースの交換が他の手段で行われる場合はリース同期やデータベース同期を無効にすることが有効であることもあります。
-(ほかの手段というのは)KeaはリースデータベースにMySQL、Postgres、Cassandraなどを選択でき、これらのデータベースレプリケーションの仕組みなどです。
+リースの交換が他の手段で行われる場合、リース同期やデータベース同期を無効にすることが有効であることもあります。
+(ほかの手段というのは)KeaはリースデータベースにMySQL、Postgres、Cassandraなどを選択でき、これらのデータベースレプリケーションの仕組みを利用する場合はこれが必要となります。
 </p>
 
 <p id="en">
@@ -525,10 +595,9 @@ In some cases, though, it is desired to disable lease updates and/or database sy
 </p>
 
 <p id="jp">
-aaa
-
-KeaのHAフックライブラリはKeaのコントロールAPIでのリース更新を無効にすることや、また、上記のようなデータベース標準のレプリケーションを利用することを考慮しています。
-具体的には、send-lease-updatesとsync-leasesの機能がこれに該当し、標準値はTrueになっています。
+KeaのHAフックライブラリはKeaのコントロールAPIでのリース更新を無効にすることや、また、
+上記のようなデータベース標準のレプリケーションを利用することを考慮しています。
+具体的には、send-lease-updatesとsync-leasesの変数がこれに該当し、標準値はTrueになっています。
 </p>
 
 <p id="en">
@@ -577,10 +646,11 @@ The HA hook library supports such scenarios by allowing to disable lease updates
 
 <p id="jp">
 上記に示すように一般的に、これらのパラメータは同じ値に設定されます。
-Kea側で同期を行う場合はTrue, データベース側で同期を行う場合はTrueです。
-ただし、特殊なユースケースにおいて、リース更新メッセージの送信とリースデータベースの同期を別々に設定することもサポートします。
-データベースが行われるのはリースファイルのコピーなので、sync-leasesはFalseに設定しますが、リース更新メッセージは通常通り行われるべきなので、send-lease-updatesはTrueに設置します。
-Keaのパッケージにはこれらのツールをあらかじめ含んでいるわけではありませんが、ユーザは独自のスクリプトなどでこの目的を達成可能です。
+Kea側で同期を行う場合はTrue, データベース側で同期を行う場合はFalseです。
+ただし、特殊なユースケースにおいて、リース更新メッセージの送信とリースデータベースの同期を別々の値に設定することも可能です。
+データベースで行われるのはリースファイルのコピーなので、sync-leasesはFalseに設定しますが、
+リース更新メッセージは通常通り行われるべきなので、send-lease-updatesはTrueに設置します。
+Keaのパッケージにはこれらのツールをあらかじめ含んでいるわけではありませんが、ユーザは独自のスクリプトなどで実装可能です。
 KeaのHAフックライブラリ構成はこのような管理の柔軟性を十分に高めるように設計されています。
 </p>
 <p id="en">
@@ -597,19 +667,14 @@ In the most typical use case, both parameters are set to the same value, i.e. bo
 
 
 <p id="jp">
-HAが有効になっているインスタンスはダウンタイム後(TODO)かha-syncコマンドを受信した際にリースデータベースの同期をします。
+HAが有効になっているインスタンスはダウンタイム経過後かha-syncコマンドを受信した際にリースデータベースの同期をします。
 サーバはsec 15.4.5.1.3で紹介されているコマンドを利用してパートナーからリース情報を取得します(リース要求)。
 このページサイズ（1コマンドで応答できる最大のリース数）はHAフックライブラリの設定で変更可能です。
-ページサイズが大きければ発行されるリース要求のクエリ数は減りますが、パートナーから一度に応答を返そうとするため、CPU利用率は高くなり、メモリを多く必要とします。
+ページサイズが大きければ発行されるリース要求のクエリ数は減りますが、
+パートナーから一度に応答を返そうとするため、CPU利用率は高くなり、メモリを多く必要とします。
 逆にページサイズが小さければ、CPUやメモリへの負荷は低減されますが、クエリの数が増えます。
-
-尚、このデフォルト値は10,000です。つまり、リースがこれより小さければ1回の要求ですべてが取得できます。
-
-
-
-HA対応サーバーは、ダウンタイム後またはha-syncコマンドを受信すると、リースデータベースの同期を開始します。サーバーは、セクション15.4.5.1.3「lease4-get-page、lease6-get-pageコマンド」で説明されているコマンドを使用して、パートナーサーバーからリースを取得します（リースクエリ）。結果ページのサイズ（これらのコマンドの1つに対する単一の応答で返されるリースの最大数）は、HAフックライブラリ構成を介して制御できます。ページサイズを大きくすると、パートナーサーバーに送信されるリースクエリの数は減りますが、パートナーサーバーはより大きな応答を生成し、両方のサーバーの送信時間とメモリおよびCPU使用率が長くなります。ページサイズを小さくすると、リソースの使用率が低下しますが、リースデータベース全体を取得するには、より多くのリースクエリを発行する必要があります。
-
-ページサイズを制御するsync-page-limitのデフォルト値は10000です。これは、このデータベースのサイズが10000以下の場合、単一のコマンドでリースデータベース全体をフェッチできることを意味します。
+<br>
+ページサイズのデフォルト値は10,000です。つまり、リースがこれより小さければ1回の要求ですべてが取得できます。
 </p>
 <p id="en">
 An HA enabled server initiates synchronization of the lease database after down time or upon receiving ha-sync command. The server uses commands described in Section 15.4.5.1.3, “lease4-get-page, lease6-get-page commands” to fetch leases from the partner server (lease queries). The size of the results page (maximum number of leases to be returned in a single response to one of these commands) can be controlled via HA hooks library configuration. Increasing the page size decreases the number of lease queries sent to the partner server, but it causes the partner server to generate larger responses, which lengthens transmission time as well as memory and CPU utilization on both servers. Decreasing the page size helps to decrease resources utilization but requires more lease queries to be issued to fetch the entire lease database.
@@ -631,7 +696,7 @@ T.B.D.
 
 
 
-<h2 id="jp">15.4.8.11. Pausing HA State Machine</h2>
+<h2 id="jp">15.4.8.11. ステートマシンの一時停止(Pause)</h2>
 <h2 id="en">Pausing HA State Machine</h2>
 <div id="section">
 <p id="jp">
@@ -647,7 +712,7 @@ The high availability state machine includes many different states described in 
 
 <p id="jp">
 通常、ステート遷移は自動的に行われるため、管理者は直接制御できませんし、通常は制御する必要はありません。
-しかし、管理者は"一時停止"ステートにHAの状態を変更することで追加の(他の)管理を行うことができます。
+しかし、管理者はPauseステートにHAの状態を変更することで追加の(他の)管理を行うことができます。
 </p>
 <p id="en">
 By default, transitions between the states are performed automatically and the server administrator has no direct control when the transitions take place and, in most cases, the administrator doesn't need such control. In some situations, however, the administrator may want to "pause" the HA state machine in a selected state to perform some additional administrative actions before the server transitions to the next state.
@@ -659,7 +724,7 @@ By default, transitions between the states are performed automatically and the s
 しかし、(障害時に)残ったインスタンスにも障害が発生し、リース情報が欠損する可能性もあります。
 この場合は何かしらの外部ソース（バックアップサーバ等）から両方のサーバのリースデータベースを復元しなければなりません。
 リースデータベースがREST APIで再構築を行っている間、インスタンスは待機状態でいる必要があります。
-サーバは(TODO)リースデータベース同期の試行をしたり、DHCPクライアントにサービスを開始してはなりません。
+サーバはリースデータベース同期の試行をしたり、DHCPクライアントにサービスを開始してはなりません。
 </p>
 <p id="en">
 Consider a server failure which results in a loss of the entire lease database. Typically, the server will rebuild its lease database when it enters the syncing state by querying the partner server for leases, but it is possible that the partner was also experiencing a failure and lacks lease information. In this case, it may be required to reconstruct lease databases on both servers from some external source, e.g. a backup server. If the lease database is going to be reconstructed via RESTful API, the servers should be started in the initial, i.e. waiting state and remain in this state while leases are being added. In particular, the servers should not attempt to synchronize their lease databases nor start serving DHCP clients.
