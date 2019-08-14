@@ -1,0 +1,1004 @@
+<html>
+<head>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+ google.load("jquery", "1.3");
+</script>
+
+<script type="text/javascript">
+</script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style type="text/css">
+*{
+	margin: 0px;
+	padding: 0px;
+	font-family: Verdana, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+}
+</style>
+</head>
+<body>
+
+<h1 id="jp">Kea Administrator Reference Manual 1.5.0 <br> 　　ha: High Availability </h1>
+
+	<p id="jp">
+	原著: 
+        <a href="https://ftp.isc.org/isc/kea/1.5.0/doc/kea-guide.html#high-availability-library">
+	Kea Administrator Reference Manual 1.5.0 15.4.8. ha: High Availability
+	</a>
+	</p>
+
+	<p id="en">
+	Original: 
+        <a href="http://www.junosandme.net/article-junos-and-bgp-flowspec-119193150.html">
+	Kea Administrator Reference Manual 1.5.0 15.4.8. ha: High Availability
+	</a>
+	<p>
+
+<p id="jp">
+Keaを使い始めたのですが、HAではまったので、HAのセクションだけ翻訳します。(金井)
+</p>
+
+<div id="section">
+<p id="jp">
+このセクションでは、HAフックライブラリについて述べます。
+HAフックライブラリは１台のサーバに障害が発生した際などに対応できるDHCPv4/v6 高信頼性ためのライブラリです。
+昔はISCの顧客のみが利用可能な機能でしたが、現在ではオープンソースであるKeaの一部になっています。
+</p>
+<p id="en">
+This section describes the High Availability hooks library, which can be loaded on a pair of DHCPv4 or DHCPv6 servers to increase reliability of the DHCP service in case of outage of one of the servers. This library used to be only available to ISC customers, but is now part of the open source Kea, available to all users.
+</p>
+
+<p id="jp">
+DHCPのHAは複数のサーバインスタンスが連携することで実現されます。
+いずれかのインスタンスが障害(プロセス障害、エージェント障害、サーバの停電や障害)によって利用できなくなった場合でも、残りのインスタンスはクライアントにサービスを継続して提供できます。
+一般的なDHCPサーバの実装ではフェイルオーバーが実現されており、サーバ間の連携・障害検知・(アドレスリースの)同期などが可能です。
+ただし、IETFにおいてDHCPv4のフェイルオーバーは標準化されていません。
+対してDHCPv6ではRFC8156がStandards Trackで公開されていますがDHCPv4を包含するものではありませんし、とても複雑なプロトコルなため運用上の制約も生まれます。
+
+「標準化」されたフェイルオーバープロトコルはごく一部のユーザにとって魅力的でしょうが、
+しかし、多くのユーザにとっては現実的な高可用性機能の実現が一番です。
+このため、KeaのHAフックライブラリは標準化されたプロトコルではなく、
+独自の設計実装(プロトコル、構成、状態など)でDHCPv4/v6で高可用性を提供しています。
+
+この文章では、敢えてフェイルオーバーという言葉は使わずに、高可用性(HA)という言葉を利用します。
+
+まず最初に次のセクションでは、Kea HAフックライブラリの構成と運用方法について説明します。
+</p>
+
+<p id="en">
+High Availability (HA) of the DHCP service is provided by running multiple cooperating server instances. If any of these instances becomes unavailable for whatever reason (DHCP software crash, Control Agent software crash, power outage, hardware failure), a surviving server instance can continue providing the reliable service to the clients. Many DHCP servers implementations include "DHCP Failover" protocol, which most significant features are: communication between the servers, partner failure detection and leases synchronization between the servers. However, the DHCPv4 failover standardization process was never completed at IETF. The DHCPv6 failover standard (RFC 8156) was published, but it is complex, difficult to use, has significant operational constraints and is different than its v4 counterpart. Although it may be useful for some users to use a "standard" failover protocol, it seems that most of the Kea users are simply interested in a working solution which guarantees high availability of the DHCP service. Therefore, Kea HA hook library derives major concepts from the DHCP Failover protocol but uses its own solutions for communication, configuration and its own state machine, which greatly simplifies its implementation and generally better fits into Kea. Also, it provides the same features in both DHCPv4 and DHCPv6. This document purposely uses the term "High Availability" rather than "Failover" to emphasize that it is not the Failover protocol implementation.
+
+The following sections describe the configuration and operation of the Kea HA hook library.
+</p>
+
+</div>
+
+<h2 id="jp">15.4.8.1. サポートする設定</h2>
+<h2 id="en">Supported Configurations</h2>
+<div id="section">
+<p id="jp">
+HAフックライブラリは２つのモードをサポートします。
+<br>
+<br>
+【負荷分散】この機能はRFC3074の実装に基づいています。DHCP要求に同時に応答する2台のサーバを用意し、交互に割り当てを行います。要求を処理したインスタンスはパートナーに対してREST APIで割り当てを通達します。このモードでは、パートナーへの通達が成功したときのみ応答は返され、パートナーとのメッセージ通信が失敗すると(訳注:APIがconnectした後の失敗です)クライアントに対する応答を行いません。
+両サーバ間ではリース更新情報がやりとりされているため、割り当てられたリース情報は完全に同期しています。
+このため、パートナーに障害が発生した際はもう片系がDHCP通信をすべて処理できます。
+</p>
+<p id="en">
+The Kea HA hook library supports two configurations also known as HA modes: load balancing and hot standby. In the load balancing mode, there are two servers responding to the DHCP requests. The load balancing function is implemented as described in RFC3074, with each server responding to 1/2 of received DHCP queries. When one of the servers allocates a lease for a client, it notifies the partner server over the control channel (RESTful API), so as the partner can save the lease information in its own database. If the communication with the partner is unsuccessful, the DHCP query is dropped and the response is not returned to the DHCP client. If the lease update is successful, the response is returned to the DHCP client by the server which has allocated the lease. By exchanging the lease updates, both servers get a copy of all leases allocated by the entire HA setup and any of the servers can be switched to handle the entire DHCP traffic if its partner becomes unavailable.
+</p>
+
+<p id="jp">
+負荷分散モードでは、2台のサーバを"プライマリ"か"セカンダリ"に割り当てます。この２台は通常全く同じ役割ですが、ただ、起動時の動作が異なります。プライマリサーバは即座にリースデータベースを同期しますが、セカンダリサーバはプライマリサーバから同期を試みようとします。
+</p>
+
+<p id="en">
+In the load balancing configuration, one of the servers must be designated as "primary" and the other server is designated as "secondary". Functionally, there is no difference between the two during the normal operation. This distniction is required when the two servers are started at (nearly) the same time and have to synchronize their lease databases. The primary server synchronizes the database first. The secondary server waits for the primary server to complete the lease database synchronization before it starts the synchronization.
+</p>
+<br>
+<br>
+<p id="jp">
+【ホットスタンバイ】
+このモードでも、２台のサーバは「プライマリ」と「セカンダリ（訳注：ここはスタンバイが正しいとおもう）」の役割を持ちます。
+しかし、平常時には負荷分散モードとは異なり、プライマリのみがDHCP要求に応答します。
+セカンダリサーバはプライマリからのリース更新を受け取って自身のリースデータベースを更新し続け、プライマリの障害を検出するとDHCP要求に応答するようになります。
+</p>
+<p id="en">
+In the hot standby configuration one of the servers is designated as "primary" and the second server is designated as "secondary". During the normal operation, the primary server is the only one that responds to the DHCP requests. The secodary server receives lease updates from the primary over the control channel. However, it does not respond to any DHCP queries as long as the primary is running or, more accurately, until the secondary considers the primary to be offline. When the secondary server detects the failure of the primary, it starts responding to all DHCP queries.
+</p>
+
+
+<p id="jp">
+これらの構成ではプライマリ、セカンダリ、スタンバイは「アクティブ」サーバと呼ばれます。
+なぜなら、DHCP要求を受け取ればすぐにパートナーの障害時に即座に自動的に対応することができるからです。
+
+HAフックライブラリでは「バックアップ」サーバという役割を作ることもできます。これは必須ではなく、上記の２つのモードにオプションとして設定できます。
+バックアップサーバの数には上限はないのですが、アクティブサーバはすべてのバックアップサーバにもリースの更新の情報を行うので、
+DHCP応答の時間が長くなります。（訳注：また後述のようにKeaはバックアップへの切り替えを自動で行いません）
+</p>
+<p id="en">
+In the configurations described above, the primary, secondary and standby are referred to as "active" servers, because they receive lease updates and can automatically react to the partner's failures by responding to the DHCP queries which would normally be handled by the partner. The HA hook library supports another server type (role) - backup server. The use of the backup servers is optional. They can be used in both load balancing and hot standby setup, in addition to the active servers. There is no limit on the number of backup servers in the HA setup. However, the presence of the backup servers increases latency of the DHCP responses, because not only do active servers send lease updates to each other, but also to the backup servers.
+</p>
+</div>
+
+<h2 id="jp">15.4.8.2. アクティブサーバの時刻</h2>
+<h2 id="en">Clocks on Active Servers</h2>
+<div id="section">
+<p id="jp">
+HAを構成するには時刻同期が重要な要素です。
+DHCPサーバではリースの更新やデータベースの同期時にリース情報を交換します。
+このリース情報には割り当て時刻や期限切れ時刻が含まれます。
+通常はサーバ間でわずかながら時刻のずれがが存在します。ずれが小さい場合は問題ありませんが、このずれが大きい場合はHAが予期せぬ動作をすることがあります。
+例えば、本来割り当て時間内であるリースが期限切れと誤判定され、
+この結果、通常ならクライアントが再利用(renew)処理を行う期間内に、（サーバ側が関係する）DNSの名前が削除される、といったことが起こりえます。
+</p>
+
+<p id="en">
+Synchronized clocks are essential for the HA setup to operate reliably. The servers share lease information via lease updates and during synchronization of the databases. The lease information includes the time when the lease has been allocated and when it expires. Some clock skew between the servers participating the HA setup would usually exist. This is acceptable as long as the clock skew is relatively low, comparing to the lease lifetimes. However, if the clock skew becomes too high, the different notions of time for the lease expiration by different servers may cause the HA system to malfuction. For example, one server may consider a valid lease to be expired. As a consequence, the lease reclamation process may remove a name associated with this lease from the DNS, even though the lease may later get renewed by a client.
+</p>
+
+<p id="jp">
+アクティブな各サーバはパートナーとのハートビートの際に時刻ずれを監視します。
+ただし、これは複雑な(NTPのような)処理は行っておらず、あくまで発信から着信のタイムスタンプの差で区別しています。
+Keaでは時刻ずれが30秒を超えるとWarningを発出します。
+(Keaは時刻処理を行わないので)管理者は通常この問題をNTP同期を行うことで対処する必要があるでしょう。
+</p>
+
+<p id="en">
+Each active server monitors the clock skew by comparing its current time with the time returned by its partner in response to the heartbeat command. This gives a good approximation of the clock skew, although it doesn't take into account the time between sending the response by the partner and receiving this response by the server which sent the heartbeat command. If the clock skew exceeds 30 seconds, a warning log message is issued. The administrator may correct this problem by synchronizing the clocks (e.g. using NTP). The servers should notice the clock skew correction and stop issuing the warning
+</p>
+
+<p id="jp">
+時刻ずれが60秒を超えた場合はHAが組まれません。つまり、HAのはterminatedステート(後述)となります。
+サーバはDHCP要求に応答することはできるものの、他のインスタンスへのハートビートやリースの同期を行うことがなくなります。
+管理者はこの場合、NTPなどでクロック同期した後、Keaサーバを再起動する必要があるでしょう。
+</p>
+
+<p id="en">
+If the clock skew is not corrected and it exceeds 60 seconds, the HA service on each of the servers is terminated, i.e. the state machine enters the terminated state. The servers will continue to respond to the DHCP clients (as in the load-balancing or hot-standby mode), but will neither exchange lease updates nor heartbeats and their lease databases will diverge. In this case, the administrator should synchronize the clocks and restart the servers.
+</p>
+</div>
+
+<h2 id="jp">15.4.8.3. ステート</h2>
+<h2 id="en">Server States</h2>
+<div id="section">
+
+<p id="jp">
+HAが組まれているサーバではHAのステートを持ちます。
+ha-heartbeat APIでパートナーの状態を確認されています。
+パートナーがこのAPIに応答しない場合、HA間の通信は切断したと仮定し、
+構成に応じてサーバは別の手段(別途説明)でパートナーの状態を確認しようとします。
+パートナーに障害が発生したと判断されるとpartner-down状態になり、DHCP要求の処理を開始します。
+</p>
+<p id="en">
+The DHCP server operating within an HA setup runs a state machine and the state of the server can be retrieved by its peers using the ha-heartbeat command sent over the RESTful API. If the partner server doesn't respond to the ha-heartbeat command longer than configured amount of time, the communication is considered interrupted and the server may (depending on the configuration) use additional measures (desribed further in this document) to verify if the partner is still operating. If it finds that the partner is not operating, the server transitions to the partner-down state to handle the entire DHCP traffic directed to the system.
+</p>
+
+<p id="jp">
+partner-down状態でも、パートナーに対してha-heartbeat APIは試行し続けられます。
+障害状態から回復したパートナーがリースデータベースの同期を完了し、運用可能状態となると、通常状態に戻ります。
+</p>
+<p id="en">
+In this case, the surviving server continues to send the ha-heartbeat command to detect when the partner wakes up. The partner synchronizes the lease database and when it is finally ready to operate, the surviving server returns to the normal operation, i.e. load-balancing or hot-standby state.
+</p>
+
+<p id="jp">
+以下にステートの一覧を示します。
+</p>
+<p id="en">
+The following is the list of all possible states into which the servers may transition:
+</p>
+
+<b>backup</b>
+<p id="jp">
+バックアップサーバの正常状態。アクティブサーバからのリース更新を受信する。
+</p>
+<p id="en">
+normal operation of the backup server. In this state it receives lease updates from the active servers.
+</p>
+
+<b>hot-standby</b>
+<p id="jp">
+ホットスタンバイモードのアクティブサーバにおける正常状態。
+プライマリとセカンダリは通常この状態となる。
+プライマリはDHCP要求に応答し、スタンバイとバックアップサーバにリース更新を送信する。
+</p>
+<p id="en">
+normal operation of the active server running in the hot standby mode. Both primary and standby server are in this state during their normal operation. The primary server is responding to the DHCP queries and sends lease updates to the standby server and to the backup servers, if any backup servers are present.
+</p>
+
+<b>load-balancing</b>
+<p id="jp">
+負荷分散モードのアクティブサーバにおける正常状態。
+プライマリとセカンダリは通常この状態となる。
+両方のサーバはDHCP要求に応答し、相互間にリース更新を送信する。
+バックアップサーバが存在するなら、同様にリース更新を送信する。
+</p>
+<p id="en">
+normal operation of the active server running in the load balancing mode. Both primary and secondary server are in this state during their normal operation. Both servers are responding to the DHCP queries and send lease updates to each other and to the backup servers, if any backup servers are present.
+</p>
+
+<b>partner-down</b>
+<p id="jp">
+アクティブサーバはパートナーがオフライン状態であることを検出するとこの状態となる。
+尚、バックアップサーバはパートナーに含まれない。
+この状態では(相手方がDHCP要求に応答できないとみなすため)通常はパートナーが処理するとみなす処理しない要求にも応答する。
+</p>
+<p id="en">
+an active server transitions to this state after detecting that its partner (another active server) is offline. The server doesn't transition to this state if any of the backup servers is unavailable. In the partner-down state the server responds to all DHCP queries, so also those queries which are normally handled by the active server which is now unavailable.
+</p>
+
+<b>ready</b>
+<p id="jp">
+アクティブサーバはリースデータベースをパートナーと同期するとこの状態となる。
+partner-down状態のサーバは障害が回復してパートナーとの同期が完了するとこの状態となり、正常動作となる。
+
+</p>
+<p id="en">
+an active server transitions to this state after synchronizing its lease database with an active partner. This state is to indicate to the partner (likely being in the partner-down state that it may return to the normal operation. When it does, the server being in the ready state will also start normal operation.
+</p>
+
+<b>syncing</b>
+<p id="jp">
+アクティブサーバはこの状態に移行して、パートナーからのリースを取得し、自身のリースデータベースを更新しようする。
+この状態では、dhcp-disable APIを発行することでパートナーのDHCPを最大60秒の間無効にする。60描画経過した後は自動的に有効となる。なぜなら、dhcp-disableを要求したノードに障害が起きるとずっとdisableになってしまうからである。
+無事にリースデータベースの更新が完了した場合、dhcp-enableコマンドを発行してパートナーのDHCPを有効にする。
+つまり、リースの同期が行われている間、DHCP要求に対しては応答しない。
+ただし、sync-leasesパラメータをfalseにしているサーバ(パートナーとの同期を行わなくしているサーバ)はこの状態に遷移することはなく、waitingからreadyに直接遷移する。
+<br>
+
+</p>
+<p id="en">
+an active server transitions to this state to fetch leases from the active partner and update the local lease database. When it this state, it issues the dhcp-disable to disable the DHCP service of the partner from which the leases are fetched. The DHCP servie is disabled for the maximum time of 60 seconds, after which it is automatically enabled, in case the syncing partner has died again failing to re-enable the service. If the synchronization is completed the syncing server issues the dhcp-enable to re-enable the DHCP service of the partner. The syncing operation is synchronous. The server is waiting for an answer from the partner and is not doing anything else while the leases synchronization takes place. A server which is configured to not synchronize its database with the partner, i.e. when the sync-leases configuration parameter is set to false, will never transition to this state. Instead, it will transition directly from the waiting to ready state.
+</p>
+
+<b>terminated</b>
+<p id="jp">
+HAライブラリが高可用性サービスを提供できず、管理者のオペレーションが必要な場合、この状態となる。
+現在、この状態になる条件はそうそうないが、様々な問題によってこの状態になる可能性がある。
+Kea 1.4.0時点で、この状態となる唯一の条件はアクティブなサーバ間での60秒以上の時刻ずれである。
+<br>
+この状態では、サーバは選択されたHAモードの通りにDHCPクライアントに応答し続けるものの、リース更新は交換されず、また、ハートビートも送出しない。
+一度この状態になると(運用者のオペレーションが必要であるため)インスタンスが再起動されるまでこの状態となる。
+そのため、管理者はこの状態となった原因を解消なければならない。
+もし、解決せずに再起動を行ったなら、再度この状態となるだろう。
+</p>
+<p id="en">
+an active server transitions to this state when the High Availability hooks library is unable to further provide reliable service and a manual intervention of the administrator is required to correct the problem. It is envisaged that various issues with the HA setup may cause the server to transition to this state in the future. As of Kea 1.4.0 release, the only issue causing the HA service to terminate is unacceptably high clock skew between the active servers, i.e. if the clocks on respective servers are more than 60 seconds apart. While in this state, the server will continue responding to the DHCP clients based on the HA mode selected (load balancing or hot standby), but the lease updates won't be exchanged and the heartbeats won't be sent. Once a server has entered the "terminated" state it will remain in this state until it is restarted. The administrator must correct the issue which caused this situation prior to restarting the server (e.g. synchronize clocks). Otherwise, the server will return to the "terminated" state as soon as it finds that the clock skew is still too high.
+</p>
+
+<b>waiting</b>
+<p id="jp">
+起動したサーバインスタンスの初期状態である。
+バックアップサーバはこの状態からbackupステートに遷移する。
+アクティブサーバはまずパートナーにハートビートを送出し、
+応答がない場合はpartner-down状態に遷移する。
+そうでない場合はsyncing状態になる(ただし、sync-leasesがfalseならready状態)。
+<br>
+もし両方のサーバがこの状態の時(つまり両方が同時に起動したとき)は、プライマリは次の状態に遷移し、セカンダリやスタンバイはwaitingのままプライマリの状態遷移を待つ。
+</p>
+<p id="en">
+each started server instance enters this state. The backup server will transition directly from this state to the backup state. An active server will send heartbeat to its partner to check its state. If the partner appears to be unavailable the server will transition to the partner-down, otherwise it will transition to the syncing or ready state (depending on the setting of the sync-leases configuration parameter).
+
+ If both servers appear to be in the waiting state (concurrent startup) the primary server will transition to the next state first. The secondary or standby server will remain in the waiting state until the primary transitions to the ready state.
+</p>
+
+<p id="jp">
+KeaがDHCP要求に応答するか、また、どの要求に応答するかというのは上記に示したステートによって決定される。
+次の表で各ステートにおけるふるまい(ただし、defaultの)を示す。
+
+DHCPサーバスコープとは、受信するクエリの分類であり、後述する。
+</p>
+<p id="en">
+Whether the server responds to the DHCP queries and which queries it responds to is a matter of the server's state, if no administrative action is performed to configure the server otherwise. The following table provides the default behavior for various states.
+
+The DHCP Server Scopes denotes what group of received DHCP queries the server responds to in the given state. The in-depth explanation what the scopes are can be found below.
+</p>
+
+TODO: ここに表を貼る
+
+<p id="jp">
+DHCPサービススコープについて補足します。
+HA構成では各サーバに対して一意な名前を設定しなければなりません。
+本ドキュメントでは、プライマリサーバをserver1、セカンダリまたはスタンバイサーバをserver2、
+バックアップサーバにはserver3という名前を用います。実際はどのような名前でも構いません。
+<br>
+負荷分散モード: HA_server1とHA_server2の２つのスコープが存在します。
+server1が処理したクエリはHA_server1に属し、
+server2が処理したクエリはHA_server2に属します。
+partner-down状態の場合、両方のスコープにサービスを提供することになります。
+<br>
+ホットスタンバイモード: HA_server1というスコープだけが存在します。
+server2はserver1が使用できなくなればこのスコープにサービスを提供します。
+<br>
+バックアップサーバ：独自のスコープはありません。ただいくつかの状況では、アクティブサーバのスコープに応答することがあります。partner-down状態でも通常状態でもサーバはスコープを提供しません。
+<br>
+スコープ名を利用することで、プール、サブネット、およびネットワークを特定のサーバに紐づけることができ、
+そのサーバのみで行うことができます。
+これは、クライアント分類メカニズムによって行われます(後述)。
+</p>
+<p id="en">
+The DHCP service scopes require some explanation. The HA configuration must specify a unique name for each server within the HA setup. This document uses the following convention within provided examples: server1 for a primary server, server2 for the secondary or standby server and server3 for the backup server. In the real life any names can be used as long as they remain unique.
+
+In the load balancing mode there are two scopes named after the active servers: HA_server1 and HA_server2. The DHCP queries load balanced to the server1 belong to the HA_server1 scope and the queries load balanced to the server2 belong to the HA_server2 scope. If any of the servers is in the partner-down state, it is responsible for serving both scopes.
+
+In the hot standby mode, there is only one scope HA_server1 because only the server1 is responding to the DHCP queries. If that server becomes unavailable, the server2 becomes responsible for this scope.
+
+The backup servers do not have their own scopes. In some cases they can be used to respond to the queries belonging to the scopes of the active servers. Also, a server which is neither in the partner-down state nor in the normal operation serves no scopes.
+
+The scope names can be used to associate pools, subnets and networks with certain servers, so as only these servers can allocate addresses or prefixes from those pools, subnets or network. This is done via the client classification mechanism (see below).
+</p>
+
+</div> <!-- section -->
+
+
+
+
+<h2 id="jp">15.4.8.4. パートナーダウン時のスコープの移行</h2>
+<h2 id="en">Scope Transition in Partner Down Case</h2>
+<div id="section">
+<p id="jp">
+あるサーバがパートナーの障害を検知した際、自身のスコープに加えて、障害を検知したパートナーのスコープの要求にも応答する。
+つまり、DHCPDISCOVER (DHCPv4)やSolicit (DHCPv6)に対してであり、これらの要求はブロードキャストされるため容易に実現できる。
+Partner-down状態のサーバはこれらのクエリにすべて応答する。
+
+</p>
+<p id="en">
+When one of the servers finds that its partner is unavailble, it will start serving clients from its own scope and the scope of the partner which is considered unavailable. This is straight forward for the new clients, i.e. sending DHCPDISCOVER (DHCPv4) or Solicit (DHCPv6), because those requests are not sent to any particular server. The available server will respond to all such queries when it is in the partner-down state.
+</p>
+
+<p id="jp">
+クライアントがリース更新を要求する際はブロードキャストではなく、割り当ててもらったサーバにDHCPREQUEST（DHCPv4）またはRenew（DHCPv6）を送出する。
+しかし、そのサーバが障害状態である場合、クライアントは応答を受け取ることができない。
+クライアントはrebindタイマ(T2)の時間が経過するまでそのリースを利用するし、リースの更新を試行する。
+経過後はrebindフェイズとなり、DHCPREQUEST（DHCPv4）またはRebind（DHCPv6）をブロードキャストで送出する。ここで他の生存しているサーバは要求を受信して(おそらくは)リース時間の延長を行う応答を行う。
+クライアントは新しいサーバからのアドレス更新を受け取ると、そのサーバに引き続きrenewを依頼することとなる。
+</p>
+<p id="en">
+When the client is renewing a lease, it will send its DHCPREQUEST (DHCPv4) or Renew (DHCPv6) message directly to the server which has allocated the lease being renewed. Because this server is unavailable, the client will not get any response. In that case, the client continues to use its lease and re-tries to renew until the rebind timer (T2) elapses. The client will now enter the rebinding phase, in which it will send DHCPREQUEST (DHCPv4) or Rebind (DHCPv6) message to any available server. The surviving server will receive the rebinding request and will (typically) extend the lifetime of the lease. The client will continue to contact that new server to renew its lease as appropriate.
+</p>
+
+<p id="jp">
+障害状態であったサーバが回復すると、HAの状態は正常に回復し、従来のスコープの処理を行おうとする。
+障害時にそのスコープの処理を行っていたサーバはこのスコープの処理をやめる。
+つまり、クライアントは再度上記に述べたrebindフェイズを経て、本来のサーバに更新を依頼することとなる。
+</p>
+<p id="en">
+When the other server becomes available, both active servers will eventually transition to the load-balancing or hot-standby state, in which they will be responsible for their own scopes. Some clients belonging to the scope of the started server will be trying to renew their leases via the surviving server. This server will not respond to them anymore and the client will eventually transition back to the right server via rebinding mechanism again.
+</p>
+
+</div>
+
+<h2 id="jp">15.4.8.5. ロードバランスモードの設定</h2>
+<h2 id="en">Load Balancing Configuration</h2>
+<div id="section">
+<p id="jp">
+T.B.D.
+</p>
+<p id="en">
+</p>
+</div>
+
+<h2 id="jp">15.4.8.6. ロードバランスモード: 高度な分類</h2>
+<h2 id="en">Load Balancing with Advanced Classification</h2>
+<div id="section">
+<p id="jp">
+T.B.D.
+</p>
+<p id="en">
+</p>
+</div>
+
+<h2 id="jp">15.4.8.7. ホットスタンバイモードの設定</h2>
+<h2 id="en">Hot Standby Configuration</h2>
+<div id="section">
+<p id="jp">
+以下に、ホットスタンバイモードのプライマリ側設定を示す。
+</p>
+<p id="en">
+The following is the example configuration of the primary server in the hot standby configuratio
+</p>
+
+<pre id="code"><code>{
+"Dhcp4": {
+
+    ...
+
+    "hooks-libraries": [
+        {
+            "library": "/usr/lib/hooks/libdhcp_lease_cmds.so",
+            "parameters": { }
+        },
+        {
+            "library": "/usr/lib/hooks/libdhcp_ha.so",
+            "parameters": {
+                "high-availability": [ {
+                    "this-server-name": "server1",
+                    "mode": "hot-standby",
+                    "heartbeat-delay": 10000,
+                    "max-response-delay": 10000,
+                    "max-ack-delay": 5000,
+                    "max-unacked-clients": 5,
+                    "peers": [
+                        {
+                            "name": "server1",
+                            "url": "http://192.168.56.33:8080/",
+                            "role": "primary",
+                            "auto-failover": true
+                        },
+                        {
+                            "name": "server2",
+                            "url": "http://192.168.56.66:8080/",
+                            "role": "standby",
+                            "auto-failover": true
+                        },
+                        {
+                            "name": "server3",
+                            "url": "http://192.168.56.99:8080/",
+                            "role": "backup",
+                            "auto-failover": false
+                        }
+                    ]
+                } ]
+            }
+        }
+    ],
+
+    "subnet4": [
+        {
+            "subnet": "192.0.3.0/24",
+            "pools": [
+                {
+                    "pool": "192.0.3.100 - 192.0.3.250",
+                    "client-class": "HA_server1"
+                }
+            ],
+
+            "option-data": [
+                {
+                    "name": "routers",
+                    "data": "192.0.3.1"
+                }
+            ],
+
+            "relay": { "ip-address": "10.1.2.3" }
+        }
+    ],
+
+    ...
+
+}
+
+}</code></pre>
+
+<p id="jp">
+この設定はロードバランスモードで説明した負荷分散構成に似ているが、
+いくつかのおおきな違いがあります。
+<br>
+ホットスタンバイモードに設定されると、ただ1台のアクティブサーバがDHCP要求を処理します。
+プライマリがオンライン状態である限り、すべてのDHCP要求はプライマリで処理されます。
+スタンバイサーバはプライマリの障害を検知したときにのみ、この処理を引き継ぎます。
+
+このモードにおいて、プライマリではないアクティブサーバはスタンバイと呼ばれており、
+つまり、２台目のアクティブサーバとも呼ばれます。
+</p>
+<p id="en">
+This configuration is very similar to the load balancing configuration described Section 15.4.8.5, “Load Balancing Configuration”, with a few notable differences.
+
+The mode is now set to hot-standby, in which only one server is responding to the DHCP clients. If the primary server is online, the primary server is responding to all DHCP queries. The standby server takes over the entire DHCP traffic when it discovers that the primary is unavailable.
+
+In this mode, the non-primary active server is called standby and that's what the role of the second active server is set to.
+</p>
+
+
+<p id="jp">
+</p>
+<p id="en">
+Finally, because there is always one server responding to the DHCP queries, there is only one scope HA_server1 in use within pools definitions. In fact, the client-class parameter could be removed from this configuration without harm, because there are no conflicts in lease allocations by different servers as they do not allocate leases concurrently. The client-class is left in this example mostly for demonstration purposes, to highlight the differences between the hot standby and load balancing mode of operation.
+</p>
+
+</div>
+
+
+
+<h2 id="jp">15.4.8.8. Lease Information Sharing</h2>
+<h2 id="en">Lease Information Sharing</h2>
+<div id="section">
+<p id="jp">
+HAが有効になっているDHCPでは、アクティブなパートナーに対して適切なコントロール用のコマンドを送ることで、リース割当とリース更新の情報を伝達します。
+パートナーはこれによって自身のリースデータベースを更新します。
+インスタンスが起動した際あるいは障害からの復旧時、サーバはパートナーとのリースデータベース同期を試みます。これのメカニズムによってHAサーバ間におけるリースの一貫性が保てるため、障害時にもDHCPサービスを提供し続けることができます。
+</p>
+
+<p id="en">
+An HA enabled server informs its active partner about allocated or renewed leases by sending appropriate control commands. The partner updates the lease information in its own database. When the server starts up for the first time or recovers after a failure it synchronizes its lease database with the partner. These two mechanisms guarantee consistency of the lease information between the servers and allow for designating one of the servers to handle the entire DHCP traffic in case the other server becomes unavailable.
+</p>
+
+<p id="jp">
+リースの交換が他の手段で行われる場合はリース同期やデータベース同期を無効にすることが有効であることもあります。
+(ほかの手段というのは)KeaはリースデータベースにMySQL、Postgres、Cassandraなどを選択でき、これらのデータベースレプリケーションの仕組みなどです。
+</p>
+
+<p id="en">
+In some cases, though, it is desired to disable lease updates and/or database synchronization between the active servers if the exchange of information about the allocated leases is performed using some other mechanism. Kea supports various types of databases to be used as a storage for leases, e.g. MySQL, Postgres, Cassandra. Those databases include builtin solutions for data replication which are often used by Kea users to provide redundancy.
+</p>
+
+<p id="jp">
+aaa
+
+KeaのHAフックライブラリはKeaのコントロールAPIでのリース更新を無効にすることや、また、上記のようなデータベース標準のレプリケーションを利用することを考慮しています。
+具体的には、send-lease-updatesとsync-leasesの機能がこれに該当し、標準値はTrueになっています。
+</p>
+
+<p id="en">
+The HA hook library supports such scenarios by allowing to disable lease updates over the control channel and/or lease database synchronization, leaving the server to rely on the database replication mechanism. This is controlled by the two boolean parameters: send-lease-updates and sync-leases, which values default to true:
+</p>
+
+
+<pre id="code"><code>{
+"Dhcp4": {
+
+    ...
+
+    "hooks-libraries": [
+        {
+            "library": "/usr/lib/hooks/libdhcp_lease_cmds.so",
+            "parameters": { }
+        },
+        {
+            "library": "/usr/lib/hooks/libdhcp_ha.so",
+            "parameters": {
+                "high-availability": [ {
+                    "this-server-name": "server1",
+                    "mode": "load-balancing",
+                    "send-lease-updates": false,
+                    "sync-leases": false,
+                    "peers": [
+                        {
+                            "name": "server1",
+                            "url": "http://192.168.56.33:8080/",
+                            "role": "primary"
+                        },
+                        {
+                            "name": "server2",
+                            "url": "http://192.168.56.66:8080/",
+                            "role": "secondary"
+                        }
+                    ]
+                } ]
+            }
+        }
+    ],
+
+    ...
+
+}</code></pre>
+
+<p id="jp">
+上記に示すように一般的に、これらのパラメータは同じ値に設定されます。
+Kea側で同期を行う場合はTrue, データベース側で同期を行う場合はTrueです。
+ただし、特殊なユースケースにおいて、リース更新メッセージの送信とリースデータベースの同期を別々に設定することもサポートします。
+データベースが行われるのはリースファイルのコピーなので、sync-leasesはFalseに設定しますが、リース更新メッセージは通常通り行われるべきなので、send-lease-updatesはTrueに設置します。
+Keaのパッケージにはこれらのツールをあらかじめ含んでいるわけではありませんが、ユーザは独自のスクリプトなどでこの目的を達成可能です。
+KeaのHAフックライブラリ構成はこのような管理の柔軟性を十分に高めるように設計されています。
+</p>
+<p id="en">
+In the most typical use case, both parameters are set to the same value, i.e. both are false if the database replication is in use, or both are true otherwise. Introducing two separate parameters to control lease updates and lease database synchronization is aimed at possible special use cases, e.g. synchronization is performed by copying a lease file (therefore the sync-leases is set to false), but lease updates should be conducted as usual (send-lease-updates set to true). It should be noted that Kea doesn't natively support such use case, but users may develop their own scripts and tools around Kea to provide such mechanisms. The HA hooks library configuration is designed to maximize the administration flexibility.
+</p>
+
+
+</div>
+
+<h2 id="jp">15.4.8.9. Controlling Lease Page Size Limit</h2>
+<h2 id="en">Discussion about Timeouts</h2>
+<div id="section">
+
+
+
+<p id="jp">
+HAが有効になっているインスタンスはダウンタイム後(TODO)かha-syncコマンドを受信した際にリースデータベースの同期をします。
+サーバはsec 15.4.5.1.3で紹介されているコマンドを利用してパートナーからリース情報を取得します(リース要求)。
+このページサイズ（1コマンドで応答できる最大のリース数）はHAフックライブラリの設定で変更可能です。
+ページサイズが大きければ発行されるリース要求のクエリ数は減りますが、パートナーから一度に応答を返そうとするため、CPU利用率は高くなり、メモリを多く必要とします。
+逆にページサイズが小さければ、CPUやメモリへの負荷は低減されますが、クエリの数が増えます。
+
+尚、このデフォルト値は10,000です。つまり、リースがこれより小さければ1回の要求ですべてが取得できます。
+
+
+
+HA対応サーバーは、ダウンタイム後またはha-syncコマンドを受信すると、リースデータベースの同期を開始します。サーバーは、セクション15.4.5.1.3「lease4-get-page、lease6-get-pageコマンド」で説明されているコマンドを使用して、パートナーサーバーからリースを取得します（リースクエリ）。結果ページのサイズ（これらのコマンドの1つに対する単一の応答で返されるリースの最大数）は、HAフックライブラリ構成を介して制御できます。ページサイズを大きくすると、パートナーサーバーに送信されるリースクエリの数は減りますが、パートナーサーバーはより大きな応答を生成し、両方のサーバーの送信時間とメモリおよびCPU使用率が長くなります。ページサイズを小さくすると、リソースの使用率が低下しますが、リースデータベース全体を取得するには、より多くのリースクエリを発行する必要があります。
+
+ページサイズを制御するsync-page-limitのデフォルト値は10000です。これは、このデータベースのサイズが10000以下の場合、単一のコマンドでリースデータベース全体をフェッチできることを意味します。
+</p>
+<p id="en">
+An HA enabled server initiates synchronization of the lease database after down time or upon receiving ha-sync command. The server uses commands described in Section 15.4.5.1.3, “lease4-get-page, lease6-get-page commands” to fetch leases from the partner server (lease queries). The size of the results page (maximum number of leases to be returned in a single response to one of these commands) can be controlled via HA hooks library configuration. Increasing the page size decreases the number of lease queries sent to the partner server, but it causes the partner server to generate larger responses, which lengthens transmission time as well as memory and CPU utilization on both servers. Decreasing the page size helps to decrease resources utilization but requires more lease queries to be issued to fetch the entire lease database.
+
+The default value of the sync-page-limit controlling the page size is 10000. This means that the entire lease database can be fetched with a single command if the size of this database is equal or lower than 10000.
+</p>
+
+</div>
+
+<h2 id="jp">15.4.8.10. Discussion about Timeouts</h2>
+<h2 id="en">Discussion about Timeouts</h2>
+<div id="section">
+<p id="jp">
+T.B.D.
+</p>
+<p id="en">
+</p>
+</div>
+
+
+
+<h2 id="jp">15.4.8.11. Pausing HA State Machine</h2>
+<h2 id="en">Pausing HA State Machine</h2>
+<div id="section">
+<p id="jp">
+15.4.8.3で述べたようにHA構成のインスタンスの状態はステートマシンになっており、いくつもの状態があります。
+多くのステートの変化はパートナーのサーバの状態の変化によって引き起こされ、
+一部の状態の変化時にはインスタンス上で特定の処理を実行します。
+例えば、リースデータベースの同期を実施したり、(処理していなかった)DHCPクエリに応答をします。
+</p>
+
+<p id="en">
+The high availability state machine includes many different states described in detail in Section 15.4.8.3, “Server States”. The server enters each state when certain conditions are met, most often taking into account the partner server's state. In some states the server performs specific actions, e.g. synchronization of the lease database in the syncing state or responding to DHCP queries according to the configured mode of operation in the load-balancing and hot-standby states.
+</p>
+
+<p id="jp">
+通常、ステート遷移は自動的に行われるため、管理者は直接制御できませんし、通常は制御する必要はありません。
+しかし、管理者は"一時停止"ステートにHAの状態を変更することで追加の(他の)管理を行うことができます。
+</p>
+<p id="en">
+By default, transitions between the states are performed automatically and the server administrator has no direct control when the transitions take place and, in most cases, the administrator doesn't need such control. In some situations, however, the administrator may want to "pause" the HA state machine in a selected state to perform some additional administrative actions before the server transitions to the next state.
+</p>
+
+<p id="jp">
+また、リースデータベースすべてが失われる障害もあることを考慮に入れてください。
+通常、(新しく加入した)サーバはパートナーに対してリース情報を要求し、リースデータベースを同期しようとします。
+しかし、(障害時に)残ったインスタンスにも障害が発生し、リース情報が欠損する可能性もあります。
+この場合は何かしらの外部ソース（バックアップサーバ等）から両方のサーバのリースデータベースを復元しなければなりません。
+リースデータベースがREST APIで再構築を行っている間、インスタンスは待機状態でいる必要があります。
+サーバは(TODO)リースデータベース同期の試行をしたり、DHCPクライアントにサービスを開始してはなりません。
+</p>
+<p id="en">
+Consider a server failure which results in a loss of the entire lease database. Typically, the server will rebuild its lease database when it enters the syncing state by querying the partner server for leases, but it is possible that the partner was also experiencing a failure and lacks lease information. In this case, it may be required to reconstruct lease databases on both servers from some external source, e.g. a backup server. If the lease database is going to be reconstructed via RESTful API, the servers should be started in the initial, i.e. waiting state and remain in this state while leases are being added. In particular, the servers should not attempt to synchronize their lease databases nor start serving DHCP clients.
+</p>
+
+<p id="jp">
+HAのフックライブラリはHAステートの一時停止・再開を行うコンフィグ、コマンドを提供しています。
+</p>
+<p id="en">
+
+The HA hooks library provides configuration parameters and a command to control when the HA state machine should be paused and resumed. The following configuration will cause the HA state machine to pause in the waiting state after server startup.
+</p>
+
+
+<pre id="code"><code>"Dhcp4": {
+
+    ...
+
+    "hooks-libraries": [
+        {
+            "library": "/usr/lib/hooks/libdhcp_lease_cmds.so",
+            "parameters": { }
+        },
+        {
+            "library": "/usr/lib/hooks/libdhcp_ha.so",
+            "parameters": {
+                "high-availability": [ {
+                    "this-server-name": "server1",
+                    "mode": "load-balancing",
+                    "peers": [
+                        {
+                            "name": "server1",
+                            "url": "http://192.168.56.33:8080/",
+                            "role": "primary"
+                        },
+                        {
+                            "name": "server2",
+                            "url": "http://192.168.56.66:8080/",
+                            "role": "secondary"
+                        }
+                    ],
+                    "state-machine": {
+                        "states":  [
+                            {
+                                "state": "waiting",
+                                "pause": "once"
+                            }
+                        ]
+                    }
+                } ]
+            }
+        }
+    ],
+
+    ...
+
+}</code></pre>
+
+<p id="jp">
+一時停止のパラメータの値"once"は待機ステートに遷移する前に一時停止ステートにすることを示しています。
+onceは初回のみ有効で、(起動した後に)また待機ステートになった際には一時停止ステートにはなりません。
+他のパラメータ値としてはalways, neverがあります。
+neverは各状態において標準の値です。つまり、状態遷移時には一時停止しません。
+
+一時停止を解除するためにはha-continueコマンドを送信します。
+このコマンドは引数は不要です。詳細については15.4.8.13を見てください。
+
+また、下記のように複数のステートに一時停止を挟み込むこともできます。
+</p>
+<p id="en">
+The pause parameter value once denotes that the state machine should be paused upon the first transition to the waiting state. Later transitions to this state won't cause the state machine to pause. Two other supported values of the pause parameter are: always and never. The latter is the default value for each state, which instructs the server to never pause the state machine.
+
+In order to "unpause" the state machine the ha-continue command must be sent to the paused server. This command does not take any arguments. See Section 15.4.8.13, “Control Commands for High Availability” for details about commands specific for HA hooks library.
+
+It is possible to configure the state machine to pause in more than one state. Consider the following configuration.
+
+</p>
+
+<pre id="code"><code>"Dhcp4": {
+
+    ...
+
+    "hooks-libraries": [
+        {
+            "library": "/usr/lib/hooks/libdhcp_lease_cmds.so",
+            "parameters": { }
+        },
+        {
+            "library": "/usr/lib/hooks/libdhcp_ha.so",
+            "parameters": {
+                "high-availability": [ {
+                    "this-server-name": "server1",
+                    "mode": "load-balancing",
+                    "peers": [
+                        {
+                            "name": "server1",
+                            "url": "http://192.168.56.33:8080/",
+                            "role": "primary"
+                        },
+                        {
+                            "name": "server2",
+                            "url": "http://192.168.56.66:8080/",
+                            "role": "secondary"
+                        }
+                    ],
+                    "state-machine": {
+                        "states": [
+                            {
+                                "state": "ready",
+                                "pause": "always"
+                            },
+                            {
+                                "state": "partner-down",
+                                "pause": "once"
+                            }
+                        ]
+                    }
+                } ]
+            }
+        }
+    ],
+
+    ...
+
+}</code></pre>
+
+<p id="jp">
+上記に示したコンフィグはReadyステートに遷移すると毎回、また、パートナーがダウンすると一度だけ、状
+状態を一時停止にします。
+</p>
+<p id="en">
+This configuration instructs the server to pause the state machine every time it transitions to the ready state and upon the first transition to the partner-down state.
+</p>
+
+<p id="jp">
+サーバ状態のリストは15.4.8.3を参照してください。
+すべての状態遷移時に一時停止を入れることは可能ですが、この状態から遷移することはないため、backupステート、terminatedステートに対して一時停止を挟むことは有用と言えません。
+</p>
+<p id="en">
+Refer to the Section 15.4.8.3, “Server States” for a complete of list of server states. The state machine can be paused in any of the supported states, however it is not practical for the backup and terminated states because the server never transitions out of these states anyway.
+</p>
+
+<p id="jp">
+syncing状態でpauseする設定とすると、同期を開始する前にpauseします。
+ready状態でpauseする設定とすると、同期の終了後にpauseします。
+</p>
+<p id="en">
+Note:
+In the syncing state the server is paused before it makes an attempt to synchronize lease database with a partner. In order to pause the state machine after lease database synchronization, use the ready state instead.
+</p>
+
+<p id="jp">
+HAの状態はパートナーなどのサーバの状態に深く依存します。
+このため、一時停止は場合によってパートナーに大きな影響を与えることがあります。
+例えば、プライマリサーバーがwaiting状態でのpauseを入れると、
+パートナー側はプライマリのreadyを待ち続けて同様にwaitingのままとなってしまいます。
+</p>
+<p id="en">
+Note:
+The state of the HA state machine depends on the state of the cooperating server. Therefore, it must be taken into account that pausing the state machine of one server may affect the operation of the partner server. For example: if the primary server is paused in the waiting state the partner server will also remain in the waiting state until the state machine of the primary server is resumed and that server transitions to the ready state.
+
+</p>
+
+
+</div>
+
+<h2 id="jp">15.4.8.12. 制御エージェントの設定</h2>
+<h2 id="en">Control Agent Configuration</h2>
+<div id="section">
+<p id="jp">
+7章ではサーバインスタンスを制御するREST APIを提供しているKeaデーモンについて説明しました。
+各サーバは他のサーバの状態確認のために、同様の仕組みを利用します。
+つまり、HAライブラリではHAを起動する際の各DHCPインスタンスに対して制御エージェントが起動していなければなりません。
+もし、あるサーバにて(DHCPプロセス自身は起動していたとしても)エージェントが起動していない場合、HAのピアが確立できず、そのサーバをオフラインとみなします。
+
+以下に、プライマリサーバでの制御エージェントのコンフィグ例を記載します。
+この構成はロードバランシング、ホットスタンバイモードいずれでも利用できます。
+</p>
+<p id="en">
+The Chapter 7, Kea Control Agent describes in detail the Kea deamon which provides RESTful interface to control Kea servers. The same functionality is used by High Availability hook library to establish communication between the HA peers. Therefore, the HA library requires that Control Agent is started for each DHCP instance within HA setup. If the Control Agent is not started the peers will not be able to communicate with the particular DHCP server (even if the DHCP server itself is online) and may eventually consider this server to be offline.
+
+The following is the example configuration for the CA running on the same machine as the primary server. This configuration is valid for both load balancing and hot standby cases presented in previous sections.
+</p>
+
+<pre id="code"><code>{
+"Control-agent": {
+    "http-host": "192.168.56.33",
+    "http-port": 8080,
+
+    "control-sockets": {
+        "dhcp4": {
+            "socket-type": "unix",
+            "socket-name": "/tmp/kea-dhcp4-ctrl.sock"
+        },
+        "dhcp6": {
+            "socket-type": "unix",
+            "socket-name": "/tmp/kea-dhcp6-ctrl.sock"
+        }
+    }
+}
+}</code></pre>
+
+</div>
+
+
+
+<h2 id="jp">15.4.8.13. HA制御コマンド</h2>
+<h2 id="en">Control Commands for High Availability</h2>
+<div id="section">
+<p id="jp">
+HAフックライブラリはリースの同期を行い、DHCPトラフィックを生存しているサーバで処理することで
+DHCPサービスに対する障害を自動的に解決するように設計されています。
+しかし、Keaでは管理者自身が実行可能なHAコマンドを提供しています。
+例えば、任意のタイミングでのデータベース同期の実行などでも。
+あるいはHAのScopeを手動で変更できます。
+
+また、両方のアクティブサーバに障害が発生した場合はバックアップサーバが処理を開始できるのですが、
+KeaのHAバックアップサーバは自動的にフェイルオーバーをしません。
+このため、バックアップサーバを利用するには管理者が切り替える必要があります。
+
+上記を実現するのがHAフックライブラリのコマンドです。以下にそれらを示します。
+</p>
+<p id="en">
+Even though the HA hook library is designed to automatically resolve issues with DHCP service interruptions by redirecting the DHCP traffic to a surviving server and synchronizing the lease database when required, it may be useful for the administrator to have control over the server behavior. In particular, it may be useful be able to trigger lease database synchronization on demand. It may also be useful to manually set the HA scopes that are being served.
+
+Note that the backup server can sometimes be used to handle the DHCP traffic in case if both active servers are down. The backup servers do not perform failover function automatically. Hence, in order to use the backup server to respond to the DHCP queries, the server administrator must enable this function manually.
+
+The following sections describe commands supported by the HA hook library which are available for the administrator.
+</p>
+</div>
+
+<h3 id="jp">15.4.8.13.1. ha-sync command</h3>
+<div id="section">
+<p id="jp">
+ha-syncコマンドはローカルのリースデータベースを同期するピア先を指定するのに用いられます。
+サーバは指定したピアからすべてのリース情報を取得して、ローカルにある古いリース情報を更新します。
+取得したリース情報がない場合は新規に作成します。
+尚、取得されないがローカルにあるリースは削除されません。
+このコマンドではピアへの同期は行われません。つまり、片方向の同期です。
+両方向での同期を行いたい場合は両者のサーバでha-syncを発行してください。
+
+データベースの同期はアクティブサーバでもバックアップサーバでも呼ばれます。
+ha-syncのコンフィグ例を以下に示します。
+</p>
+<p id="en">
+The ha-sync is issued to instruct the server to synchronize its local lease database with the selected peer. The server fetches all leases from the peer and updates those locally stored leases which are older comparing to those fetched. It also creates new leases when any of those fetched do not exist in the local database. All leases that are not returned by the peer but are in the local database are preserved. The database synchronization is unidirectional, i.e. only the database on the server to which the command has been sent is updated. In order to synchronize the peer's database a separate ha-sync has to be issued to that peer.
+
+The database synchronization may be triggered for both active and backup server type. The ha-sync has the following structure (DHCPv4 server case):
+</p>
+
+<pre id="code"><code>{
+    "command": "ha-sync",
+    "service": [ "dhcp4 "],
+    "arguments": {
+        "server-name": "server2",
+        "max-period": 60
+    }
+}</code></pre>
+
+<p id="jp">
+</p>
+<p id="en">
+When the server receives this command it first disables the DHCP service of the server from which it will be fetching leases, i.e. sends dhcp-disable command to that server. The max-period parameter specifies the maximum duration (in seconds) for which the DHCP service should be disabled. If the DHCP service is successfully disabled, the synchronizing server will fetch leases from the remote server by issuing one or more lease4-get-page commands. When the lease database synchronization is complete, the synchronizing server sends the dhcp-enable to the peer to re-enable its DHCP service.
+
+The max-period value should be sufficiently long to guarantee that it doesn't elapse before the synchronization is completed. Otherwise, the DHCP server will automatically enable its DHCP function while the synchronization is still in progress. If the DHCP server subsequently allocates any leases during the synchronization, those new (or updated) leases will not be fetched by the synchronizing server leading to database inconsistencies.
+</p>
+
+
+</div>
+
+
+
+<h3 id="jp">15.4.8.13.2. ha-scopes command</h3>
+<div id="section">
+<p id="jp">
+ha-scopesコマンドはサーバの提供するスコープを変更することができます。
+スコープについては15.4.8.5及び15.4.8.7を参照してください。
+DHCPv4サーバのha-scopesコマンドの例を以下に示します。
+</p>
+<p id="en">
+This command allows for modifying the HA scopes that the server is serving. Consult Section 15.4.8.5, “Load Balancing Configuration” and Section 15.4.8.7, “Hot Standby Configuration” to learn what scopes are available for different HA modes of operation. The ha-scopes command has the following structure (DHCPv4 server case):
+</p>
+
+<pre id="code"><code>{
+    "command": "ha-scopes",
+    "service": [ "dhcp4" ],
+    "arguments": {
+        "scopes": [ "HA_server1", "HA_server2" ]
+    }
+}</code></pre>
+
+<p id="jp">
+上記の設定はHA_server1, HA_server2のスコープをすべて処理するようにHA設定を変更します。
+すべてのスコープを無効にするのは以下のように空のリストを使ってください。
+</p>
+<p id="en">
+This command configures the server to handle traffic from both HA_server1 and HA_server2 scopes. In order to disable all scopes specify an empty list:
+</p>
+
+
+<pre id="code"><code>{
+    "command": "ha-scopes",
+    "service": [ "dhcp4 "],
+    "arguments": {
+        "scopes": [ ]
+    }
+}</code></pre>
+
+
+</div>
+
+
+<h3 id="jp">15.4.8.13.3. ha-continue command</h3>
+<div id="section">
+<p id="jp">
+このコマンドは15.4.8.11「HA状態マシンの一時停止」の通り
+一時停止状態のインスタンスを再開させるために用います。
+引数はありません。<br>
+</p>
+<p id="en">
+This command is used to resume the operation of the paused HA state machine as described in the Section 15.4.8.11, “Pausing HA State Machine”. It takes no arguments, so the command structure is as simple as:
+</p>
+
+<pre id="code"><code>{
+    "command": "ha-continue"
+}</code></pre>
+
+</div>
+
+
+
+<div id="footer">
+	&copy;2019 ｜ Akira KANAI
+</div>
+
+<div id="footer">
+	Original article was written by ISC
+</div>
+
+
+</body> 
+
+</html>
