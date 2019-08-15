@@ -1,0 +1,173 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+ google.load("jquery", "1.3");
+</script>
+
+<script type="text/javascript">
+</script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style type="text/css">
+*{
+	margin: 0px;
+	padding: 0px;
+	font-family: Verdana, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+}
+</style>
+</head>
+<body>
+
+<h1 id="jp">Kea Administrator Reference Manual 1.5.0 <br> 　Chapter 1. Introduction </h1>
+
+	<p id="jp">
+	原著: 
+        <a href="https://ftp.isc.org/isc/kea/1.5.0/doc/kea-guide.html#intro">
+	Kea Administrator Reference Manual 1.5.0 Chapter 1. Introduction
+	</a>
+	</p>
+
+
+<h2 id="jp">1.1. サポートするプラットフォーム</h2>
+<h2 id="en">Supported Platforms</h2>
+<div id="section">
+<p id="jp">
+Keaは以下のようなプラットフォームでサポート・テストされています。
+また、Windowsのサポート計画はありません。
+</p>
+<p id="en">
+Kea is officially supported on CentOS, Fedora, Ubuntu, Debian and FreeBSD systems. It is also likely to work on many other platforms. Kea-1.5.0 builds have been tested on:
+
+There are currently no plans to port Kea to Windows platforms.
+</p>
+
+<pre id="code"><code>CentOS Linux — 7.1804 (aka 7.5)
+Fedora — 28, 29
+Ubuntu — 16.04, 18.04
+Debian GNU/Linux — 7, 8, 9
+FreeBSD — 11.0
+macOS — 10.13, 10.14
+</code></pre>
+
+</div>
+
+
+
+<h2 id="jp">1.1. サポートするプラットフォーム</h2>
+<h2 id="en">Supported Platforms</h2>
+<div id="section">
+<p id="jp">
+Keaは以下のようなプラットフォームでサポート・テストされています。
+また、Windowsのサポート計画はありません。
+</p>
+<p id="en">
+Kea is officially supported on CentOS, Fedora, Ubuntu, Debian and FreeBSD systems. It is also likely to work on many other platforms. Kea-1.5.0 builds have been tested on:
+
+There are currently no plans to port Kea to Windows platforms.
+</p>
+
+<pre id="code"><code>CentOS Linux — 7.1804 (aka 7.5)
+Fedora — 28, 29
+Ubuntu — 16.04, 18.04
+Debian GNU/Linux — 7, 8, 9
+FreeBSD — 11.0
+macOS — 10.13, 10.14
+</code></pre>
+
+</div>
+
+
+<h2 id="jp">1.2 Keaの要求ライブラリ</h2>
+<h2 id="en">Runtime</h2>
+<div id="section">
+<p id="jp">
+Keaを動作させる際は、いくつかの追加パッケージが必要になりインストールされます。
+いくつかは別途インストールする必要があります。
+ビルドの際の要件については3.3を参照。
+</p>
+<p id="en">
+Running Kea uses various extra software which may not be provided in the default installation of some operating systems, nor in the standard package collections. You may need to install this required software separately. (For the build requirements, also see Section 3.3, “Building Requirements”.)
+</p>
+
+<pre id="code"><code>一覧
+- Keaは暗号化ライブラリとしてOpenSSLかBotanを利用することができます。
+- KeaはC ++（http://botan.randombit.net/）のBotanライブラリ1.9以上を要求します
+- Keaは1.6.0からBotan2.0よりも前のサポートを終了します。Botanの代用としてはOpenSSLの1.0.2以降が使用できます。
+- KeaはC++のlog4cplusライブラリ 1.0.3以降を使用します。
+- KeaはC++のBoost runtimeを要求します。ヘッダでboostをビルドすることは推奨されません。
+- (Option)リース情報を管理するために、標準ではMySQL/PostgresSQL/Cassandraのヘッダとライブラリが必要になります。ただし、これら以外を利用する場合は不要です。
+- (Option)Kea 1.4.0 から RADIUSフックライブラリによってRADIUS機能を統合することができます。この場合、FreeRadiusのクライアントライブラリが必要です。
+- (Option)Kea 1.5.0 から kea-netconfエージェントを用いることでnetconfによる制御が可能です。この場合、Sysrepoが必要になります。これ以外にも必要になるソフトウェアがあるため、詳細は21.2章を参照してください。
+</code></pre>
+<p id="en">
+Kea is modular. Part of this modularity is accomplished using multiple cooperating processes which, together, provide the server functionality. The following software is included with Kea:
+</p>
+
+</div>
+
+
+
+<h2 id="jp">1.3 Keaのプログラム群</h2>
+<h2 id="en">Kea Software</h2>
+<div id="section">
+<p id="jp">
+Keaはモジュール化されたプログラム群です。
+サーバ機能の提供には複数のプログラムが利用されます。
+以下に一覧を示します。
+</p>
+<p id="en">
+Kea is modular. Part of this modularity is accomplished using multiple cooperating processes which, together, provide the server functionality. The following software is included with Kea:
+</p>
+
+
+<pre id="code"><code>ソフトウェア一覧
+keactrl: Keaインスタンスの開始、停止、設定読み込み、ステータス表示をする
+kea-dhcp4: DHCPv4サーバープロセス。
+kea-dhcp6: DHCPv6サーバープロセス。
+kea-dhcp-ddns: DHCP　DDNSプロセス。DHCPサーバプロセスからドメイン名のupdateを受信し、DNSサーバにDNSアップデートのメッセージを送信します。
+kea-admin: バックエンドにあるデータベースの管理ツール。新しいデータベースの作成、バージョンの確認、アップグレードなどに利用可能。
+kea-lfc:インメモリデータベース使用時に永続化のために保存されているファイルから冗長な情報を削除します。このプログラムは単体で実行することも可能ですが、通常はDHCPサーバから実行されます。
+kea-ctrl-agent — Kea Control Agent（CA）は、Keaを管理するためのREST APIを提供するプログラムです。
+kea-netconf-Kea: YANG / NETCONFインターフェースを提供するプログラムです。
+kea-shell: REST APIを使用してKea Control Agentに接続するシンプルなテキストクライアント。
+perfdhcp: DHCPv4とDHCPv6の両方のパフォーマンスをテストするDHCPベンチマークツール。</code></pre>
+<pre>
+keactrl — Tool to start, stop, reconfigure, and report status for the Kea servers.
+kea-dhcp4 — The DHCPv4 server process. This process responds to DHCPv4 queries from clients.
+kea-dhcp6 — The DHCPv6 server process. This process responds to DHCPv6 queries from clients.
+kea-dhcp-ddns — The DHCP Dynamic DNS process. This process acts as an intermediary between the DHCP servers and DNS servers. It receives name update requests from the DHCP servers and sends DNS Update messages to the DNS servers.
+kea-admin — A useful tool for database backend maintenance (creating a new database, checking versions, upgrading etc.)
+kea-lfc — This process removes redundant information from the files used to provide persistent storage for the memfile data base backend. While it can be run standalone, it is normally run as and when required by the Kea DHCP servers.
+kea-ctrl-agent — Kea Control Agent (CA) is a daemon that exposes a RESTful control interface for managing Kea servers.
+kea-netconf - Kea netconf is an agent that provides a YANG/NETCONF interface for the Kea environment.
+kea-shell — Simple text client that uses REST interface to connect to Kea Control Agent.
+perfdhcp — A DHCP benchmarking tool which simulates multiple clients to test both DHCPv4 and DHCPv6 server performance.</pre>
+
+<p id="jp">
+各プログラムの詳細については本ガイドにて詳細に述べます。
+
+また、KeaはC++クライアントライブラリとDHCPのプログラマインタフェース(API?)を提供します。これらの詳細はデベロッパドキュメントとコード例を参照してください。
+</p>
+<p id="en">
+The tools and modules are covered in full detail in this guide. In addition, manual pages are also provided in the default installation.
+
+Kea also provides C++ libraries and programmer interfaces for DHCP. These include detailed developer documentation and code examples.
+</p>
+
+
+</div>
+
+
+<div id="footer">
+	&copy;2019 ｜ Akira KANAI
+</div>
+
+<div id="footer">
+	Original article was written by hogehoge
+</div>
+
+
+</body> 
+
+</html>
