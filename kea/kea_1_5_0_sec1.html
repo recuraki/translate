@@ -34,7 +34,7 @@
 <div id="section">
 <p id="jp">
 Keaは以下のようなプラットフォームでサポート・テストされています。
-また、Windowsのサポート計画はありません。
+Windowsのサポート計画はありません。
 </p>
 <p id="en">
 Kea is officially supported on CentOS, Fedora, Ubuntu, Debian and FreeBSD systems. It is also likely to work on many other platforms. Kea-1.5.0 builds have been tested on:
@@ -49,32 +49,6 @@ Debian GNU/Linux — 7, 8, 9
 FreeBSD — 11.0
 macOS — 10.13, 10.14
 </code></pre>
-
-</div>
-
-
-
-<h2 id="jp">1.1. サポートするプラットフォーム</h2>
-<h2 id="en">Supported Platforms</h2>
-<div id="section">
-<p id="jp">
-Keaは以下のようなプラットフォームでサポート・テストされています。
-また、Windowsのサポート計画はありません。
-</p>
-<p id="en">
-Kea is officially supported on CentOS, Fedora, Ubuntu, Debian and FreeBSD systems. It is also likely to work on many other platforms. Kea-1.5.0 builds have been tested on:
-
-There are currently no plans to port Kea to Windows platforms.
-</p>
-
-<pre id="code"><code>CentOS Linux — 7.1804 (aka 7.5)
-Fedora — 28, 29
-Ubuntu — 16.04, 18.04
-Debian GNU/Linux — 7, 8, 9
-FreeBSD — 11.0
-macOS — 10.13, 10.14
-</code></pre>
-
 </div>
 
 
@@ -82,8 +56,8 @@ macOS — 10.13, 10.14
 <h2 id="en">Runtime</h2>
 <div id="section">
 <p id="jp">
-Keaを動作させる際は、いくつかの追加パッケージが必要になりインストールされます。
-いくつかは別途インストールする必要があります。
+Keaを動作させる際は、いくつかの追加パッケージが必要になり、そのいくつかはインストールされます。
+ただし、別途インストールする必要があるライブラリもあります。
 ビルドの際の要件については3.3を参照。
 </p>
 <p id="en">
@@ -100,9 +74,6 @@ Running Kea uses various extra software which may not be provided in the default
 - (Option)Kea 1.4.0 から RADIUSフックライブラリによってRADIUS機能を統合することができます。この場合、FreeRadiusのクライアントライブラリが必要です。
 - (Option)Kea 1.5.0 から kea-netconfエージェントを用いることでnetconfによる制御が可能です。この場合、Sysrepoが必要になります。これ以外にも必要になるソフトウェアがあるため、詳細は21.2章を参照してください。
 </code></pre>
-<p id="en">
-Kea is modular. Part of this modularity is accomplished using multiple cooperating processes which, together, provide the server functionality. The following software is included with Kea:
-</p>
 
 </div>
 
@@ -119,7 +90,6 @@ Keaはモジュール化されたプログラム群です。
 <p id="en">
 Kea is modular. Part of this modularity is accomplished using multiple cooperating processes which, together, provide the server functionality. The following software is included with Kea:
 </p>
-
 
 <pre id="code"><code>ソフトウェア一覧
 keactrl: Keaインスタンスの開始、停止、設定読み込み、ステータス表示をする
@@ -164,7 +134,7 @@ Kea also provides C++ libraries and programmer interfaces for DHCP. These includ
 </div>
 
 <div id="footer">
-	Original article was written by hogehoge
+	Original article was written by ISC
 </div>
 
 
